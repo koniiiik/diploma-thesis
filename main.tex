@@ -1,0 +1,217 @@
+
+%% Template by Michal Forisek
+
+
+\documentclass[12pt,a4paper]{report}
+%\usepackage{slovak}
+\usepackage[utf8]{inputenc}
+\usepackage[IL2]{fontenc}
+%\usepackage{a4wide}
+\usepackage{tabularx}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+%\usepackage{breqn} % messes up biblatex and \log_2
+%\usepackage{epsfig}
+\usepackage{color}
+\usepackage{mathrsfs}
+\usepackage{verbatim}
+\usepackage{fancyvrb}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{changepage}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{paralist}
+\usepackage{pdfpages}
+\usepackage{tikz}
+\usepackage{gnuplot-lua-tikz}
+\usetikzlibrary{arrows,positioning,shapes}
+\usepackage[style=alphabetic,maxbibnames=47]{biblatex}
+\input{utility/makra.tex}
+
+\input{configurables.tex}
+\usepackage[hidelinks]{hyperref}
+
+\addbibresource{literature.bib}
+
+\newlength{\firstpagewidthinc}
+% The length by which we want the first two pages wider:
+\setlength{\firstpagewidthinc}{2cm}
+\graphicspath{{img/}}
+\linespread{1.3}
+
+\lstset{numberstyle=none, basicstyle=\ttfamily,
+showstringspaces=false, escapechar=\%, language=C++}
+
+% TODO: Move the setup of packages into a separate file.
+
+% Set up hyperref...
+\hypersetup{
+    pdfauthor = {\author},
+    pdftitle = {\titlea{} \titleb},
+    pdfkeywords = {online problem} {advice complexity} {approximation}
+}
+
+\begin{document}
+
+\newlength{\firstpagewidth}
+\setlength{\firstpagewidth}{\textwidth}
+\addtolength{\firstpagewidth}{\firstpagewidthinc}
+
+\pagenumbering{roman}
+
+%%%%%%%%%%%%%%%%%% Obal %%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+% Tu je kopa zakomentovanych riadkov, lebo Pastorovej sa z nejakeho dovodu
+% nepaci v niektorych pracach, ze maju na obale logo, zatial co pri inych
+% jej to vobec nevadi, tak nech je spokojna.
+\begin{adjustwidth}{-0.5\firstpagewidthinc}{-0.5\firstpagewidthinc}
+%\begin{minipage}{0.25\firstpagewidth}
+%\includegraphics[width=0.9\textwidth]{img/komlogo-new}
+%\end{minipage}
+%\begin{minipage}{0.69\firstpagewidth}
+\begin{center}
+\textsc{\university} \\
+\textsc{\faculty} \\
+\end{center}
+%\end{minipage}
+
+\bigskip
+%3dc8ac68-0ab2-4817-b352-48b4038e9b46
+
+\vfill
+\begin{center}
+\begin{minipage}{0.8\textwidth}
+%\hrule
+\bigskip\medskip
+\centerline{\LARGE\sc\titlea}
+\smallskip
+\centerline{\LARGE\sc\titleb}
+\smallskip
+\centerline{\thesistype}
+\end{minipage}
+\end{center}
+\vfill
+\vfill
+{\bf\year}
+\hfill{\bf\author}
+\end{adjustwidth}
+\eject % EOP i
+
+
+%%%%%%%%%%%%%%%%%% Titulna strana %%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+\begin{adjustwidth}{-0.5\firstpagewidthinc}{-0.5\firstpagewidthinc}
+\begin{minipage}{0.25\firstpagewidth}
+\includegraphics[width=0.9\textwidth]{img/komlogo-new}
+\end{minipage}
+\begin{minipage}{0.69\firstpagewidth}
+\begin{center}
+\textsc{\university} \\
+\textsc{\faculty} \\
+\end{center}
+\end{minipage}
+
+\vfill
+\begin{center}
+\begin{minipage}{0.8\textwidth}
+%\hrule
+\bigskip\medskip
+\centerline{\LARGE\sc\titlea}
+\smallskip
+\centerline{\LARGE\sc\titleb}
+\smallskip
+\centerline{\thesistype}
+\bigskip
+\bigskip
+%\centerline{\large\sc \author}
+\bigskip\bigskip
+%\hrule
+\end{minipage}
+\end{center}
+\vfill
+\begin{tabular}{l l}
+Study programme: & \studyprogram \\
+Field of study: & \fieldnumber{} \studyprogram \\
+Department: & \department \\
+Supervisor: & \supervisor \\
+\end{tabular}
+\vfill
+{\bf\location, \year}
+\hfill{\bf\author}
+\end{adjustwidth}
+
+\eject % EOP i
+
+%%%%%%%%%%%%%%%%%% Zadanie %%%%%%%%%%%%%%%%%%
+%\thispagestyle{empty}
+
+%\includepdf{img/zadanie.pdf}
+
+\eject
+
+%\includepdf{img/statement.pdf}
+
+\eject
+
+%%%%%%%%%%%%%%%%%% Abstrakty a poďakovanie %%%%%%%%%%%%%%%%%%
+%\thispagestyle{empty}
+\section*{Abstrakt}
+\input{tex/00abstract-sk.tex}
+
+\eject
+
+%\thispagestyle{empty}
+\section*{Abstract}
+\input{tex/01abstract-en.tex}
+
+\eject
+
+\section*{Acknowledgements}
+\input{tex/02ack.tex}
+
+\eject
+
+%\thispagestyle{empty}
+\tableofcontents
+%\thispagestyle{empty}
+
+% S tymito dvomi sa este bude treba pohrat, hlavne aby nemali cislovane
+% strany a vobec.
+\listoffigures
+\listoftables
+
+\chapter*{Introduction}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\addcontentsline{toc}{chapter}{Introduction}
+\label{chapter:intro}
+\input{tex/03intro.tex}
+
+\chapter{First chapter}
+\label{chapter:first}
+\input{tex/10intro.tex}
+\section{First section of the first chapter}
+\label{section:online}
+\input{tex/11online.tex}
+
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+\label{chapter:conclusion}
+\input{tex/47conclusion.tex}
+
+%\backmatter fixme: preco to tu nefunguje? asi chyba nejaky package
+
+\printbibliography
+
+\appendix
+
+%\chapter{Implementation}
+%\input{tex/50implementation.tex}
+
+\end{document}
