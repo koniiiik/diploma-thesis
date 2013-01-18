@@ -1,1 +1,18 @@
-In this section we will define online problems 'n shit.
+One of the countless ways to categorize algorithmic problems is into
+\emph{offline} and \emph{online problems}. Offline problems are those
+where the algorighm can access the whole input instance before yielding
+the output.  On the other hand, the instance of an online problem is
+revealed to the algorithm in smaller pieces and after each piece a partial
+solution has to be produced. This partial solution is cannot be changed
+later.
+
+A slightly different way of looking at online algorithms is that the
+algorithm waits for an input query, procsses it and outputs an answer to
+this query immediately. Then it waits for another query until there is
+nothing more to do.
+
+Solving a problem online is obviously more difficult than solving the same
+instance knowing the whole input at once. For many problems it is even
+impossible to compute the optimal partial solution without the knowledge
+of the rest of the input sequence. Therefore we define a \emph{competitive
+ratio}, which is the 
