@@ -13,6 +13,13 @@ nothing more to do.
 
 Solving a problem online is obviously more difficult than solving the same
 instance knowing the whole input at once. For many problems it is even
-impossible to compute the optimal partial solution without the knowledge
+impossible to compute the optimal partial solutions without the knowledge
 of the rest of the input sequence. Therefore we define a \emph{competitive
-ratio}, which is the 
+ratio} of an algorithm, which is the quotient of the cost of the solution
+produced by the online algorithm and the cost of the optimal solution. An
+optimal solution is one produced by an optimal offline algorithm. Since
+the competitive ratio can depend on the input instance, we study the worst
+competitive ratio an algorithm achieves.
+
+We consider randomized online algorithms as well. In this case we examine
+the expected competitive ratio.
