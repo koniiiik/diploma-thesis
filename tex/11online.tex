@@ -34,3 +34,20 @@ ski trip'' and after each query an answer is expected that is either
 is proved that to minimize the competitive ratio the algorithm needs to
 rent for the first $s-1$ rounds and then buy a pair of skis; this way, the
 competitive ratio is $\frac{2s-1}{s} \approx 2$.
+
+Another classic online problem is the paging problem. Assume a two-level
+memory divided into uniform, fixed-size pages. Let $k$ be the number of
+pages that can fit within the fast memory. The input consists of $n$
+queries, each specifying a page we want to access. This page needs to be
+loaded into the fast memory thus replacing a page called a victim (unless
+it is there already). The goal is to minimize the number of page faults,
+i.e. the number of times we need to load a page from the slow memory into
+the fast level.
+
+In \cite{paging-deterministic} the authors show that for any deterministic
+online algorithm solving the paging problem it is possible to construct an
+instance using $k + 1$ pages where the online algorithm will produce a
+page fault on each request by always choosing the page that is not in the
+fast memory. However, an offline algorithm can decrease the number of page
+faults by at least a factor of $k$, therefore the competitive ratio of any
+online paging algorithm is at least $k$.
