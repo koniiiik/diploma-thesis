@@ -23,3 +23,14 @@ competitive ratio an algorithm achieves.
 
 We consider randomized online algorithms as well. In this case we examine
 the expected competitive ratio.
+
+Let us describe a few examples of simple online problems to give a better
+idea of what they are about. A very simple online problem is ski rental.
+Suppose we are going to take an unknown number of ski trips and we do not
+own a pair of skis. Renting a pair of skis for a single trip costs $1$,
+buying one costs $s$. The input consists of a sequence of queries ``take a
+ski trip'' and after each query an answer is expected that is either
+``rent'', ``buy'' or ``use skis already bought''. In \cite{skirental} it
+is proved that to minimize the competitive ratio the algorithm needs to
+rent for the first $s-1$ rounds and then buy a pair of skis; this way, the
+competitive ratio is $\frac{2s-1}{s} \approx 2$.
