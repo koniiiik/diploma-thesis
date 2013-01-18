@@ -26,3 +26,25 @@ in each round. This makes it impossible to use a sublinear amount of
 advice. The model used in this thesis has been defined in
 \cite{advice-infinite}; this model uses an infinite advice tape and we
 measure the amount of bits the algorithm accesses.
+
+To illustrate the effect of advice we show the amount of advice required
+to solve the two aforementioned online problems optimally. The ski rental
+problem is trivial to solve using a single bit of advice -- this bit tells
+the algorithm whether there will be at least $s$ queries. The online
+algorithm reads this before answering the first query and it knows
+immediately whether to buy a pair of skis or just rent them on each trip.
+
+The paging problem is slightly more complex to solve optimally using
+advice. Following the proof in \cite{paging-optimal}, this can be done
+using $n$ bits of advice. The oracle calculates one optimal solution to
+the input instance and assigns a single bit to each request. This bit
+indicates whether the page will be accessed again before it is replaced by
+another one in the optimal solution, such pages are called active; if the
+page will not be accessed again, it is passive. The online algorithm then
+just picks a passive page as the victim on each page fault.
+
+Thus far we only covered the amount of advice required to obtain the
+optimal solution using an online algorithm. However, it is also useful to
+examine the amount of advice required to obtain a certain competitive
+ratio and the tradeoff between these two. In this thesis we will study
+this aspect as well.
