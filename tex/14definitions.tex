@@ -1,1 +1,101 @@
 This section will contain the required definitions. \todo{ADD THEM!!!}
+
+This thesis follows the definitions from \cite{misof-trivial-graphs}. They
+are provided in this section for reference.
+
+To denote the solution produced by an algorithm $A$ for an instance $I$ we
+use $A(I)$. The cost of a solution $S$ will be denoted by $C(S)$. An
+optimal solution for $I$ will be denoted by $Opt(I)$. We will use $E[X]$
+to denote the expected value of a random variable $X$.
+
+\begin{definition}\label{def:competitive-ratio}
+    Consider an optimization problem in which the goal is to minimize the
+    cost of a solution. An algorithm is $c$-competitive if there is a
+    constant $\alpha$ such that for each instance $I$ we have $C(A(I))
+    \leq c \cdot C(Opt(I)) + \alpha$.  If $\alpha = 0$, we say that $A$ is
+    strictly $c$-competitive. The competitive ratio of $A$ is the smallest
+    $c$ such that $A$ is $c$-competitive.
+\end{definition}
+
+The previous definition can easily be extended to randomized algorithms.
+For each instance $I$ we require $E[C(A(I))] \leq c \cdot C(Opt(I)) +
+\alpha$. We say that the expected competitive ratio of $A$ is the smallest
+value of $c$ satisfying the above inequality.
+
+\begin{definition}\label{def:online-advice}
+    An online algorithm $A$ with advice is defined as follows: The input
+    for the algorithm is a sequence $X = (x_1, \dots, x_n)$ and an
+    infinite advice string $\phi \in \{0, 1\}^\omega$. The algorithm
+    produces an output sequence $Y = (y_1, \dots, y_n)$ with the
+    restriction that, for all $i$, $y_i$ is computed only from $x_1,
+    \dots, x_i$ and $\phi$. This is denoted by $A^\phi(X) = Y$.
+\end{definition}
+
+As stated earlier, the computation of $A$ can be interpreted as a series
+of turns, where in the $i$-th turn the algorithm reads $x_i$ and yields
+$y_i$ using all the information read so far and possibly some additional
+bits from the advice string $\phi$. It is worth noting that the definition
+does not restrict the computational power of $A$.
+
+\begin{definition}\label{def:advice-complexity}
+    The advice complexity of $A$ is a function $s$ such that $s(n)$ is the
+    smallest value such that for each input sequence of size $n$ there is
+    an advice string $\phi$ such that the algorithm $A$ examines at most
+    the first $s(n)$ bits of $\phi$. The advice complexity of an online
+    problem is the smallest advice complexity an online algorithm with
+    advice needs to produce an optimal solution (i.e., a solution as good
+    as an optimal offline algorithm would produce).
+\end{definition}
+
+\begin{definition}\label{def:advice-competitive}
+    An online algorithm with advice $A$ is $c$-competitive if there is a
+    constant $\alpha$ such that for every $n \in \N$ and for every
+    instance $I$ of size at most $n$ there is an advice string $\phi$ such
+    that $C(A^\phi(I)) \leq c \cdot C(Opt(I)) + \alpha$.
+\end{definition}
+
+The previous two definitions suggest another way to look at algorithms
+with advice. They have one similarity with the traditional definition of a
+non-deterministic Turing machine: in both cases the definitions allow the
+existence of an unlimited number of possible computations for a single
+input instance and all except ``the right one'' are disregarded. In the
+case of a non-deterministic Turing machine this means that in case there
+are multiple possibilities for the next configuration, we always choose
+the one that leads to an accepting state. In the case of online algorithms
+with advice this means that although there is an infinite number of advice
+strings, we always choose the one that leads to the optimal solution (or
+the required competitive ratio) with the smallest number of accessed bits.
+
+This observation indicates that there is a direct connection between the
+number of required advice bits and the number of non-deterministic
+decisions a non-deterministic algorithm would have to make in order to
+find the expected solution.
+
+\begin{definition}\label{def:graph-coloring}
+    In \problem{OnlineColoring} the instance is an undirected graph $G =
+    (V, E)$ with $V = \{1, 2, \dots, n\}$. This graph is presented to an
+    online algorithm in turns: In the $k$-th turn the online algorithm
+    receives the graph $G_k = G[\{1, 2, \dots, k\}]$, i.e., a subgraph of
+    $G$ induced by the vertex set $\{1, 2, \dots, k\}$.  As its reply, the
+    online algorithm must return a positive integer: the color it wants to
+    assign to vertex $k$. The goal is to produce an optimal coloring of
+    $G$ -- the online algorithm must assign distinct integers to adjacent
+    vertices, and the largest integer used must be as small as possible.
+\end{definition}
+
+When anlyzing a variant of \problem{OnlineColoring}, we always need to
+specify the class of graphs it is restricted to and the presentation
+order. We denote this using \graphcol{X}{Y} where \problem{X} is the class
+of graphs $G$ will belong to and \problem{Y} is the presentation order.
+For the class of graphs we will use its common name (e.g.,
+``\problem{bipartite}'', ``\problem{planar}'') with the special class
+called ``\problem{any}'' meaning that there is no restriction on $G$ at
+all. For the presentation order we will use ``\problem{connected}'',
+``\problem{bfs}'', ``\problem{dfs}'' and ``\problem{max-degree}'' with
+meanings as discussed earlier and, again, ``\problem{any}'' with the
+meaning that the vertices may be presented in a fully arbitrary order.
+
+The value of $n$ is not known to the online algorithm beforehand. The
+reason for this is that it would provide the algorithm with additional
+information about the input instance which may (and in some cases does)
+affect the advice complexity of the problem.

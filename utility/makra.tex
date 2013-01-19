@@ -10,6 +10,7 @@
 \def\problem#1{\textsc{#1}}
 \def\graphcol#1#2{\problem{GraphColoring(#1, #2)}}
 
+\def\phi{\varphi}
 \def\xor{\oplus}
 \def\concat{\|}
 %\def\inr{\in_{R}}
@@ -48,9 +49,9 @@
 
 \catcode`\@=11
 
-\def\R{{\cal R}}
+\def\R{\mset{R}}
 \def\cent{{c\kern-0.3em|\kern0.1em}}
-\def\N{{N}} % FIXME FIXME 
+\def\N{\mset{N}}
 
 \let\eps=\varepsilon
 
@@ -81,8 +82,8 @@
 % \newtheorem{dokaz}{Dôkaz}[section]
 
 \newtheorem{definition}{Definition}[chapter]
-\newtheorem{theorem}{Theorem}[chapter]
-\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
 
 \long\def\odsadene#1{
 \leftskip=\parindent
