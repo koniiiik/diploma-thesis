@@ -1,0 +1,17 @@
+# vim swapfiles
+.*.swp
+
+# LaTeX / BibTeX temporary / output files
+Session.vim
+main-blx.bib
+main.aux
+main.bbl
+main.blg
+main.lof
+main.log
+main.lot
+main.out
+main.pdf
+main.run.xml
+main.slo
+main.toc
