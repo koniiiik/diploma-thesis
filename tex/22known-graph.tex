@@ -38,6 +38,8 @@ complexity.
 As a reminder, bipartite graphs are those that can be colored using two
 colors.
 
+\todo{Mention the cases when advice is not needed.}
+
 \begin{theorem}\label{theorem:bipartite-connected}
     There is a deterministic online algorithm for
     \graphcol{bipartite}{connected} without advice.
@@ -54,3 +56,15 @@ This result shows that for bipartite graphs it does not really make any
 sense to analyze any of the connected presentation orders. However, for
 presentation orders without any restrictions this class of graphs is still
 interesting from the point of view of advice complexity.
+
+\subsection{Paths}
+
+Paths are a subclass of bipartite graphs, therefore it is only interesting
+to analyze the most general presentation order.
+
+\begin{theorem}\label{theorem:paths-any}
+    The advice complexity of \graphcol{path}{any} is
+    $\ceil*{\frac{n}{2}}$.
+\end{theorem}
+
+\todo{Why?}
