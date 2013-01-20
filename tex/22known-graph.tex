@@ -1,1 +1,56 @@
 \todo{Let's do this.}
+
+Most of the results provided in this section are discussed in more detail
+in \cite{misof-trivial-graphs}.
+
+\subsection{General graphs}
+
+The following asymptotically tight estimates on the advice complexity of
+the most general case of online graph coloring have been established.
+
+\begin{theorem}\label{theorem:general-graphs-upper}
+    There is an online algorithm with advice which solves
+    \graphcol{any}{any} using $n \lg n - n \lg\lg n + O(n)$ bits of
+    advice.
+\end{theorem}
+
+The general idea is to encode the position of an optimal coloring in a
+lexicographically sorted list of all partitions of the set of vertices on
+the advice tape.
+
+\begin{theorem}\label{theorem:general-graphs-lower}
+    The advice complexity of \graphcol{any}{bfs} is at least $n \lg n - n
+    \lg\lg n + O(n)$.
+\end{theorem}
+
+The proof of this theorem uses the idea outlined in section
+\ref{section:techniques}. It is possible to create a set of instances that
+an online algorithm cannot distinguish based on their prefixes up to a
+certain length but that require unique colorings in these prefixes
+already.
+
+These results are crucial in order to quantify how much a restriction on
+the class of graphs simplifies the coloring problem by means of advice
+complexity.
+
+\subsection{Bipartite graphs}
+
+As a reminder, bipartite graphs are those that can be colored using two
+colors.
+
+\begin{theorem}\label{theorem:bipartite-connected}
+    There is a deterministic online algorithm for
+    \graphcol{bipartite}{connected} without advice.
+\end{theorem}
+
+\begin{proof}
+    The algorithm for an optimal coloring is trivial. For the first vertex
+    it picks an arbitrary color and afterwards, for each vertex there is
+    at least one neighbor whose color has already been assigned. Therefore
+    the algorithm just picks the other color.
+\end{proof}
+
+This result shows that for bipartite graphs it does not really make any
+sense to analyze any of the connected presentation orders. However, for
+presentation orders without any restrictions this class of graphs is still
+interesting from the point of view of advice complexity.
