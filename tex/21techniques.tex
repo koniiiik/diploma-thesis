@@ -37,3 +37,178 @@ which gives a lower bound on the advice complexity of the problem.
 
 This technique is used in various proofs in \cite{misof-trivial-graphs}.
 These will be discussed in more detail in the following sections.
+
+In \cite{string-guessing} the authors use reductions to a simpler problem
+that is easier to analyze as a method to prove lower bounds. Specifically,
+they picked the string guessing problem in two variants.
+
+\begin{definition}[String Guessing with Known History]
+    The string guessing problem with known history over an alphabet
+    $\Sigma$ of size $q \geq 2$ (denoted as \sgkh{q}) is defined as
+    follows. The input instance $I = (n, d_1, \dots, d_n)$ consists of an
+    integer $n$ specifying the length of the instance and a sequence of
+    $n$ characters, where $d_i \in \Sigma, 1 \leq i \leq n$. Let $A$ be an
+    online algorithm that solves \sgkh{q}, then $A(I) = (y_1, \dots, y_n,
+    \_)$, where $y_i \in \Sigma$. We define the cost of a solution as the
+    Hamming distance between the sequence $(y_1, \dots, y_n)$ and the
+    sequence $(d_1, \dots, d_n)$, i.e. the number of wrongly guessed
+    characters.
+\end{definition}
+
+\begin{definition}[String Guessing with Unknown History]
+    The string guessing problem with unknown history over an alphabet
+    $\Sigma$ of size $q \geq 2$ (denoted as \sguh{q}) is defined as
+    follows. The input instance $I = (n, ?_2, \dots, ?_n, d)$ consists of
+    an integer $n$ specifying the length of the instance, $n-1$ queries
+    without additional information and a string $d = d_1d_2\dots{}d_n$,
+    where $d_i \in \Sigma, 1 \leq i \leq n$. Let $A$ be an online
+    algorithm that solves \sguh{q}, then $A(I) = (y_1, \dots, y_n, \_)$,
+    where $y_i \in \Sigma$. We define the cost of a solution as the
+    Hamming distance between the sequence $(y_1, \dots, y_n)$ and the
+    sequence $(d_1, \dots, d_n)$.
+\end{definition}
+
+Both \sgkh{q} and \sguh{q} consist of $n + 1$ queries where for the first
+$n$ queries the algorithm is expected to guess a single character of the
+instance; for the last query no meaningful response is expected, its
+purpose is only to reveal the input string to allow an offline algorithm
+to guess the whole string correctly. The only difference between the two
+variants is that in \sgkh{q} it is revealed whether the algorithm guessed
+correctly after each guess and in \sguh{q} this is revealed in the last
+turn.
+
+For the sake of simplicity, we may sometimes speak about the input string
+$d = d_1d_2\dots{}d_n$ instead of the corresponding input instance $I =
+(n, d_1, \dots, d_n)$ in the case of \sgkh{q} or $I = (n, ?_2, \dots, ?_n,
+d)$ in the case of \sguh{q}.
+
+We formulate the following simple observation.
+
+\begin{observation}\label{observation:sguh-sgkh-bounds}
+    It should be noted that any upper bound on the advice complexity of
+    \sguh{q} is also an upper bound on the advice complexity of \sgkh{q}
+    -- any algorithm that solves \sguh{q} can be used to solve \sgkh{q} as
+    well, simply ignoring the characters provided in each query.
+    Similarly, any lower bound for \sgkh{q} is also a lower bound for
+    \sguh{q}.
+\end{observation}
+
+\begin{theorem}\label{theorem:sgkh-upper}\label{theorem:sguh-upper}
+    The advice complexity of \sguh{q} is at most $\ceil{n \lg q}$.
+\end{theorem}
+
+\begin{proof}
+    We prove this theorem by describing an algorithm $A$ using $\ceil{n
+    \lg q}$ bits of advice which solves both \sgkh{q} and \sguh{q}.
+
+    The total number of strings of length $n$ is $q^n$. These can be
+    sorted in a lexicographic order in which each instance has a position.
+    To encode this position, $\ceil{n \lg q}$ bits are required.
+
+    Therefore, after receiving the number $n$ in the first query, $A$
+    reads the position $m$ of the string from the advice string and
+    enumerates the first $m$ strings of length $n$ in lexicographic order
+    until it finds the correct one. Then it just yields one character from
+    the string per query.
+\end{proof}
+
+\begin{theorem}\label{theorem:sgkh-lower}
+    The advice complexity of \sgkh{q} is at least $\ceil{n \lg q}$.
+\end{theorem}
+
+\begin{proof}
+    We prove this by contradiction. Suppose there is an algorithm $A$
+    which solves \sgkh{q} using $m$ bits of advice, $m < \ceil{n \lg q}$.
+    The total number of instances of length $n$ is $q^n$. However, using
+    $m$ bits of advice it is possible to only encode $2^m \leq 2^{\ceil{n
+    \lg q} - 1} < 2^{n \lg q} = q^n$ different values. Therefore, there
+    are two input strings $d, d'$ where the same $m$-bit advice string
+    $\phi$ leads to the optimal solution.
+
+    Consider the first position $i$ at which strings $d$ and $d'$ differ,
+    i.e., $d_i \not= d'_i$. Since $A$ gives the optimal result for the
+    input string $d$, in the $i$-th turn it emits $d_i$. However, since up
+    until the $i$-th turn, the input is the same for $d'$ as well and
+    since the advice string is also the same, $A$ is in exactly the same
+    state in the $i$-th turn when processing $d'$ as it is when processing
+    $d$. Therefore, for the input string $d'$, $A$ outputs $d_i$ in the
+    $i$-th turn as well. This contradicts the assumption that $A$ provides
+    an optimal solution for $d'$.
+\end{proof}
+
+The following corollary follows from the previous two theorems and
+observation \ref{observation:sguh-sgkh-bounds}.
+
+\begin{corollary}
+    The advice complexity of both \sgkh{q} and \sguh{q} is $\ceil{n \lg
+    q}$.
+\end{corollary}
+
+It is easy to see that no deterministic online algorithm without advice
+can guarantee to quess even a single character right for alphabets of size
+$q \geq 2$. This can be seen by running the algorithm against an adversary
+which builds the string $d$ by picking a character different from the one
+a deterministic algorithm emits in each turn.
+
+However, by providing an online algorithm with a constant amount of advice
+we can already reach a number of correctly guessed characters linear in
+the input length.
+
+\begin{theorem}
+    Using $\ceil{\lg q}$ bits of advice it is possible to guess at least
+    $\ceil{\frac{n}{q}}$ characters correctly.
+\end{theorem}
+
+\begin{proof}
+    Using $\ceil{\lg q}$ it is possible to encode a single character from
+    $\Sigma$. Therefore, by encoding the character with the most
+    occurrences in the input string into the $\ceil{\lg q}$ advice bits
+    and then emitting this character in each turn we can ensure that the
+    algorithm guesses at least $\ceil{\frac{n}{q}}$ correctly.
+\end{proof}
+
+The following lower bounds on the number of advice bits required to
+guarantee that an algorithm guesses at least a certain amount of
+characters right have been established.
+
+\begin{theorem}\label{theorem:sguh-lower-ratio}\label{theorem:sgkh-lower-ratio}
+    To guarante that an online algorithm $A$ guesses at least $\alpha{}n$
+    characters right for an instance of \sgkh{q} of length $n$ where
+    $\frac{1}{q} \leq \alpha < 1$, $A$ needs to access at least the
+    following number of advice bits:
+    $$
+        \paren*{1 + (1 - \alpha)\log_q\paren*{\frac{1 - \alpha}{q - 1}} +
+        \alpha\log_q\alpha} n\lg{}q
+        =
+        (1 - H_q (1 - \alpha)) n\lg{}q
+    $$
+\end{theorem}
+
+For a proof of this theorem please refer to \cite{string-guessing}.
+
+According to observation \ref{observation:sguh-sgkh-bounds}, the same
+lower bound applies to \sguh{q} as well.
+
+The same paper also establishes the following upper bounds on the amount
+of advice required to guarantee a certain rate of success.
+
+\begin{theorem}\label{theorem:sguh-upper-ratio}\label{theorem:sgkh-upper-ratio}
+    There is an online algorithm that guesses at least $\alpha{}n$
+    characters right for an instance of \sguh{q} of length $n$ where
+    $\frac{1}{q} \leq \alpha < 1$, which accesses at most the following
+    number of advice bits:
+    $$
+        \ceil*{(1 - H_q(1 - \alpha)) n \lg q + 3 \lg \frac{n}{2} + \lg(\ln
+        q) + \frac{1}{2}}
+    $$
+\end{theorem}
+
+Again, thanks to observation \ref{observation:sguh-sgkh-bounds}, the upper
+bound is also valid for \sgkh{q}. The full proof can be found in
+\cite{string-guessing}.
+
+The paper then uses these results to establish lower bounds on the advice
+required to attain a certain competitive ratio for the online version of
+the maximum clique problem and the online set cover problem.
+
+\todo{Study more analysis techniques.}
