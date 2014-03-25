@@ -6,7 +6,7 @@ fast:
 
 main.dvi: */*.tex *.tex Makefile img/* *.bib
 	latex main
-	bibtex8 main
+	biber main
 	latex main
 	latex main
 
@@ -25,7 +25,7 @@ ps: main.ps
 
 main.pdf: */*.tex *.tex Makefile img/* *.bib
 	pdflatex main
-	bibtex8 main
+	biber main
 	pdflatex main
 	pdflatex main
 
