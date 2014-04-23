@@ -1,17 +1,21 @@
-This chapter focuses on the problem of disjoint path allocation. We start
-with a definition of the problem, follow with an overview of known results
-and in the final section of this chapter we present some new bounds for
-the competitive advice complexity of this problem.
+Disjoint path allocation is a well-studied specialization of the more
+general problem of call admission in arbitrary networks. In the general
+case, a dispatcher needs to decide which calls to admit based on the
+topology of the network, capacities of its edges, and the bandwidth and
+duration of each call.
 
-\todo{Some motivational shit about DPA.}
+In the case of disjoint path allocation, we restrict ourselves to a path
+on $L + 1$ vertices where all edges have the same capacity, which is equal
+to the bandwidth of each call. In addition, each call has an unlimited
+duration.
 
 In this chapter we build on the results published in \cite{sofsem2014},
 therefore we use the same definition of the problem as in the
 aforementioned article.
 
-\begin{definition}
+\begin{definition}[DPA]\label{def:dpa}
     The \emph{disjoint path allocation problem (DPA)} is the following
-    maximization problem on a path $P = (v_1, \dots, v_L)$. First, the
+    maximization problem on a path $P = (v_0, \dots, v_L)$. First, the
     value of $L$ is revealed. Then $n$ requests of the form $(i_k, j_k)$
     follow, where each such pair denotes the subpath of $P$ from $v_{i_k}$
     to $v_{j_k}$. For each pair an algorithm decides whether to admit or

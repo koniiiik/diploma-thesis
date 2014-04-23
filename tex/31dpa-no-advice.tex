@@ -1,0 +1,103 @@
+Before we delve into the area of advice complexity, we focus on an
+analysis of deterministic online algorithms without advice.
+
+Section 13.5 of \cite{dpa-book} presents a proof that no deterministic
+algorithm can guarantee a competitive ratio better than linear in the
+number of vertices when restricted to strict competitiveness. We reproduce
+the proof below.
+
+\begin{theorem}[\cite{dpa-book}]\label{theorem:dpa-deterministic}
+    On a path on $L$ vertices, any deterministic online algorithm $A$ has
+    a competitive ratio of at least $L - 1$. Specifically, there exists
+    either an input instance $I_1$ where $C(Opt(I_1)) = L - 1$ and
+    $C(A(I_1)) = 1$ or an instance $I_2$ for which $C(Opt(I_2)) = 1$ and
+    $C(A(I_2)) = 0$.
+\end{theorem}
+
+\begin{proof}
+    We prove the theorem using an adversary $Adv$. Consider an algorithm
+    $A$. The adversary reveals $L$ and issues as the first query $(0, L)$.
+    If $A$ rejects this query, $Adv$ terminates the input instance, which
+    leads to the second case in the theorem and it means $A$ is not
+    competitive.
+
+    If $A$ admits the first query, $Adv$ follows up with $L - 1$ requests:
+    $(0, 1), (1, 2), \dots, (L - 1, L)$. Since $A$ has already admitted a
+    request spanning the whole path $P$, it cannot admin any of these
+    following requests, while the optimal solution is to reject the first
+    request and admit all of the following $L - 1$ requests. This leads
+    to the first case and means that the competitive ratio of $A$ is at
+    least $L - 1$.
+\end{proof}
+
+The proof of theorem \ref{theorem:dpa-deterministic} might appear to rely
+on a pathologic edge case made possible by the definition of strict
+competitiveness: it leans on the fact that each algorithm that denies the
+first request can be made non-competitive and setting the parameter
+$\alpha$ from definition \ref{def:competitive-ratio} to a value of only
+$1$ would eliminate this.
+
+Indeed, Komm described in \cite{komm-thesis} an algorithm that achieves a
+competitive ratio of $\left\lceil\frac{L-1}{\alpha+1}\right\rceil$, which
+seems to indicate that relaxing the definition of competitiveness might
+lead to better results. However, he also proved that the competitive ratio
+of any deterministic algorithm is at least linear in the number of
+requests.
+
+Since we study DPA primarily with respect to the length of the
+communication network, we complement this with a lower bound on the
+competitive ratio of $\frac{\lfloor\sqrt{L-1}\rfloor}{\alpha+1}$.
+
+\begin{theorem}\label{theorem:relaxed-dpa-deterministic}
+    Consider an arbitrary value of $\alpha$ in the definition of
+    competitiveness. On a path on $L$ vertices, any deterministic online
+    algorithm has a competitive ratio of at least
+    $\frac{\lfloor\sqrt{L-1}\rfloor}{\alpha+1}$.
+\end{theorem}
+
+\begin{proof}
+    Let $A$ be a $c$-competitive deterministic online algorithm for DPA,
+    let $\alpha$ be a positive constant such that $C(A(I)) \geq
+    \frac{C(Opt(I))}{c} - \alpha$. We use an adversary $Adv$ to prove the
+    bound.
+
+    Let $k := \lfloor\sqrt{L-1}\rfloor$. $Adv$ starts by issuing
+    non-overlapping requests of length $k$: $(0, k), (k, 2k), \dots$,
+    until either $A$ admits a request, or $Adv$ submits the request
+    $(k(k-1), k^2)$.
+
+    In the former case, let $(ik, (i+1)k)$ be the first (and only) request
+    admitted by $A$. $Adv$ then submits the following $k$ requests and
+    terminates the input: $(ik, ik+1), (ik+1, ik+2), \dots, ((i+1)k-1,
+    (i+1)k)$. Each of these requests overlaps the single admitted request,
+    therefore $A$ has to deny all of them.
+
+    The optimal solution for this instance is to admit the first $i$
+    requests of length $k$, deny the $i+1$-th request and admit all of the
+    following $k$ requests of length $1$, which means $C(Opt(I)) = i+k$,
+    while $C(A(I)) = 1$. Since $A$ is $c$-competitive, the following
+    inequalities hold.
+
+    \begin{align*}
+        1 &\geq \frac{k+i}{c} - \alpha \\
+        c &\geq \frac{k+i}{\alpha + 1} \geq \frac{k}{\alpha + 1} =
+        \frac{\lfloor\sqrt{L-1}\rfloor}{\alpha + 1}
+    \end{align*}
+
+    In the latter case, $Adv$ terminates the input after request $(k(k-1),
+    k^2)$. The optimal solution of this instance is to admit all $k$
+    requests, while $A$ rejects everything, which results in these
+    inequalities:
+
+    \begin{align*}
+        0 &\geq \frac{k}{c} - \alpha \\
+        c &\geq \frac{k}{\alpha} \geq \frac{\lfloor\sqrt{L-1}\rfloor}{\alpha + 1}
+    \end{align*}
+\end{proof}
+
+This result indicates that even though relaxing the condition of
+competitiveness does make it possible to obtain a better competitive ratio
+with a deterministic algorithm, it still leaves a significant gap between
+the optimal solution and deterministic online algorithms. Therefore in the
+rest of this chapter we will adhere to the strict definiton, unless noted
+otherwise.
