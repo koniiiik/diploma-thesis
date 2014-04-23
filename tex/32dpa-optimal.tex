@@ -1,0 +1,25 @@
+The first result regarding the advice complexity of DPA has been published
+in \cite{komm-thesis} and it states that the minimum amount of advice
+required to achieve optimality is $(L-1)/2$ bits. This bound has since
+been improved in \cite{sofsem2014} to $L-1$ bits. \todo{Give a brief
+overview of the proof.} The same paper also
+details an optimal algorithm using the same amount of advice, which we
+reproduce below, since multiple competitive algorithms discussed later on
+are modified versions of this particular optimal algorithm.
+
+\begin{theorem}[\cite{sofsem2014}]\label{theorem:dpa-optimal}
+    There is an online algorithm which guarantees an optimal solution
+    using $L-1$ bits of advice.
+\end{theorem}
+
+\begin{proof}
+    The algorithm $A$ works as follows. After obtaining the length $L$,
+    $A$ reads $L-1$ bits from the advice string with the following
+    meaning: the $i$-th bit (denoted by $b_i$, for $i \in \{1, \dots,
+    L-1\}$ indicates whether $A$ should accept a request starting in
+    vertex $v_i$. We always set $b_0$ to $1$.
+
+    Then, whenever $A$ processes a request $(i, j)$ that does not conflict
+    with any already admitted request, $A$ accepts it iff $b_i = 1$ and
+    $b_k = 0$ for all $i < k < j$.
+\end{proof}
