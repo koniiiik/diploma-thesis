@@ -31,7 +31,7 @@
 \usepackage{pdfpages}
 \usepackage{tikz}
 \usepackage{gnuplot-lua-tikz}
-\usetikzlibrary{arrows,positioning,shapes}
+\usetikzlibrary{arrows,positioning,shapes,calc,decorations.pathreplacing}
 \usepackage[style=alphabetic,maxbibnames=47,backend=biber]{biblatex}
 \input{utility/makra.tex}
 
@@ -57,6 +57,12 @@ showstringspaces=false, escapechar=\%, language=C++}
     pdftitle = {\titlea{} \titleb},
     pdfkeywords = {online problem} {advice complexity} {approximation}
 }
+
+% TikZ setup for DPA figures
+\tikzstyle{vertex} = [circle, thick, draw, inner sep=2]
+\tikzstyle{query vertex} = [vertex, fill=white]
+\tikzstyle{path vertex} = [vertex, fill=black]
+\tikzstyle{edge} = [thick]
 
 \begin{document}
 
@@ -234,6 +240,9 @@ Supervisor: & \supervisor \\
 \section{Bounds for constant advice}
 \label{section:dpa-constant-advice}
 \todo{Write this section}
+\section{Bounds for constant competitiveness}
+\label{section:dpa-constant-compet}
+\input{tex/34dpa-constant-compet.tex}
 
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}

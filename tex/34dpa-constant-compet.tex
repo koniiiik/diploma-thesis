@@ -1,0 +1,320 @@
+\subsection{Upper bound for small $c$}
+
+An upper bound on the amount of advice required for $c$-competitiveness
+for $c$ close to $1$ has been published in \cite{sofsem2014} as a
+modification of the optimal algorithm. We describe the modified algorithm
+in detail below.
+
+\begin{theorem}[\cite{sofsem2014}]\label{theorem:dpa-log3}
+    For each $c = k/(k-1)$ where $k$ is an integer greater than $1$, there
+    is a $c$-competitive algorithm for DPA that uses
+    $\lceil\log(c/(c-1))\rceil + L-1 - \lfloor\lfloor(c-1)(L-2)/c\rfloor
+    \cdot (2 - \log 3)\rfloor$ bits of advice.
+\end{theorem}
+
+\begin{proof}
+    Let $\phi = b_1\dots{}b_{L-1}$ be an advice string for the optimal
+    algorithm from the proof of theorem \ref{theorem:dpa-optimal} leading
+    to an optimal solution. We modify the advice string by adding the
+    value of every $k$-th bit and omitting the bit itself from the
+    sequence. This way, we replace some pairs of successive bits with
+    ternary numbers. For example, consider the following sequence:
+    $(1,0,1,1,0,1,0,0,1,0)$. For $k=4$ we obtain the following sequence:
+    $(1,0,1+1,0,1,0+0,1,0) = (1,0,2,0,1,0,1,0)$. Assuming the positions of
+    ternary numbers in the sequence are known beforehand, it is possible
+    to encode the modified sequence using $L - 1 - 2p +
+    \lceil{}p\log{}3\rceil$ bits, where $p$ is the number of added pairs.
+
+    Given a sequence thus shortened, it is possible to reconstruct most of
+    the original sequence $\phi$. Each sum of two bits needs to be
+    replaced by a pair of bits. In cases where the sum is $0$ or $2$ the
+    original pair of bits is unambiguous, however, if the sum is $1$,
+    there are two possibilities. In this case, our algorithm will always
+    assume that the original pair of bits was $0, 1$. With this
+    reconstructed sequence $\phi'$ it is now possible to simulate the
+    optimal algorithm.
+
+    Clearly, using $\phi'$ as the advice instead of $\phi$ can lead to the
+    algorithm rejecting some requests which would be admitted in an
+    optimal solution. This can happen only in case when a pair of bits was
+    $1, 0$ before adding them; in this case, the algorithm would expect a
+    request starting at the second position, which might not arrive. It
+    will, however, not block any requests starting before the first of the
+    two bits. Therefore, if $e$ is the number of pairs reconstructed
+    incorrectly, the cost of a solution produced by this algorithm will be
+    at least $C(Opt(I)) - e$.
+
+    However, simply selecting bits $b_k, b_{2k}, \dots$ does not lead to
+    the required competitive ratio. TODO: example
+
+    The solution is to consider all strategies for choosing the pairs of
+    bits to add of the following form: for each $1 \leq i \leq k$, the
+    $i$-th strategy is to choose $b_{i+ak}, b_{i+ak+1}$ for all integers
+    $a$ such that $0 \leq a \leq \left\lceil\frac{L-2}{k}-1\right\rceil$
+    as the pairs to add. In each strategy the number of pairs is $p \geq
+    \left\lfloor\frac{L-2}{p}\right\rfloor$. Of all such strategies, the
+    one with the smallest number of errors is chosen and its number $i$ is
+    encoded in the advice string.
+
+    This way of choosing strategies ensures that for each bit $b_j$,
+    exactly two strategies are considered where $b_j$ is part of an added
+    pair, once in the position of the first bit and once in the position
+    of the second bit (with the exception of the first and last bit, of
+    course). Thanks to this fact, if we sum all encoding errors over all
+    strategies, each bit can contribute to this sum at most once, and in
+    addition, only $1$ bits can contribute at all. From this and from the
+    fact that the cost of the optimal solution is at least the number of
+    $1$ bits (possibly $+1$ if the optimal solution accepts a request
+    starting in $v_0$) follows that $C(Opt(I)) \geq ke$ where $e$ is the
+    number of errors in the best strategy.
+
+    The competitive ratio of this solution is then obtained as follows.
+    $$
+        \frac{C(Opt(I))}{C(Opt(I)) - e} \leq \frac{C(Opt(I))}{C(Opt(I)) -
+        \frac{C(Opt(I))}{k}} = \frac{k}{k-1}
+    $$
+
+    The amount of advice required is therefore $\lceil\log{}k\rceil$ bits
+    to encode the number of strategy used, and $L - 1 - 2p +
+    \lceil{}p\log{}3\rceil$ where the value of $p$ is described above,
+    which matches the theorem.
+\end{proof}
+
+We present a simplification of the above algorithm which requires less
+advice for the same competitive ratios.
+
+\begin{theorem}\label{theorem:dpa-fraction}
+    For each $c = (p+q)/q$ where $p, q$ are positive integers, there is a
+    $c$-competitive algorithm for DPA which uses $\lceil\log(p+q)\rceil +
+    L - 1 - \lfloor (L-1) p / (p + q)\rfloor$ bits of advice.
+\end{theorem}
+
+\begin{proof}
+    The algorithm works in a similar fashion to the one presented in the
+    proof of theorem \ref{theorem:dpa-fraction}. However, instead of
+    adding certain bits to the previous ones, it simply leaves them out of
+    the advice string.
+
+    More precisely, given an advice string $\phi$ leading to an optimal
+    solution, we split $\phi$ into alternating blocks of lengths $p$ and
+    $q$ bits (with a possible exception of the first and last blocks,
+    which may be shorter). We retain blocks of length $q$ and we leave out
+    blocks of length $p$, thus removing $s$ bits, where $s \geq
+    \lfloor(L-1) p / (p+q)\rfloor$.
+
+    Again, our algorithm $A$ first reconstructs an approximation
+    $\phi'$ of the original string $\phi$, by filling all the gaps in
+    $\phi'$ with zeroes and then simulates the optimal algorithm with
+    $\phi'$.
+
+    Some of the omitted bits will have been ones, for every such bit,
+    $C(A(I))$ will decrease by $1$ compared to the optimal solution. In
+    order to guarantee the expected competitive ratio, again, we need to
+    consider $p+q$ possible strategies based on whether the first block is
+    retained or omitted and setting its length to some nonnegative integer
+    less than or equal to $q$ or $p$ respectively, and choose the best
+    strategy.
+
+    Let us denote the number of errors (i.e. bits whose value in $\phi$ is
+    $1$ and in $\phi'$ it is $0$) in the $i$-th strategy as $e_i$. We
+    already know that if we choose the $i$-th strategy, $C(A(I)) \geq
+    C(Opt(I)) - e_i$. Every $1$ bit contributes to the error count of $p$
+    strategies, which, combined with the fact that $C(Opt(I))$ is at least
+    the number of $1$ bits, gives $p \cdot C(Opt(I)) \geq \sum_{i=1}^{p+q}
+    \geq (p+q) \overline{e}$, where $\overline{e}$ is the error count of
+    the best strategy, i.e. the lowest of all $e_i$.
+
+    The competitive ratio is therefore obtained from the following
+    inequalities.
+
+    $$
+        \frac{C(Opt(I))}{C(Opt(I))-\overline{e}} \leq
+        \frac{C(Opt(I))}{C(Opt(I)) - \frac{p\cdot{}C(Opt(I))}{p+q}} =
+        \frac{p+q}{q}
+    $$
+
+    The advice string consists of a binary encoding of the number of
+    chosen strategy taking $\lceil\log(p+q)\rceil$ bits followed by the
+    shortened string from an optimal solution taking $L - 1 - s$ bits.
+\end{proof}
+
+\subsection{Lower bound for small $c$}
+
+\cite{string-guessing} details a lower bound on the number of advice bits
+required for competitive solutions of the string guessing problem using
+covering codes on the universe of input instances. We reuse multiple ideas
+presented there to establish a lower bound on the advice for DPA.
+
+The general technique we use to show our lower bound consists of the
+following steps. First, we isolate a set of instances with these two
+properties: \begin{inparaenum}\item all instances share the same prefix,
+and \item for any two instances, the decisions of an online algorithm on
+the common prefix must be different in order to obtain an optimal
+solution.\end{inparaenum} Next, we observe that the decisions leading to
+an optimal solution for an instance $I$ are sufficient to obtain a good
+enough solution (i.e. one whose cost fits within the range allowed by a
+given competitive ratio) for a set of ``similar'' instances $C_I$ and
+compute an upper bound on the number of such instances. Finally, a lower
+bound on the length of the advice string is obtained as the binary
+logarithm of a fraction of the number of instances and the upper bound of
+$|C_I|$.
+
+In order to estimate the size of $C_I$, we will use the following lemma.
+
+\begin{lemma}[\cite{flum-grohe}]\label{lemma:hamming}
+    Let $n \geq 1$ and $0 < q \leq 1/2$. Then
+    $$
+        \sum_{i=0}^{\lfloor{}qn\rfloor} \binom{n}{i} \leq
+        2^{n\cdot{}H(q)},
+    $$
+    where $H(q) = -q \log q - (1-q) \log (1-q)$ is the binary entropy of
+    $q$.
+\end{lemma}
+
+A more straightforward way to write the above bound is
+$$
+    2^{n\cdot{}H(q)} = \paren*{\frac{1}{q}}^{nq} \cdot
+    \paren*{\frac{1}{1-q}}^{n(1-q)}.
+$$
+
+TODO: some transition sentence...
+
+\begin{theorem}
+    Any online algorithm for DPA which guarantees a competitive ratio $1 <
+    c \leq \frac{4}{3}$ needs to read at least $\frac{L}{2} +
+    L\paren*{1-\frac{1}{c}}\log\paren*{2-\frac{2}{c}} +
+    \frac{L}{2}\paren*{\frac{2}{c}-1}\log\paren*{\frac{2}{c}-1}$ bits of
+    advice.
+\end{theorem}
+
+\begin{proof}
+    Let $L = 2k$ for some positive integer k. Consider the following set
+    $U_L$ of instances consisting of two stages. The first stage of each
+    instance consists of requests $(2i, 2i+2)$ for all $0 \leq i < k$.
+    The second stage is unique for each instance and consists of pairs of
+    requests $(2i, 2i+1), (2i+1, 2i+2)$, where $i$ is chosen from some
+    subset of $\{0, \dots, k-1\}$.
+
+    Each instance corresponds to a binary string of length $k$: if the
+    $i$-th bit in the binary string is $1$, the second stage contains
+    requests $(2i, 2i+1), (2i+1, 2i+2)$, otherwise, it contains no request
+    on this subpath. For an example, refer to figure
+    \ref{fig:lower-bound-instance}.
+
+    The optimal solution for each instance is to admit all requests in
+    stage 2 and those in stage 1 that do not overlap any requests in
+    stage 2. If we look at the binary representation of an instance, that
+    means the optimal solution admits one request for every zero bit
+    (stage 1) and two requests for every one bit (stage 2).
+
+    A crucial observation is that for each mistake an online algorithm $A$
+    makes in stage 1, the cost of its solution decreases by at least one:
+    if $A$ admits a stage 1 request corresponding to a one bit, it will
+    not be able to accept any of the two stage 2 requests on this subpath,
+    and if it rejects a stage 1 request corresponding to a zero bit, there
+    will not be any further requests in stage 2 for this subpath.
+
+    Moreover, for each instance $I \in U_L$, the following equality holds:
+    $C(Opt(I)) = pL$ for some $p \in [1/2, 1]$. That means, if we allow
+    $A$ to make $e$ mistakes in stage $1$, its competitive ratio is
+    described by the inequality
+    $$
+        \frac{pL}{pL-e} \leq c.
+    $$
+    Solving this inequality for $e$ gives us an upper bound on the number
+    of errors:
+    \begin{equation}\label{eq:upper-bound-e}
+        e \leq qL \frac{c-1}{c} \leq L \frac{c-1}{c}.
+    \end{equation}
+
+    Since the first $k$ queries are the same in all instances, all stage 1
+    decisions an online algorithm makes only depend on the advice string.
+    Each sequence of decisions in stage 1 is optimal for one instance $I
+    \in U_L$ with its corresponding bit vector $B$. In addition, if we
+    allow at most $e$ errors in stage 1, the same sequence of decisions is
+    acceptable for an instance $I'$ with a bit string $B'$ if $Ham(B, B')
+    \leq e$, where $Ham$ denotes the Hamming distance. The number of such
+    acceptable instances is then $Vol_2(k, e) = \sum_{i=0}^e
+    \binom{k}{e}$, which is the volume of a binary Hamming ball of radius
+    $e$ around a string of length $k$.
+
+    We already have an upper bound on $e$ from \eqref{eq:upper-bound-e}.
+    If we substitute this into the bound on $Vol_2(n, qn)$ from lemma
+    \ref{lemma:hamming}, we obtain an upper bound on the number of
+    instances from $U_L$ that can be served with a single advice string in
+    order to achieve $c$-competitiveness. For simplicity, we use $q$ to
+    denote the expression $2(c-1)/c$.
+    \begin{align*}
+        Vol_2(k, e) &\leq Vol_2\paren*{k, 2k\frac{c-1}{c}} \\
+        &= \sum_{i=0}^{\floor{qk}} \binom{k}{i} \\
+        &\leq \paren*{\frac{1}{q}}^{kq} \paren*{\frac{1}{1-q}}^{k(1-q)}
+        \numberthis\label{eq:single-string-instances}
+    \end{align*}
+
+    If we denote the length of advice strings by $b$, we know that there
+    are at most $2^b$ possible advice strings, whereas there are $2^k$
+    instances in $U_L$. \eqref{eq:single-string-instances} gives us an
+    upper bound on the fraction of these two numbers, which we can solve
+    for $b$ and thus obtain the lower bound on the amount of advice
+    required for $c$-competitiveness.
+
+    \begin{align*}
+        \frac{2^k}{2^b} &\leq \paren*{\frac{1}{q}}^{kq}
+            \paren*{\frac{1}{1-q}}^{k(1-q)} \\
+        k-b &\leq kq(-\log{}q) - k(1-q)\log(1-q) \\
+        k-b &\leq -2k\frac{c-1}{c}\log\frac{2(c-1)}{c} \\
+            & \quad - k\paren*{1-\frac{2(c-1)}{c}}
+            \log\paren*{1-\frac{2(c-1)}{c}} \\
+        b &\geq k + 2k\paren*{1-\frac{1}{c}}\log\paren*{2-\frac{2}{c}} \\
+            & \quad + k\paren*{\frac{2}{c}-1}\log\paren*{\frac{2}{c}-1}
+    \end{align*}
+
+    In order for \eqref{eq:single-string-instances} to hold, $q$ cannot
+    exceed $1/2$, which gives us the restriction on $c$ for which this
+    bound holds.
+
+    \begin{align*}
+        q &\leq \frac{1}{2} \\
+        2\frac{c-1}{c} &\leq \frac{1}{2} \\
+        c &\leq \frac{4}{3}
+    \end{align*}
+\end{proof}
+
+\begin{figure}\centering
+    \begin{tikzpicture}[scale=.6]
+
+        \foreach \i in {1, ..., 4}
+        {
+            \draw [dashed] (2 * \i, 0.5) -- (2 * \i, -4.5);
+        }
+
+        \draw [edge] (0,0) node [path vertex] {}
+        \foreach \i in {1, ..., 10}
+            {-- (\i, 0) node [path vertex] {} } ;
+
+        \foreach \i in {0, ..., 4}
+        {
+            \draw let \n1 = {-1 - mod(\i, 2)} in
+                    [edge] (2 * \i, \n1) node [query vertex] {}
+                    --     ++(1, 0)      node [query vertex] {}
+                    --     ++(1, 0)      node [query vertex] {};
+        }
+
+        \foreach \i in {0, 1, 3}
+        {
+            \draw [edge] (2 * \i, -3)   node [query vertex] {}
+                  --     ++(1,  0)      node [query vertex] {}
+                         ++(0, -1)      node [query vertex] {}
+                  --     ++(1,  0)      node [query vertex] {};
+        }
+
+        \draw [decorate, decoration={brace}, thick]
+              (-0.5, -2.3) -- (-0.5, -0.7)
+              node [left, midway]{stage 1};
+        \draw [decorate, decoration={brace}, thick]
+              (-0.5, -4.3) -- (-0.5, -2.7)
+              node [left, midway]{stage 2};
+    \end{tikzpicture}
+    \caption{Input instance corresponding to the string $11010$.}
+    \label{fig:lower-bound-instance}
+\end{figure}
