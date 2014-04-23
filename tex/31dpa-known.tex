@@ -1,0 +1,38 @@
+
+\cite{dpa-book} contains a simple proof that no deterministic online
+algorithm without advice can guarantee a good competitive ratio, which we
+reproduce below.
+
+\begin{theorem}\label{theorem:dpa-deterministic}
+    On a path of length $L$, any deterministic online algorithm $A$ has a
+    competitive ratio of at least $L - 1$. Specifically, there exists
+    either an input instance $I_1$ where $C(Opt(I_1)) = L - 1$ and
+    $C(A(I_1)) = 1$ or an instance $I_2$ for which $C(Opt(I_2)) = 1$ and
+    $C(A(I_2)) = 0$.
+\end{theorem}
+
+\begin{proof}
+    We prove the theorem using an adversary. Consider an algorithm $A$.
+    The adversary reveals $L$ and issues as the first query $(0, L)$. If
+    $A$ rejects this query, the adversary terminates the input instance,
+    which leads to the second case in the theorem and it means $A$ is not
+    competitive.
+
+    If $A$ admits the first query, the adversary follows up with $L - 1$
+    requests: $(0, 1), (1, 2), \dots, (L - 1, L)$. Since $A$ has already
+    admitted a request spanning the whole path $P$, it cannot admin any
+    of these following requests, while the optimal solution is to reject
+    the first request and admit all of the following $L - 1$ requests.
+    This leads to the first case and means that the competitive ratio of
+    $A$ is at least $L - 1$.
+\end{proof}
+
+At this point it is worth noting that we restrict ourselves to strict
+competitiveness. In the case of general competitiveness with an arbitrary
+value of the slackness constant $\alpha$, \cite{komm-thesis} shows a
+greedy algorithm that is $\ceil*{\frac{L - 1}{\alpha + 1}}$-competitive.
+We complement this result with a matching lower bound: in section
+\todo{reference the section} we show that each deterministic algorithm is
+at least $\ceil*{\frac{L - 1}{\alpha + 1}}$-competitive.
+
+

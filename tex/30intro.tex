@@ -1,0 +1,26 @@
+This chapter focuses on the problem of disjoint path allocation. We start
+with a definition of the problem, follow with an overview of known results
+and in the final section of this chapter we present some new bounds for
+the competitive advice complexity of this problem.
+
+\todo{Some motivational shit about DPA.}
+
+In this chapter we build on the results published in \cite{sofsem2014},
+therefore we use the same definition of the problem as in the
+aforementioned article.
+
+\begin{definition}
+    The \emph{disjoint path allocation problem (DPA)} is the following
+    maximization problem on a path $P = (v_1, \dots, v_L)$. First, the
+    value of $L$ is revealed. Then $n$ requests of the form $(i_k, j_k)$
+    follow, where each such pair denotes the subpath of $P$ from $v_{i_k}$
+    to $v_{j_k}$. For each pair an algorithm decides whether to admit or
+    deny the request. All admitted requests must be pairwise
+    edge-disjoint. The goal is to maximize the number of admitted
+    requests.
+\end{definition}
+
+This problem can be looked at as a series of call requests where each call
+has infinite duration and each edge can accommodate at most one call. Note
+that the number of requests is not known in advance, only the length of
+the path.
