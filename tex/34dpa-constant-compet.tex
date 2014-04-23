@@ -45,7 +45,7 @@ in detail below.
     at least $C(Opt(I)) - e$.
 
     However, simply selecting bits $b_k, b_{2k}, \dots$ does not lead to
-    the required competitive ratio. TODO: example
+    the required competitive ratio. \todo{example}
 
     The solution is to consider all strategies for choosing the pairs of
     bits to add of the following form: for each $1 \leq i \leq k$, the
@@ -177,7 +177,7 @@ $$
     \paren*{\frac{1}{1-q}}^{n(1-q)}.
 $$
 
-TODO: some transition sentence...
+\todo{Some transition sentence...}
 
 \begin{theorem}
     Any online algorithm for DPA which guarantees a competitive ratio $1 <
@@ -262,11 +262,10 @@ TODO: some transition sentence...
         \frac{2^k}{2^b} &\leq \paren*{\frac{1}{q}}^{kq}
             \paren*{\frac{1}{1-q}}^{k(1-q)} \\
         k-b &\leq kq(-\log{}q) - k(1-q)\log(1-q) \\
-        k-b &\leq -2k\frac{c-1}{c}\log\frac{2(c-1)}{c} \\
-            & \quad - k\paren*{1-\frac{2(c-1)}{c}}
-            \log\paren*{1-\frac{2(c-1)}{c}} \\
-        b &\geq k + 2k\paren*{1-\frac{1}{c}}\log\paren*{2-\frac{2}{c}} \\
-            & \quad + k\paren*{\frac{2}{c}-1}\log\paren*{\frac{2}{c}-1}
+        k-b &\leq -2k\frac{c-1}{c}\log\frac{2(c-1)}{c} -
+            k\paren*{1-\frac{2(c-1)}{c}} \log\paren*{1-\frac{2(c-1)}{c}} \\
+        b &\geq k + 2k\paren*{1-\frac{1}{c}}\log\paren*{2-\frac{2}{c}}
+            + k\paren*{\frac{2}{c}-1}\log\paren*{\frac{2}{c}-1}
     \end{align*}
 
     In order for \eqref{eq:single-string-instances} to hold, $q$ cannot
