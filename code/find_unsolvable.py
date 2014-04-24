@@ -61,21 +61,22 @@ def solve_knapsack_liblll(a, m):
         matrix = create_matrix_from_knapsack(a, curr_m)
         reduced = lll_reduction(matrix)
         try:
-            return (find_solution_vector(reduced, curr_m), int(m == curr_m))
+            return (find_solution_vector(reduced, a, curr_m), int(m == curr_m))
         except SolutionNotFound:
             pass
     raise SolutionNotFound()
 
 
-def find_solution_vector(matrix, m):
+def find_solution_vector(matrix, a, m):
     for v in transposed(matrix):
         v = v[:-1]
         s = sum(v)
-        if s == 0:
+        # All nonzero elements should be 0 < v[i] <= n.
+        if not 0 < s <= len(v)**2:
             continue
-        # TODO: this appears to be broken
         expected = s // len([x for x in v if x != 0])
-        if all(x == 0 or x == expected for x in v) and s // expected == m:
+        if (all(x == 0 or x == expected for x in v) and
+                sum(a[i] for i, x in enumerate(v) if x > 0) == m):
             return [x // expected for x in v]
     raise SolutionNotFound()
 
