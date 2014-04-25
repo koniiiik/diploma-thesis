@@ -1,13 +1,14 @@
 In the previous section we showed that there are problems which cannot be
-solved optimally with an online algorithm. This means that having access
-to the whole of the input sequence can help the algorithm to provide
-better partial results. However, sometimes it may not be necessary to
-access the whole input sequence in order to compute the optimal solution,
-in some cases a significantly smaller amount of information is required.
+solved optimally by a deterministic online algorithm. This means that
+having access to the whole of the input sequence can help the algorithm to
+provide better partial results. However, sometimes it may not be necessary
+to access the whole input sequence in order to compute the optimal
+solution, in some cases a significantly smaller amount of information is
+required.
 
 That is why a computational model of \emph{online algorithms with advice}
 has been introduced in \cite{advice-first}. In this model, the online
-algorithm is assisted by an oracle with access to the whole input
+algorithm is assisted by an oracle with access to the entire input
 sequence. The oracle has unlimited computational power and provides the
 online algorithm with information about the input sequence that it
 requires. We define the \emph{advice complexity} of an online algorithm as
@@ -25,9 +26,9 @@ model where the online algorithm receives the same amount of information
 in each round. This makes it impossible to use a sublinear amount of
 advice. The model used in this thesis has been defined in
 \cite{advice-infinite}; this model uses an infinite advice tape and we
-measure the amount of bits the algorithm accesses.
+measure the number of bits the algorithm accesses.
 
-To illustrate the effect of advice we show the amount of advice required
+To illustrate the power of advice, we show the amount of advice required
 to solve the two aforementioned online problems optimally. The ski rental
 problem is trivial to solve using a single bit of advice -- this bit tells
 the algorithm whether there will be at least $s$ queries. The online
@@ -45,7 +46,7 @@ just picks a passive page as the victim on each page fault.
 
 Thus far we only covered the amount of advice required to obtain the
 optimal solution using an online algorithm. However, it is also useful to
-examine the amount of advice required to obtain a certain competitive
+examine the amount of advice required to achieve a certain competitive
 ratio and the tradeoff between these two. In this thesis we will study
 this aspect as well.
 
@@ -53,3 +54,11 @@ Another possible area of research is the amount of advice required to
 solve a \emph{partially online problem}. This is a special case of an
 online problem where only a part of the input instance is served in pieces
 and at some point the whole rest of the input is served in a single piece.
+
+Taking the previous notion one step further, it also makes sense to apply
+the concept of advice to offline problems. In that case, we no longer
+study the competitive ratio. Instead, we can use advice to help an
+algorithm achieve better efficiency, mainly in terms of its time
+complexity, especially for known hard problems, such as $NP$-complete
+problems. This direction of research is explored further in the last
+chapter of this thesis.
