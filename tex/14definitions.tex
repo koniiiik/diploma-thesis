@@ -70,32 +70,3 @@ This observation indicates that there is a direct connection between the
 number of required advice bits and the number of non-deterministic
 decisions a non-deterministic algorithm would have to make in order to
 find the expected solution.
-
-\begin{definition}\label{def:graph-coloring}
-    In \problem{OnlineColoring} the instance is an undirected graph $G =
-    (V, E)$ with $V = \{1, 2, \dots, n\}$. This graph is presented to an
-    online algorithm in turns: In the $k$-th turn the online algorithm
-    receives the graph $G_k = G[\{1, 2, \dots, k\}]$, i.e., a subgraph of
-    $G$ induced by the vertex set $\{1, 2, \dots, k\}$.  As its reply, the
-    online algorithm must return a positive integer: the color it wants to
-    assign to vertex $k$. The goal is to produce an optimal coloring of
-    $G$ -- the online algorithm must assign distinct integers to adjacent
-    vertices, and the largest integer used must be as small as possible.
-\end{definition}
-
-When anlyzing a variant of \problem{OnlineColoring}, we always need to
-specify the class of graphs it is restricted to and the presentation
-order. We denote this using \graphcol{X}{Y} where \problem{X} is the class
-of graphs $G$ will belong to and \problem{Y} is the presentation order.
-For the class of graphs we will use its common name (e.g.,
-``\problem{bipartite}'', ``\problem{planar}'') with the special class
-called ``\problem{any}'' meaning that there is no restriction on $G$ at
-all. For the presentation order we will use ``\problem{connected}'',
-``\problem{bfs}'', ``\problem{dfs}'' and ``\problem{max-degree}'' with
-meanings as discussed earlier and, again, ``\problem{any}'' with the
-meaning that the vertices may be presented in a fully arbitrary order.
-
-The value of $n$ is not known to the online algorithm beforehand. The
-reason for this is that it would provide the algorithm with additional
-information about the input instance which may (and in some cases does)
-affect the advice complexity of the problem.
