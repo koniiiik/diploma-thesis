@@ -17,8 +17,14 @@ GEOMETRIC_MEAN = 1.2
 
 # List of solvers defined in here.
 SOLVERS = ['liblll', 'ntl']
+SOLVERS = ['ntl']
 
 NTL_SOLVER_BINARY = './knapsack_solver_ntl'
+
+try:
+    xrange(47)
+except NameError:
+    xrange = range
 
 
 class SolutionNotFound(Exception):
@@ -82,7 +88,7 @@ def find_solution_vector(matrix, a, m):
 
 
 def transposed(m):
-    return [[m[j][i] for j in range(len(m))] for i in range(len(m[0]))]
+    return [[m[j][i] for j in xrange(len(m))] for i in xrange(len(m[0]))]
 
 
 def create_mh_keys(n):
@@ -96,7 +102,7 @@ def create_mh_keys(n):
     """
     q = 1 << (n)
     r = random.randrange(1, q, 2)
-    beta = [(r * (1 << i)) % q for i in range(n)]
+    beta = [(r * (1 << i)) % q for i in xrange(n)]
     return (beta, r)
 
 
@@ -106,7 +112,7 @@ def create_for_density(n, d):
     defined in [LO83].
     """
     max_elem = int(2 ** (n / d) * (1 + random.expovariate(1 / (GEOMETRIC_MEAN - 1))))
-    result = random.sample(range(1, max_elem), n - 1)
+    result = random.sample(xrange(1, max_elem), n - 1)
     result.append(max_elem)
     return result
 
@@ -134,8 +140,8 @@ if __name__ == "__main__":
     elems = create_for_density(n, d)
     print("Density: %.5f" % (n / math.log(max(elems), 2)))
     print("Elements: %s" % (" ".join("%s" % e for e in elems)))
-    options = set(range(1, (1 << n) - 1))
-    for i in range(its):
+    options = set(xrange(1, (1 << n) - 1))
+    for i in xrange(its):
         if not options:
             break
         mask = random.sample(options, 1).pop()
