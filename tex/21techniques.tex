@@ -12,7 +12,15 @@ and then determine its advice complexity. Any optimal algorithm cannot
 then have any worse advice complexity. While this method is obvious, it is
 often the most demonstrative one.
 
-One of the most basic approaches to find the lower bound on the advice
+Proving lower bounds is usually significantly more difficult. Instead of
+showing an algorithm which does not need more than a certain amount of
+advice, to prove that $b$ is a lower bound, we need to show that any
+algorithm with a certain guarantee on the competitive ratio cannot achieve
+this without reading at least $b$ bits.
+
+\subsection{Common prefix}
+
+Probably the most basic approach to find the lower bound on the advice
 complexity of a particular online problem is to find a set of instances
 with the following properties:
 
@@ -27,19 +35,39 @@ with the following properties:
     for each pair of instances $I^{(i)} \not= T^{(j)}$ there are no
     optimal solutions $Opt(I^{(i)}) = (y_1^{(i)}, \dots, y_{n_i}^{(i)})$,
     $Opt(I^{(j)}) = (y_1^{(j)}, \dots, y_{n_j}^{(j)})$ such that
-
-    $$(y_1^{(i)}, \dots, y_{k}^{(i)}) = (y_1^{(j)}, \dots, y_{k}^{(j)})$$
+    $$
+        (y_1^{(i)}, \dots, y_{k}^{(i)}) = (y_1^{(j)}, \dots, y_{k}^{(j)})
+    $$
 \end{enumerate}
 
-In other words, we find a set of instances such that the algorithm can't
-possibly distinguish the prefixes of these instances but for each instance
-a unique solution needs to be yielded in the prefix already. To achieve
-this, the advice string must necessarily be used. If the size of this set
-of instances is $m$, at least $\lg m$ advice bits need to be accessed
-which gives a lower bound on the advice complexity of the problem.
+In other words, we find a set of instances such that the algorithm cannot
+possibly distinguish the prefixes of these instances, however, for each
+instance a unique solution needs to be yielded in the prefix already. To
+achieve this, the advice string must necessarily be used. If the size of
+this set of instances is $m$, at least $\lg m$ advice bits need to be
+accessed which gives a lower bound on the advice complexity of the
+problem.
 
-This technique is used in various proofs in \cite{misof-trivial-graphs}.
-These will be discussed in more detail in the following sections.
+This technique is used in various proofs in \cite{misof-trivial-graphs}
+and in \cite{komm-thesis} to prove a lower bound on the advice complexity
+of disjoint path allocation.
+
+It is possible to generalize this technique to show lower bounds not only
+on the advice complexity of an optimal solution, but also to show lower
+bounds for $c$-competitive algorithms for a given constant $c$.
+
+In this case, it is useful to look at an online algorithm with $b$ bits of
+advice as a collection of $2^b$ deterministic online algorithms with
+different strategies. If the problem in question has the property that a
+strategy (sequence of decisions on the common prefix) leading to an
+optimal solution for a particular instance $I$ also leads to a competitive
+solution for a set of similar instances, we can estimate an upper bound on
+the number of such similar instances, let us denote this by $s$. A lower
+bound on the number of required strategies is then obtained as $m/c$,
+which means that $\log\frac{m}{b}$ is a lower bound on the number of
+advice bits.
+
+\subsection{Reduction to string guessing}
 
 In \cite{string-guessing} the authors use reductions to a simpler problem
 that is easier to analyze as a method to prove lower bounds. Specifically,
@@ -85,18 +113,21 @@ $d = d_1d_2\dots{}d_n$ instead of the corresponding input instance $I =
 (n, d_1, \dots, d_n)$ in the case of \sgkh{q} or $I = (n, ?_2, \dots, ?_n,
 d)$ in the case of \sguh{q}.
 
-We formulate the following simple observation.
+It is easy to observe the following relationship between bounds for the
+two variants of the string guessing problem.
 
 \begin{observation}\label{observation:sguh-sgkh-bounds}
-    It should be noted that any upper bound on the advice complexity of
-    \sguh{q} is also an upper bound on the advice complexity of \sgkh{q}
-    -- any algorithm that solves \sguh{q} can be used to solve \sgkh{q} as
-    well, simply ignoring the characters provided in each query.
-    Similarly, any lower bound for \sgkh{q} is also a lower bound for
-    \sguh{q}.
+    Any upper bound on the advice complexity of \sguh{q} is also an upper
+    bound on the advice complexity of \sgkh{q} -- any algorithm that
+    solves \sguh{q} can be used to solve \sgkh{q} as well, simply ignoring
+    the characters provided in each query. Similarly, any lower bound for
+    \sgkh{q} is also a lower bound for \sguh{q}.
 \end{observation}
 
-\begin{theorem}\label{theorem:sgkh-upper}\label{theorem:sguh-upper}
+With this in mind, bounds on the advice necessary to achieve optimality
+for both veriants have been shown.
+
+\begin{theorem}[\cite{string-guessing}]\label{theorem:sgkh-upper}\label{theorem:sguh-upper}
     The advice complexity of \sguh{q} is at most $\ceil{n \lg q}$.
 \end{theorem}
 
@@ -115,7 +146,7 @@ We formulate the following simple observation.
     the string per query.
 \end{proof}
 
-\begin{theorem}\label{theorem:sgkh-lower}
+\begin{theorem}[\cite{string-guessing}]\label{theorem:sgkh-lower}
     The advice complexity of \sgkh{q} is at least $\ceil{n \lg q}$.
 \end{theorem}
 
@@ -151,38 +182,15 @@ observation \ref{observation:sguh-sgkh-bounds}.
     q}$.
 \end{corollary}
 
-It is easy to see that no deterministic online algorithm without advice
-can guarantee to quess even a single character right for alphabets of size
-$q \geq 2$. This can be seen by running the algorithm against an adversary
-which builds the string $d$ by picking a character different from the one
-a deterministic algorithm emits in each turn.
-
-However, by providing an online algorithm with a constant amount of advice
-we can already reach a number of correctly guessed characters linear in
-the input length.
-
-\begin{theorem}
-    Using $\ceil{\lg q}$ bits of advice it is possible to guess at least
-    $\ceil{\frac{n}{q}}$ characters correctly.
-\end{theorem}
-
-\begin{proof}
-    Using $\ceil{\lg q}$ it is possible to encode a single character from
-    $\Sigma$. Therefore, by encoding the character with the most
-    occurrences in the input string into the $\ceil{\lg q}$ advice bits
-    and then emitting this character in each turn we can ensure that the
-    algorithm guesses at least $\ceil{\frac{n}{q}}$ correctly.
-\end{proof}
-
 The following lower bounds on the number of advice bits required to
 guarantee that an algorithm guesses at least a certain amount of
 characters right have been established.
 
-\begin{theorem}\label{theorem:sguh-lower-ratio}\label{theorem:sgkh-lower-ratio}
+\begin{theorem}[\cite{string-guessing}]\label{theorem:sguh-lower-ratio}\label{theorem:sgkh-lower-ratio}
     To guarantee that an online algorithm $A$ guesses at least $\alpha{}n$
-    characters right for an instance of \sgkh{q} of length $n$ where
-    $\frac{1}{q} \leq \alpha < 1$, $A$ needs to access at least the
-    following number of advice bits:
+    characters right for an instance of either \sguh{q} or \sgkh{q} of
+    length $n$, where $\frac{1}{q} \leq \alpha < 1$, $A$ needs to access at
+    least the following number of advice bits:
     $$
         \paren*{1 + (1 - \alpha)\log_q\paren*{\frac{1 - \alpha}{q - 1}} +
         \alpha\log_q\alpha} n\lg{}q
@@ -191,31 +199,47 @@ characters right have been established.
     $$
 \end{theorem}
 
-For a proof of this theorem please refer to \cite{string-guessing}.
+\todo{What is $H_q$?}
 
-According to observation \ref{observation:sguh-sgkh-bounds}, the same
-lower bound applies to \sguh{q} as well.
+Even though thanks to observation \ref{observation:sguh-sgkh-bounds} it
+would suffice to show this bound for \sgkh{q}, it has been proved for each
+problem independently as both proofs are interesting in their own right.
 
-The same paper also establishes the following upper bounds on the amount
-of advice required to guarantee a certain rate of success.
+The proof for \sguh{q} uses the common prefix technique described in the
+previous subsection. This is possible thanks to the fact that all
+instances of length $n$ are identical except for the very last query.
 
-\begin{theorem}\label{theorem:sguh-upper-ratio}\label{theorem:sgkh-upper-ratio}
-    There is an online algorithm that guesses at least $\alpha{}n$
-    characters right for an instance of \sguh{q} of length $n$ where
-    $\frac{1}{q} \leq \alpha < 1$, which accesses at most the following
-    number of advice bits:
-    $$
-        \ceil*{(1 - H_q(1 - \alpha)) n \lg q + 3 \lg \frac{n}{2} + \lg(\ln
-        q) + \frac{1}{2}}
-    $$
-\end{theorem}
+In this problem, each strategy is in fact one hard-coded string of length
+$n$ that an algorithm outputs for each instance. Since the output is
+allowed to differ in at most $(1-\alpha)n$ characters, all instances for
+which a strategy is acceptable have a Hamming distance of at most
+$(1-\alpha)n$ from the guessed character. The lower bound is then obtained
+by estimating the number of strings of length $n$ within the appropriate
+Hamming distance.
 
-Again, thanks to observation \ref{observation:sguh-sgkh-bounds}, the upper
-bound is also valid for \sgkh{q}. The full proof can be found in
-\cite{string-guessing}.
+For \sgkh{q}, however, the common prefix technique is no longer
+applicable, because an algorithm receives information about the
+correctness of its guess after each round. Even though this information
+does not correlate with the rest of the instance in any way, an algorithm
+may make different decisions based on the correctness of its previous
+guesses.
 
-The paper then uses these results to establish lower bounds on the advice
-required to attain a certain competitive ratio for the online version of
-the maximum clique problem and the online set cover problem.
+The formal proof of this bound is therefore significantly more complicated
+than in the \sguh{q} problem and involves representing each computation as
+a walk through a complete rooted $q$-ary tree of depth $n$ and estimating
+the number of instances in each subtree for which an adversary is able to
+enforce at most $e$ errors. This number of instances turns out to be the
+same as in the case of \sguh{q}, which leads to the same lower bound.
 
-\todo{Study more analysis techniques.}
+These results have been used in \cite{string-guessing} to establish lower
+bounds on the advice required to attain a certain competitive ratio for
+the online version of the maximum clique problem and the online set cover
+problem.
+
+\subsection{Partition Tree}
+
+A generalization of the common prefix technique has been introduced in
+\cite{sofsem2014}. It is not always possible to isolate enough instances
+which all have the same prefix of sufficient length.
+
+\todo{Finish me!}
