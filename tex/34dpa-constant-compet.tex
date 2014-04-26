@@ -138,7 +138,40 @@ advice for the same competitive ratios.
     shortened string from an optimal solution taking $L - 1 - s$ bits.
 \end{proof}
 
-\todo{Compare with bounds in \cite{sofsem2014}, thm. 6, 7, 8.}
+Other upper bounds were shown in \cite{sofsem2014} as well, such that each
+of them is the best for a certain interval of competitive ratios.
+
+\begin{theorem}[\cite{sofsem2014}, Theorem 6]\label{theorem:sofsem6}
+    There is a $c$-competitive online algorithm, for $c = 2\sqrt{k}$ with
+    $k \in \N$, that uses at most $$\ceil*{\ceil*{4L/c^2}\log3}$$ bits of
+    advice.
+\end{theorem}
+
+\begin{theorem}[\cite{sofsem2014}, Theorem 7]\label{theorem:sofsem7}
+    There is a $c$-competitive online algorithm, for $c \in \N$, that uses
+    at most $$\ceil*{2(L-1)/c}$$ bits of advice.
+\end{theorem}
+
+\begin{theorem}[\cite{sofsem2014}, Theorem 8]\label{theorem:sofsem8}
+    There is a $c$-competitive online algorithm, for $c = 4\log{}k$ with
+    $k \in \N^{\geq2}$, that uses at most 
+    $$\ceil*{\frac{L}{2^{c/4}} \cdot \paren*{\frac{c}{2} + \ceil*{\log{}c}
+    + 0.33}}$$
+    bits of advice.
+\end{theorem}
+
+Taking into account only the bounds from \cite{sofsem2014}, the bound from
+theorem \ref{theorem:dpa-log3} is the best for the interval $1 \leq c \leq
+3$; for $3 \leq c \leq 2\sqrt{3}$, theorem \ref{theorem:sofsem7} takes
+over; for $2\sqrt{3} \leq c \leq 64$, theorem \ref{theorem:sofsem6} is
+even better; and the rest, $c > 64$, is covered by theorem
+\ref{theorem:sofsem8}.
+
+Our bound from theorem \ref{theorem:dpa-fraction} is obviously better than
+the one from theorem \ref{theorem:dpa-log3}, which makes it the best one
+for $1 \leq c \leq 3$. However, it also outperforms both bounds from
+theorems \ref{theorem:sofsem6} and \ref{theorem:sofsem7} for $c \leq 4
+\log3 \approx 6.34$, which makes theorem \ref{theorem:sofsem7} obsolete.
 
 \subsection{Lower bound for small $c$}
 
