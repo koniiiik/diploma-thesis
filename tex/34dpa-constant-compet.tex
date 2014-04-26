@@ -224,34 +224,34 @@ $$
 
 \begin{proof}
     Let $L = 2k$ for some positive integer k. Consider the following set
-    $U_L$ of instances consisting of two stages. The first stage of each
+    $U_L$ of instances consisting of two phases. The first phase of each
     instance consists of requests $(2i, 2i+2)$ for all $0 \leq i < k$.
-    The second stage is unique for each instance and consists of pairs of
+    The second phase is unique for each instance and consists of pairs of
     requests $(2i, 2i+1), (2i+1, 2i+2)$, where $i$ is chosen from some
     subset of $\{0, \dots, k-1\}$.
 
     Each instance corresponds to a binary string of length $k$: if the
-    $i$-th bit in the binary string is $1$, the second stage contains
+    $i$-th bit in the binary string is $1$, the second phase contains
     requests $(2i, 2i+1), (2i+1, 2i+2)$, otherwise, it contains no request
     on this subpath. For an example, refer to figure
     \ref{fig:lower-bound-instance}.
 
     The optimal solution for each instance is to admit all requests in
-    stage 2 and those in stage 1 that do not overlap any requests in
-    stage 2. If we look at the binary representation of an instance, that
+    phase 2 and those in phase 1 that do not overlap any requests in
+    phase 2. If we look at the binary representation of an instance, that
     means the optimal solution admits one request for every zero bit
-    (stage 1) and two requests for every one bit (stage 2).
+    (phase 1) and two requests for every one bit (phase 2).
 
     A crucial observation is that for each mistake an online algorithm $A$
-    makes in stage 1, the cost of its solution decreases by at least one:
-    if $A$ admits a stage 1 request corresponding to a one bit, it will
-    not be able to accept any of the two stage 2 requests on this subpath,
-    and if it rejects a stage 1 request corresponding to a zero bit, there
-    will not be any further requests in stage 2 for this subpath.
+    makes in phase 1, the cost of its solution decreases by at least one:
+    if $A$ admits a phase 1 request corresponding to a one bit, it will
+    not be able to accept any of the two phase 2 requests on this subpath,
+    and if it rejects a phase 1 request corresponding to a zero bit, there
+    will not be any further requests in phase 2 for this subpath.
 
     Moreover, for each instance $I \in U_L$, the following equality holds:
     $C(Opt(I)) = pL$ for some $p \in [1/2, 1]$. That means, if we allow
-    $A$ to make $e$ mistakes in stage $1$, its competitive ratio is
+    $A$ to make $e$ mistakes in phase $1$, its competitive ratio is
     described by the inequality
     $$
         \frac{pL}{pL-e} \leq c.
@@ -262,11 +262,11 @@ $$
         e \leq qL \frac{c-1}{c} \leq L \frac{c-1}{c}.
     \end{equation}
 
-    Since the first $k$ queries are the same in all instances, all stage 1
+    Since the first $k$ queries are the same in all instances, all phase 1
     decisions an online algorithm makes only depend on the advice string.
-    Each sequence of decisions in stage 1 is optimal for one instance $I
+    Each sequence of decisions in phase 1 is optimal for one instance $I
     \in U_L$ with its corresponding bit vector $B$. In addition, if we
-    allow at most $e$ errors in stage 1, the same sequence of decisions is
+    allow at most $e$ errors in phase 1, the same sequence of decisions is
     acceptable for an instance $I'$ with a bit string $B'$ if $Ham(B, B')
     \leq e$, where $Ham$ denotes the Hamming distance. The number of such
     acceptable instances is then $Vol_2(k, e) = \sum_{i=0}^e
@@ -344,10 +344,10 @@ $$
 
         \draw [decorate, decoration={brace}, thick]
               (-0.5, -2.3) -- (-0.5, -0.7)
-              node [left, midway]{stage 1};
+              node [left, midway]{phase 1};
         \draw [decorate, decoration={brace}, thick]
               (-0.5, -4.3) -- (-0.5, -2.7)
-              node [left, midway]{stage 2};
+              node [left, midway]{phase 2};
     \end{tikzpicture}
     \caption{Input instance corresponding to the string $11010$.}
     \label{fig:lower-bound-instance}
