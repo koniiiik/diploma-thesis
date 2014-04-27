@@ -56,24 +56,3 @@ does not restrict the computational power of $A$.
     instance $I$ of size at most $n$ there is an advice string $\phi$ such
     that $C(A^\phi(I)) \leq c \cdot C(Opt(I)) + \alpha$.
 \end{definition}
-
-\todo{The following is horsefeces. Either nuke it or replace with a much
-more meaningful comparison to randomization in the introdictory advice
-section.}
-
-The previous two definitions suggest another way to look at algorithms
-with advice. They have one similarity with the traditional definition of a
-non-deterministic Turing machine: in both cases the definitions allow the
-existence of an unlimited number of possible computations for a single
-input instance and all except ``the right one'' are disregarded. In the
-case of a non-deterministic Turing machine this means that in case there
-are multiple possibilities for the next configuration, we always choose
-the one that leads to an accepting state. In the case of online algorithms
-with advice this means that although there is an infinite number of advice
-strings, we always choose the one that leads to the optimal solution (or
-the required competitive ratio) with the smallest number of accessed bits.
-
-This observation indicates that there is a direct connection between the
-number of required advice bits and the number of non-deterministic
-decisions a non-deterministic algorithm would have to make in order to
-find the expected solution.

@@ -24,11 +24,25 @@ that additional information can be encoded into the length of the advice
 tape. In \cite{advice-constant} the authors define a slightly different
 model where the online algorithm receives the same amount of information
 in each round. This makes it impossible to use a sublinear amount of
-advice. The model used in this thesis has been defined in
-\cite{advice-infinite}; this model uses an infinite advice tape and we
-measure the number of bits the algorithm accesses.
+advice.
 
-To illustrate the power of advice, we show the amount of advice required
+The model used in this thesis has been defined in \cite{advice-infinite};
+this model uses an infinite advice tape and we measure the number of bits
+the algorithm accesses. The following sequence of events can therefore be
+imagined: before we start feeding an online algorithm $A$ with the input,
+first we give the entire input instance to an oracle which produces a
+binary string $\phi$. This binary string is then written at the beginning
+of an infinite advice tape which can be accessed by $A$ throughout the
+whole computation.
+
+This model of algorithms with advice suggests a similarity with the model
+of randomized algorithms. Common definitions of randomized algorithms use
+a tape filled with random characters from a certain alphabet, often simply
+with random bits. Our model of algorithms with advice can therefore be
+looked at as a special case of randomized algorithms, in which the oracle
+fills the random tape with the string which leads to the best outcome.
+
+To demonstrate the power of advice, we show the amount of advice required
 to solve the two aforementioned online problems optimally. The ski rental
 problem is trivial to solve using a single bit of advice -- this bit tells
 the algorithm whether there will be at least $s$ queries. The online
