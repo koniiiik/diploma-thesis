@@ -1,0 +1,56 @@
+When proving lower bounds on the competitiveness of an online problem, it
+is often useful to model instances on which an online algorithm computes
+the worst solution. The concept of an \emph{adversary}, denoted by $Adv$,
+does precisely that.
+
+A computation of an online algorithm can be thought of as a game in which
+there are two players: the online algorithm, trying to compute the best
+solution possible, and an adversary which tries to coerce the algorithm
+into making as bad decisions as possible by using information about the
+decisions of the algorithm to construct an instance that is as difficult
+for the algorithm to solve as possible.
+
+For deterministic online algorithms, informally, the two entities take
+turns -- the adversary submits the first part of the input and the online
+algorithm provides its first result. Then, the adversary can decide how
+best to construct the next part of the input instance in order to keep the
+cost of the solution as far from the optimum as possible.
+
+More formally, we define $Adv$ as an offline algorithm with knowledge of
+how an algorithm $A$ works in the sense that $Adv$ is able to simulate
+$A$, making it possible to anticipate every reaction $A$ makes. The output
+of $Adv$ is then an instance which is used as the input for $A$.
+
+If we can show that given an online problem $\onlineproblem$, there is an
+adversary $Adv$ such that for every algorithm $A$, $Adv$ is able to
+construct an instance for which $A$ fails to be $c$-competitive, that
+means there is no $c$-competitive algorithm for $\onlineproblem$.
+
+For randomized online algorithms, there are multiple definitions of
+adversaries \cite{adversaries}: the oblivious adversary, the adaptive
+online adversary and the adaptive offline adversary. The oblivious
+adversary works in the same way as described for offline algorithms -- it
+can only simulate $A$ without any information about the random data based
+on which $A$ may make decisions. In the adaptive online model, $A$ and
+$Adv$ play the game described earlier and $Adv$ creates the input for $A$
+in an online fashion. In other words, $Adv$ knows the results of the
+previous decisions of $A$ when constructing the next piece of input.
+Finally, the offline adaptive adversary is omniscient -- it has full
+information about the source of randomness based on which $A$ makes its
+decisions.
+
+When dealing with algorithms with advice, we need to consider whether to
+allow an adversary to access the advice or not. In this thesis, we follow
+the model from \cite{komm-thesis}, which gives $Adv$ full information
+about the advice string corresponding to an instance it creates.
+
+The rationale is that we usually show the existence of an adversary for
+online algorithms using at most $b$ bits of advice as a way of proving a
+lower bound of $b$ bits on the advice complexity. This means that a single
+algorithm can be actually treated as a collection of $2^b$ deterministic
+algorithms, where the advice string only serves to select the particular
+deterministic algorithm. The adversary can then simply simulate all $2^b$
+deterministic algorithms at once. Therefore if we want to show that $b$
+bits of advice are insufficient, we simply need to show that for each of
+those $2^b$ deterministic algorithms there is an instance where the
+algorithm \todo{wtf, sleep on this.}
