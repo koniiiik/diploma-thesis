@@ -126,7 +126,6 @@ advice for the same competitive ratios.
 
     The competitive ratio is therefore obtained from the following
     inequalities.
-
     $$
         \frac{C(Opt(I))}{C(Opt(I))-\overline{e}} \leq
         \frac{C(Opt(I))}{C(Opt(I)) - \frac{p\cdot{}C(Opt(I))}{p+q}} =
@@ -143,13 +142,13 @@ of them is the best for a certain interval of competitive ratios.
 
 \begin{theorem}[\cite{sofsem2014}, Theorem 6]\label{theorem:sofsem6}
     There is a $c$-competitive online algorithm, for $c = 2\sqrt{k}$ with
-    $k \in \N$, that uses at most $$\ceil*{\ceil*{4L/c^2}\log3}$$ bits of
-    advice.
+    $k \in \N$, that uses at most $$\ceil*{\ceil*{\frac{4L}{c^2}}\log3}$$
+    bits of advice.
 \end{theorem}
 
 \begin{theorem}[\cite{sofsem2014}, Theorem 7]\label{theorem:sofsem7}
     There is a $c$-competitive online algorithm, for $c \in \N$, that uses
-    at most $$\ceil*{2(L-1)/c}$$ bits of advice.
+    at most $$\ceil*{\frac{2(L-1)}{c}}$$ bits of advice.
 \end{theorem}
 
 \begin{theorem}[\cite{sofsem2014}, Theorem 8]\label{theorem:sofsem8}
@@ -212,14 +211,14 @@ $$
     \paren*{\frac{1}{1-q}}^{n(1-q)}.
 $$
 
-\todo{Some transition sentence...}
+This allows us to state the following lower bound.
 
 \begin{theorem}
     Any online algorithm for DPA which guarantees a competitive ratio $1 <
-    c \leq \frac{4}{3}$ needs to read at least $\frac{L}{2} +
-    L\paren*{1-\frac{1}{c}}\log\paren*{2-\frac{2}{c}} +
-    \frac{L}{2}\paren*{\frac{2}{c}-1}\log\paren*{\frac{2}{c}-1}$ bits of
-    advice.
+    c \leq \frac{4}{3}$ needs to read at least
+    $$\frac{L}{2} + L\paren*{1-\frac{1}{c}}\log\paren*{2-\frac{2}{c}} +
+    \frac{L}{2}\paren*{\frac{2}{c}-1}\log\paren*{\frac{2}{c}-1}$$
+    bits of advice.
 \end{theorem}
 
 \begin{proof}
@@ -249,10 +248,10 @@ $$
     and if it rejects a phase 1 request corresponding to a zero bit, there
     will not be any further requests in phase 2 for this subpath.
 
-    Moreover, for each instance $I \in U_L$, the following equality holds:
-    $C(Opt(I)) = pL$ for some $p \in [1/2, 1]$. That means, if we allow
-    $A$ to make $e$ mistakes in phase $1$, its competitive ratio is
-    described by the inequality
+    Moreover, for each instance $I \in U_L$, the equality $C(Opt(I)) = pL$
+    holds for some $p \in [1/2, 1]$. That means, if we allow $A$ to make
+    $e$ mistakes in phase $1$, its competitive ratio is described by the
+    inequality
     $$
         \frac{pL}{pL-e} \leq c.
     $$
@@ -292,7 +291,6 @@ $$
     upper bound on the fraction of these two numbers, which we can solve
     for $b$ and thus obtain the lower bound on the amount of advice
     required for $c$-competitiveness.
-
     \begin{align*}
         \frac{2^k}{2^b} &\leq \paren*{\frac{1}{q}}^{kq}
             \paren*{\frac{1}{1-q}}^{k(1-q)} \\
@@ -306,7 +304,6 @@ $$
     In order for \eqref{eq:single-string-instances} to hold, $q$ cannot
     exceed $1/2$, which gives us the restriction on $c$ for which this
     bound holds.
-
     \begin{align*}
         q &\leq \frac{1}{2} \\
         2\frac{c-1}{c} &\leq \frac{1}{2} \\
