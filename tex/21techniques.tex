@@ -1,6 +1,3 @@
-\todo{Categorize this section into subsections: common prefix, partition
-tree, anything else\dots?}
-
 Despite the fact that the computational model of online algorithms with
 advice has been only concieved a few years ago it is already possible to
 notice the emergence of common techniques to analyze online problems and
@@ -186,16 +183,19 @@ characters right have been established.
     To guarantee that an online algorithm $A$ guesses at least $\alpha{}n$
     characters right for an instance of either \sguh{q} or \sgkh{q} of
     length $n$, where $\frac{1}{q} \leq \alpha < 1$, $A$ needs to access at
-    least the following number of advice bits:
+    least
     $$
         \paren*{1 + (1 - \alpha)\log_q\paren*{\frac{1 - \alpha}{q - 1}} +
         \alpha\log_q\alpha} n\lg{}q
         =
         (1 - H_q (1 - \alpha)) n\lg{}q
     $$
+    advice bits, where $H_q$ is the $q$-ary entropy function defined as
+    $$
+        H_q(p) = p \log_q(q - 1) - x\log_qx - (1-x)\log_q(1-x)
+    $$
+    for any $q \in \N^{\geq2}, 0 \leq p \leq 1$.
 \end{theorem}
-
-\todo{What is $H_q$?}
 
 Even though thanks to observation \ref{observation:sguh-sgkh-bounds} it
 would suffice to show this bound for \sgkh{q}, it has been proved for each
