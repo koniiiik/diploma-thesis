@@ -240,6 +240,77 @@ problem.
 
 A generalization of the common prefix technique has been introduced in
 \cite{sofsem2014}. It is not always possible to isolate enough instances
-which all have the same prefix of sufficient length.
+which all have the same prefix of sufficient length. However, it may be
+possible to find a set of instances such that certain pairs of instances
+share common prefix of some length (where the length may differ for each
+pair) and, again, require different handling on this prefix.
 
-\todo{Finish me!}
+The technique is formalized by organizing instances into a tree based on
+their common prefixes.
+
+\begin{definition}[Partition Tree]\label{definition:partition-tree}
+    Consider an online problem and a set of instances $\I$ for this problem.
+    We define a \emph{partition tree} $T(\I)$ of $\I$ as a labeled rooted
+    tree with the following properties:
+    \begin{enumerate}[(i)]
+        \item Each vertex $v$ of $T(\I)$ is labeled by a non-empty set of
+            instances $\I_v \subseteq \I$ and by a natural number $k_v$,
+            such that any two instances $I_1, I_2 \in \I_v$ have a common
+            prefix of length at least $k_v$.
+
+        \item For each non-leaf vertex $v$, the instance sets of its
+            children form a partition of $\I_v$. For each child $w$ of
+            $v$, $k_w \geq k_v$.
+
+        \item The instance set of the root of $T(\I)$ is $\I$.
+    \end{enumerate}
+\end{definition}
+
+These properties ensure that if an algorithm processes two instances from
+the instance set of a single vertex $v$, the algorithm cannot distinguish
+these instances based on their prefix of length $k_v$. If we combine this
+property with an additional one, that for any two instances belonging to
+different children of $v$, different outputs for the common prefix are
+required, these outputs are only determined by the advice, as the
+following lemma states.
+
+\begin{lemma}[\cite{sofsem2014}]\label{lemma:partition-tree}
+    Let $\I$ be a set of instances for an online problem and let $T(\I)$
+    be a partition tree of $\I$. Let $v_1, v_2$ be two different vertices
+    of $T(\I)$ such that neither is an ancestor of the other and let $v$
+    be the lowest common ancestor of $v_1$ and $v_2$. Let $I_1 \in
+    \I_{v_1}$ and $I_2 \in \I_{v_2}$ and let $OPT(I)$ denote the set of
+    optimal output sequences for any instance $I$.
+
+    If, for all $\pi_1 \in OPT(I_1), \pi_2 \in OPT(I_2)$, $\pi_1$ and
+    $\pi_2$ differ in the first $k_v$ elements, then any optimal algorithm
+    needs a different advice string for each of the two instances $I_1$
+    and $I_2$.
+\end{lemma}
+
+If we take, for instance, a partition tree satisfying the prerequisite of
+lemma \ref{lemma:partition-tree}, and apply the lemma to its leaves, we
+can see that each leaf requires a unique advice string. This observation
+leads to the following theorem.
+
+\begin{theorem}[\cite{sofsem2014}]\label{theorem:partition-tree}
+    Let $\I$ be a subset of the set of all instances of an online problem
+    $\onlineproblem$ and let $T(\I)$ be a partition tree of $\I$
+    satisfying the prerequisite of lemma \ref{lemma:partition-tree}.
+
+    Then, any optimal online algorithm for $\onlineproblem$ needs to read
+    at least $\log{}m$ bits of advice, where $m$ is the number of leaves
+    of $T(\I)$.
+\end{theorem}
+
+While the prerequisite of lemma \ref{lemma:partition-tree} might appear to
+be rather difficult to prove, it is easily satisfied if we create a set of
+instances $\I$ orgainzed in a partition tree $T(\I)$, such that every leaf
+of $T(\I)$ contains only one instance, each instance has only one optimal
+output sequence and an optimal sequence for some instance from $\I$ is not
+optimal for any other instance in $\I$.
+
+If a tree satisfies these three conditions, all that is left to show for
+lemma \ref{lemma:partition-tree} to hold is that for every pair of
+instances from $\I$, the output sequences differ in the first $k$ items,
+where $k$ is the length of their common prefix.
