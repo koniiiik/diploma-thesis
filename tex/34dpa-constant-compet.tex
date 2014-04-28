@@ -369,6 +369,23 @@ optimality, i.e. $c = 0$, we need $L-1$ bits.
     \ref{theorem:dpa-lower-bound-half}.}
     \label{fig:dpa-lower-half-plot}
 \end{figure}
+
+Even though we have not succeeded in proving a better lower bound, we
+believe it is possible to obtain a tighter bound by generalizing the proof
+of theorem \ref{theorem:dpa-lower-optimal}. It should be possible to use
+the same partition tree $T(\I)$ as in the aforementioned proof and combine
+it with the technique used to prove a lower bound for the string guessing
+problem with known history, as discussed in section
+\ref{section:string-guessing}.
+
+Each computation of an algorithm in an instance $I \in \I$ can be viewed
+as a path from the root of $T(\I)$. We would need to calculate for each
+vertex of $T(\I)$ the number of instances for which an adversary can
+force an algorithm $A$ to miss at most $e$ requests.
+
+Unfortunately, due to the complex structure of $T(\I)$, we have not
+managed to obtain such an estimate.
+
 %
 %We conjecture a better lower bound which approaches the lower bound of the
 %optimal solution.
