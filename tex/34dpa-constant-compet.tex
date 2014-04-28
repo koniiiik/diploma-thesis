@@ -368,13 +368,67 @@ optimality, i.e. $c = 0$, we need $L-1$ bits.
     and the coefficient in the lower bound in theorem
     \ref{theorem:dpa-lower-bound-half}.}
 \end{figure}
-
-We conjecture a better lower bound which approaches the lower bound of the
-optimal solution.
-
-\begin{conjecture}\label{conjecture:dpa-lower-bound-tight}
-    Any online algorithm for DPA which guarantees a competitive ratio
-    \todo{Fill me in.} needs to read at least
-    \todo{Fill me in.}
-    bits of advice.
-\end{conjecture}
+%
+%We conjecture a better lower bound which approaches the lower bound of the
+%optimal solution.
+%
+%\begin{conjecture}\label{conjecture:dpa-lower-bound-tight}
+%    Any online algorithm for DPA which guarantees a competitive ratio
+%    \todo{Fill me in.} needs to read at least
+%    \todo{Fill me in.}
+%    bits of advice.
+%\end{conjecture}
+%
+%While the bound from theorem \ref{theorem:dpa-lower-bound-half} is a
+%generalization of the bound for optimality from \cite{komm-thesis}, this
+%one is a generalization of the one from theorem
+%\ref{theorem:dpa-lower-optimal}. We outline a proof that is missing one
+%important step to be valid.
+%
+%\begin{proof}[Proof outline]\let\qed\relax
+%    We use the same set $I$ of instances as in the proof of theorem
+%    \ref{theorem:dpa-lower-optimal}. We already know that each instance $I \in
+%    \I$ has a unique optimal solution and each pair of instances requires
+%    requires unique responses in their common prefix to achieve optimality.
+%
+%    Let us denote by \emph{decision} responses to those requests of length
+%    at least $2$ that do not overlap any already admitted request. In
+%    other words, decisions are responses to those requests where the
+%    algorithm has a choice of admitting the request in the current phase
+%    or expecting more shorter requests in this subpath in a later stage.
+%
+%    From the proof of \ref{theorem:dpa-lower-optimal} we already know that
+%    each instance from $\I$ has a unique optimal sequence of decisions.
+%    Conversely, for each sequence of decisions, there is an instance for
+%    which it is optimal: it is easy to concieve an opponent which plays
+%    against an online algorithm $A$ and constructs an instance from $\I$
+%    based on the decisions of $A$ such that the sequence of decisions is
+%    optimal for that instance.
+%
+%    If we look at a subpath $v_i, v_j$ and the two possible decisions $A$
+%    can make, each decision is correct for a class of instances with
+%    certain associated binary strings. If $A$ rejects $(i, j)$, the
+%    decision is optimal for those instances where the subpath $v_i, v_j$
+%    contains at least one internal vertex labeled with $1$. Similarly,
+%    admitting $(i, j)$ is optimal for those instances where all internal
+%    vertices of the subpath are labeled by $0$ and, in addition, vertices
+%    $v_i$ and $v_j$ are labeled by $1$.
+%
+%    This means that each sequence of decisions, and thus also each
+%    computation of $A$, can be viewed as a sequece of guesses about the
+%    binary string associated with an instance.
+%
+%    Another noteworthy observation is that if an algorithm makes decisions
+%    optimal for an instance $I$ with a binary string $b$ while actually
+%    processing an instance $I'$ associated with string $b'$, the following
+%    inequality holds: $C(Opt(I')) \leq C(A(I')) + Ham(b, b')$. The reason
+%    for this is that if $A$ wrongly admits a request $(i, j)$, that means
+%    $A$ expects all vertices between $v_i$ and $v_j$ to be labelled by $0$
+%    while some are labeled by $1$. Let $e$ be the number of vertices
+%    labelled by $1$, then by admitting $(i, j)$, $A$ blocks $e+1$ further
+%    requests which are accepted in $Opt(I')$, which means the difference
+%    in the cost of the solution caused by admitting request $(i, j)$ will
+%    be $e$. This case contributes to $Ham(b, b')$ by at most $e + 2$,
+%    because $A$ expects vertices $v_i, v_j$ to be labeled by $1$, which
+%    may not be true.
+%\end{proof}
