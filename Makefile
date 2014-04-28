@@ -1,4 +1,4 @@
-IMAGES=img/dpa-lower-bound-half.tikz.tex
+IMAGES=
 
 default: main.pdf
 

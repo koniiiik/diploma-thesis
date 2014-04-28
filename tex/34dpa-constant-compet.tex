@@ -368,9 +368,18 @@ from theorem \ref{theorem:dpa-lower-optimal} we know that to achieve
 optimality, i.e. $c = 0$, we need $L-1$ bits.
 
 \begin{figure}\centering
-    \todo{Find out why gnuplot plots something entirely different than it
-    is told.}
-    \input{img/dpa-lower-bound-half.tikz.tex}
+    \begin{tikzpicture}
+        \begin{axis}[axis x line = bottom,
+                     axis y line = left,
+                     xlabel = $c$,
+                     ylabel = coefficient,
+                     samples = 100,
+                    ]
+            \addplot[domain = 1:4/3, black]
+            {1/2 + ((1 - 1/x) * ln(2 - 2/x) + (1/2) * ((2/x) - 1) *
+            ln((2/x) - 1)) / ln(2)};
+        \end{axis}
+    \end{tikzpicture}
     \caption{Plot showing the relationship between the competitive ratio
     and the coefficient in the lower bound in theorem
     \ref{theorem:dpa-lower-bound-half}.}
