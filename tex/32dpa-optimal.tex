@@ -1,11 +1,173 @@
 The first result regarding the advice complexity of DPA has been published
 in \cite{komm-thesis} and it states that the minimum amount of advice
-required to achieve optimality is $(L-1)/2$ bits. This bound has since
-been improved in \cite{sofsem2014} to $L-1$ bits. \todo{Give a brief
-overview of the proof.} The same paper also
-details an optimal algorithm using the same amount of advice, which we
-reproduce below, since multiple competitive algorithms discussed later on
-are modified versions of this particular optimal algorithm.
+required to achieve optimality is $(L-1)/2$ bits. The proof of this bound
+uses the common prefix technique described in section
+\ref{section:common-prefix}: the common prefix consists of $(L-1)/2$
+requests of length $2$ and then in each instance, a different subset of
+these two-edge paths is chosen and for each of them two single-edge
+requests are issued. We generalize this bound for competitive algorithms
+in theorem \ref{theorem:dpa-lower-bound-half}.
+
+This bound has since been improved in \cite{sofsem2014} to $L-1$ bits. Its
+proof uses the partition tree technique from section
+\ref{section:partition-tree}. Since we base our conjecture
+\ref{conjecture:dpa-lower-bound-tight} on this proof, we summarize it
+below.
+
+\begin{theorem}[\cite{sofsem2014}]\label{theorem:dpa-lower-optimal}
+    Any optimal online algorithm for DPA needs to read at least $L-1$ bits
+    of advice.
+\end{theorem}
+
+\begin{proof}
+    We construct a set $\I$ of instances which can be organized in a
+    partition tree $T(\I)$ in a way that they satisfy the conditions
+    described at the end of section \ref{section:partition-tree}.
+
+    Each instance $I$ corresponds to a binary string $b$ of length $L+1$,
+    where $b = b_0b_1\dots{}b_L$ and $b_0 = b_L = 1$. The $i$-th bit of
+    $b$ is a label for the $i$-th vertex of the path in $I$. All vertices
+    labeled by $1$ are the end points of two requests that are supposed to
+    be accepted except for $v_0$ and $v_L$, each of which is the end
+    point of only a single request.
+
+    Instance $I$ consists of $L$ phases numbered from $L$ down to $1$. In
+    phase $p$, all requests of length $p$ are asked from left to right,
+    with some exceptions, as required by the bit vector associated with
+    $I$. Specifically, if a request $(i, j)$ is supposed to be admitted,
+    i.e. $b_i = b_j = 1$ and $b_k = 0$ for all $i < k < j$, the request
+    $(i, j)$ is the last one on the subpath $v_i, v_j$ and in all
+    subsequent phases, requests on this subpath are omitted. Figure
+    \ref{fig:dpa-lower-optimum} shows an example of an instance
+    constructed in this way.
+
+    \begin{figure}\centering
+        \begin{tikzpicture}[scale=.6]
+            \foreach \i in {0, 2, 5, 6}
+            {
+                \draw [dashed] (\i, 0) -- (\i, -12.5);
+            }
+
+            \draw [edge] (0, 0) node [path vertex] {}
+            \foreach \i in {1, ..., 6}
+            {
+                -- (\i, 0) node [path vertex] {}
+            } ;
+
+            \foreach \i/\b in {0/1, 1/0, 2/1, 3/0, 4/0, 5/1, 6/1}
+            {
+                \node at (\i, 1) {$\b$};
+            }
+
+            \draw [edge] (0, -1) node [query vertex] {}
+            \foreach \i in {1, ..., 6}
+            {
+                -- ++(1, 0) node [query vertex] {}
+            } ;
+
+            \foreach \j in {0, 1}
+            {
+                \draw let \n1 = {-2 - \j} in
+                    [edge] (\j, \n1) node [query vertex] {}
+                \foreach \i in {1, ..., 5}
+                {
+                    -- ++(1, 0) node [query vertex] {}
+                };
+            }
+
+            \foreach \j in {0, ..., 2}
+            {
+                \draw let \n1 = {-4 - \j} in
+                    [edge] (\j, \n1) node [query vertex] {}
+                \foreach \i in {1, ..., 4}
+                {
+                    -- ++(1, 0) node [query vertex] {}
+                };
+            }
+
+            \foreach \j in {0, ..., 3}
+            {
+                \draw let \n1 = {-7 - \j} in
+                    [edge] (\j, \n1) node [query vertex] {}
+                \foreach \i in {1, ..., 3}
+                {
+                    -- ++(1, 0) node [query vertex] {}
+                };
+            }
+
+            \draw [edge] (0, -11) node [query vertex] {}
+            \foreach \i in {1, ..., 2}
+            {
+                -- ++(1, 0) node [query vertex]{}
+            };
+
+            \draw [edge] (5, -12) node [query vertex] {}
+                -- ++(1, 0) node [query vertex]{};
+
+            \draw [decorate, decoration={brace}, thick]
+                  (-1, -1.3) -- (-1, -0.7)
+                  node [left, midway]{phase 6};
+            \draw [decorate, decoration={brace}, thick]
+                  (-1, -3.3) -- (-1, -1.7)
+                  node [left, midway]{phase 5};
+            \draw [decorate, decoration={brace}, thick]
+                  (-1, -6.3) -- (-1, -3.7)
+                  node [left, midway]{phase 4};
+            \draw [decorate, decoration={brace}, thick]
+                  (-1, -10.3) -- (-1, -6.7)
+                  node [left, midway]{phase 3};
+            \draw [decorate, decoration={brace}, thick]
+                  (-1, -11.3) -- (-1, -10.7)
+                  node [left, midway]{phase 2};
+            \draw [decorate, decoration={brace}, thick]
+                  (-1, -12.3) -- (-1, -11.7)
+                  node [left, midway]{phase 1};
+        \end{tikzpicture}
+        \caption{Example of an input instance for the string $1010011$.
+            \todo{Highlight the optimal solution.}}
+        \label{fig:dpa-lower-optimum}
+    \end{figure}
+
+    Now we need to show that this set of instances has the required
+    properties. We show by contradiction that for each instance from $\I$,
+    the solution described in the previous two paragraphs is the only
+    optimal solution. Let us denote by $Opt(I)$ the expected solution and
+    assume there is a solution $Opt'(I)$ such that $C(Opt'(I)) \geq
+    C(Opt(I))$ which differs from $Opt(I)$ in at least one answer. There
+    are two possibilities how this can happen. Either $Opt'(I)$ rejects a
+    request $(i, j)$ admitted by $Opt(I)$, in which case there are no
+    further requests on subpath $v_i, v_j$, which means $Opt'(I)$ admits
+    one less request than $Opt(I)$, which means its cost is lower than
+    that of $Opt(I)$. Otherwise, $Opt'(I)$ needs to admit a request $(i,
+    j)$ not admitted by $Opt(I)$. However, by construction of $I$ we know
+    that there is at least one $1$ bit between $i$ and $j$, which means
+    $Opt'(I)$ cannot admit at least two other requests admitted by
+    $Opt(I)$, which, again, leads to a contradiction.
+
+    This also implies that each output sequence is optimal for only one
+    instance from $\I$.
+
+    The only property left to show is that for each two instances, the
+    optimal outputs differ in the common prefix of the two instances. Let
+    $I_1, I_2 \in \I$ be two different instances, let $p$ be the first
+    phase in which they differ, without loss of generality let $r_p = (i,
+    i+p)$ be a request which appears in $I_1$, but not in $I_2$. Since
+    phase $p+1$ is identical in the two instances, both contain the
+    request $r_{p+1} = (i, i+p+1)$. Since $r_p$ appears in $I_1$,
+    $r_{p+1}$ is not admitted by $Opt(I_1)$, however, it is admitted by
+    $Opt(I_2)$. Thus the optimal output sequences for $I_1$ and $I_2$
+    differ in phase $p+1$ already.
+
+    Since it is easy to organize all $2^{L-1}$ instances into a partition
+    tree based on their common prefixes and each instance gets its own
+    leaf, the prerequisite of lemma \ref{lemma:partition-tree} is
+    satisfied and the number of bits required is at least $L-1$.
+\end{proof}
+
+A matching optimal algorithm using $L-1$ bits of advice was also published
+in \cite{sofsem2014}. We reproduce the algorithm below, since multiple
+competitive algorithms discussed later on are modified versions of this
+particular optimal algorithm.
 
 \begin{theorem}[\cite{sofsem2014}]\label{theorem:dpa-optimal}
     There is an online algorithm which guarantees an optimal solution
