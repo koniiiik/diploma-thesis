@@ -1,37 +1,44 @@
-This section will contain the required definitions. \todo{Reword this
-paragraph.}
+Having described the basic concepts in informal terms, let us now proceed
+to formally define the model we are working with.
 
-\todo{Update for maximization problems.}
-
-This thesis follows the definitions from \cite{misof-trivial-graphs}. They
-are provided in this section for reference.
-
-To denote the solution produced by an algorithm $A$ for an instance $I$ we
-use $A(I)$. The cost of a solution $S$ will be denoted by $C(S)$. An
-optimal solution for $I$ will be denoted by $Opt(I)$. We will use $E[X]$
-to denote the expected value of a random variable $X$.
-
-\begin{definition}\label{def:competitive-ratio}
-    Consider an optimization problem in which the goal is to minimize the
-    cost of a solution. An algorithm is $c$-competitive if there is a
-    constant $\alpha$ such that for each instance $I$ we have $C(A(I))
-    \leq c \cdot C(Opt(I)) + \alpha$.  If $\alpha = 0$, we say that $A$ is
-    strictly $c$-competitive. The competitive ratio of $A$ is the smallest
-    $c$ such that $A$ is $c$-competitive.
+\begin{definition}[Online Algorithm]\label{def:online-algorithm}
+    Let $I = (x_1, \dots, x_n)$ be an input sequence of an online problem.
+    An \emph{online algorithm} $A$ computes the output sequence $A(I) =
+    (y_1, \dots, y_n)$ such that $y_i = f(x_1, \dots, x_i)$ for some
+    function $f$. We denote the cost of the solution computed by $A$ as
+    $C(A(I))$.
 \end{definition}
+
+An optimal solution for $I$ will be denoted by $Opt(I)$. By optimal
+solution we mean one which can be computed by an offline algorithm with
+unbounded computational power, such that, in the case of maximization
+problems, it maximizes the cost. We will use $E[X]$ to denote the expected
+value of a random variable $X$.
+
+\begin{definition}[Competitive Ratio]\label{def:competitive-ratio}
+    Consider an optimization problem in which the goal is to maximize the
+    cost of a solution. An algorithm $A$ is $c$-competitive if there is a
+    constant $\alpha$ such that for each instance $I$ we have $C(A(I))
+    \geq C(Opt(I)) / c - \alpha$. If $\alpha = 0$, we say that $A$ is
+    strictly $c$-competitive. The \emph{competitive ratio} of $A$ is the
+    smallest $c$ such that $A$ is $c$-competitive.
+\end{definition}
+
+For minimization problems, competitiveness is defined analogously, only
+the inequality changes to $C(A(I)) \leq c \cdot C(Opt(I)) + \alpha$.
 
 The previous definition can easily be extended to randomized algorithms.
 For each instance $I$ we require $E[C(A(I))] \leq c \cdot C(Opt(I)) +
 \alpha$. We say that the expected competitive ratio of $A$ is the smallest
 value of $c$ satisfying the above inequality.
 
-\begin{definition}\label{def:online-advice}
-    An online algorithm $A$ with advice is defined as follows: The input
-    for the algorithm is a sequence $X = (x_1, \dots, x_n)$ and an
-    infinite advice string $\phi \in \{0, 1\}^\omega$. The algorithm
-    produces an output sequence $Y = (y_1, \dots, y_n)$ with the
-    restriction that, for all $i$, $y_i$ is computed only from $x_1,
-    \dots, x_i$ and $\phi$. This is denoted by $A^\phi(X) = Y$.
+We shall now extend the above definitions to include advice.
+
+\begin{definition}[Online Algorithm with Advice]\label{def:online-advice}
+    Consider an input sequence $I = (x_1, \dots, x_n)$ and an infinite
+    binary string $\phi$.  An \emph{online algorithm $A$ with advice}
+    computes the sequence $A^\phi(I) = (y_1, \dots, y_n)$ if $y_i =
+    f(\phi, x_1, \dots, x_i)$. We call $\phi$ the \emph{advice string}.
 \end{definition}
 
 As stated earlier, the computation of $A$ can be interpreted as a series
@@ -40,19 +47,19 @@ $y_i$ using all the information read so far and possibly some additional
 bits from the advice string $\phi$. It is worth noting that the definition
 does not restrict the computational power of $A$.
 
-\begin{definition}\label{def:advice-complexity}
-    The advice complexity of $A$ is a function $s$ such that $s(n)$ is the
-    smallest value such that for each input sequence of size $n$ there is
-    an advice string $\phi$ such that the algorithm $A$ examines at most
-    the first $s(n)$ bits of $\phi$. The advice complexity of an online
-    problem is the smallest advice complexity an online algorithm with
-    advice needs to produce an optimal solution (i.e., a solution as good
-    as an optimal offline algorithm would produce).
+\begin{definition}[Advice Complexity]\label{def:advice-complexity}
+    The \emph{advice complexity} of an algorithm $A$ is a function $s$
+    such that $s(n)$ is the smallest value such that for each input
+    sequence of size $n$ there is an advice string $\phi$ such that the
+    algorithm $A$ examines at most the first $s(n)$ bits of $\phi$. The
+    advice complexity of an online problem is the smallest advice
+    complexity of an online algorithm which computes an optimal solution
+    for each instance.
 \end{definition}
 
 \begin{definition}\label{def:advice-competitive}
     An online algorithm with advice $A$ is $c$-competitive if there is a
     constant $\alpha$ such that for every $n \in \N$ and for every
-    instance $I$ of size at most $n$ there is an advice string $\phi$ such
-    that $C(A^\phi(I)) \leq c \cdot C(Opt(I)) + \alpha$.
+    instance $I$ of size at most $n$ there is an advice string $\phi$ for
+    which $C(A^\phi(I)) \geq C(Opt(I)) / c - \alpha$ holds.
 \end{definition}
