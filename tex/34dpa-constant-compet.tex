@@ -16,14 +16,15 @@ in detail below.
     Let $\phi = b_1\dots{}b_{L-1}$ be an advice string for the optimal
     algorithm from the proof of theorem \ref{theorem:dpa-optimal} leading
     to an optimal solution. We modify the advice string by adding the
-    value of every $k$-th bit and omitting the bit itself from the
-    sequence. This way, we replace some pairs of successive bits with
-    ternary numbers. For example, consider the following sequence:
-    $(1,0,1,1,0,1,0,0,1,0)$. For $k=4$ we obtain the following sequence:
-    $(1,0,1+1,0,1,0+0,1,0) = (1,0,2,0,1,0,1,0)$. Assuming the positions of
-    ternary numbers in the sequence are known beforehand, it is possible
-    to encode the modified sequence using $L - 1 - 2p +
-    \lceil{}p\log{}3\rceil$ bits, where $p$ is the number of added pairs.
+    value of every $k$-th bit to the bit immediately preceding it and
+    omitting the bit itself from the sequence. This way, we replace some
+    pairs of successive bits with ternary numbers. For example, consider
+    the following sequence: $(1,0,1,1,0,1,0,0,1,0)$. For $k=4$ we obtain
+    the following sequence: $(1,0,1+1,0,1,0+0,1,0) = (1,0,2,0,1,0,1,0)$.
+    Assuming the positions of ternary numbers in the sequence are known
+    beforehand, it is possible to encode the modified sequence using $L -
+    1 - 2p + \lceil{}p\log{}3\rceil$ bits, where $p$ is the number of
+    added pairs.
 
     Given a sequence thus shortened, it is possible to reconstruct most of
     the original sequence $\phi$. Each sum of two bits needs to be
@@ -44,8 +45,14 @@ in detail below.
     incorrectly, the cost of a solution produced by this algorithm will be
     at least $C(Opt(I)) - e$.
 
-    However, simply selecting bits $b_k, b_{2k}, \dots$ does not lead to
-    the required competitive ratio. \todo{example}
+    However, simply selecting bits $b_{k+1}, b_{2k+1}, \dots$ does not lead to
+    the required competitive ratio. For example, let $k = 3$ and assume
+    the original advice string $\phi$ is $010010010$. By selecting every
+    $3$-rd bit, the compressed string becomes $010101$ and the
+    reconstructed $\phi'$ becomes $001001001$. Now, if the only requests
+    the instance contains are those starting on positions $2$, $5$, and
+    $8$, our algorithm would admit no request and thus fail to be
+    competitive.
 
     The solution is to consider all strategies for choosing the pairs of
     bits to add of the following form: for each $1 \leq i \leq k$, the
