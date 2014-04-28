@@ -215,8 +215,11 @@ This allows us to state the following lower bound.
 \begin{theorem}\label{theorem:dpa-lower-bound-half}
     Any online algorithm for DPA which guarantees a competitive ratio $1 <
     c \leq \frac{4}{3}$ needs to read at least
-    $$\frac{L}{2} + L\paren*{1-\frac{1}{c}}\log\paren*{2-\frac{2}{c}} +
-    \frac{L}{2}\paren*{\frac{2}{c}-1}\log\paren*{\frac{2}{c}-1}$$
+    $$
+        L \paren*{\frac{1}{2} +
+        \paren*{1-\frac{1}{c}}\log\paren*{2-\frac{2}{c}} +
+        \frac{1}{2}\paren*{\frac{2}{c}-1}\log\paren*{\frac{2}{c}-1}}
+    $$
     bits of advice.
 \end{theorem}
 
@@ -235,6 +238,7 @@ This allows us to state the following lower bound.
     \ref{fig:lower-bound-instance}.
 
     \begin{figure}\centering
+        \label{fig:lower-bound-instance}
         \begin{tikzpicture}[scale=.6]
 
             \foreach \i in {1, ..., 4}
@@ -270,7 +274,6 @@ This allows us to state the following lower bound.
                   node [left, midway]{phase 2};
         \end{tikzpicture}
         \caption{Input instance corresponding to the string $11010$.}
-        \label{fig:lower-bound-instance}
     \end{figure}
 
     The optimal solution for each instance is to admit all requests in
