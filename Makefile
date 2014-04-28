@@ -1,10 +1,12 @@
+IMAGES=img/dpa-lower-bound-half.tikz.tex
+
 default: main.pdf
 
 .PHONY: fast
 fast:
 	pdflatex main
 
-main.dvi: */*.tex *.tex Makefile img/* *.bib
+main.dvi: */*.tex *.tex Makefile img/* *.bib $(IMAGES)
 	latex main
 	biber main
 	latex main
@@ -13,7 +15,7 @@ main.dvi: */*.tex *.tex Makefile img/* *.bib
 main.ps: main.dvi
 	dvips main.dvi
 
-quietps: *.tex Makefile img/*
+quietps: *.tex Makefile img/* $(IMAGES)
 	latex -interaction=batchmode main
 	latex -interaction=batchmode main
 	latex -interaction=batchmode main
@@ -23,7 +25,7 @@ dvi: main.dvi
 
 ps: main.ps
 
-main.pdf: */*.tex *.tex Makefile img/* *.bib
+main.pdf: */*.tex *.tex Makefile img/* *.bib $(IMAGES)
 	pdflatex main
 	biber main
 	pdflatex main
@@ -50,6 +52,9 @@ all: pdf
 
 booklet: main.ps
 	cat main.ps | psbook | psnup -2 >main-booklet.ps
+
+img/%.tikz.tex: img/%.gnu
+	(cd img; gnuplot $*.gnu)
 
 .PHONY: img
 img:

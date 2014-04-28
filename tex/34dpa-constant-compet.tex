@@ -351,3 +351,30 @@ This allows us to state the following lower bound.
         c &\leq \frac{4}{3}
     \end{align*}
 \end{proof}
+
+This lower bound is certainly not tight. The bound is a linear function
+where for $c=4/3$, the coefficient is $0$ and for $c \to 0$, the
+coefficient approaches $1/2$. See figure \ref{fig:dpa-lower-half-plot} for
+a plot of the coefficient with respect to the competitive ratio. However,
+from theorem \ref{theorem:dpa-lower-optimal} we know that to achieve
+optimality, i.e. $c = 0$, we need $L-1$ bits.
+
+\begin{figure}\centering
+    \todo{Find out why gnuplot plots something entirely different than it
+    is told.}
+    \label{fig:dpa-lower-half-plot}
+    \input{img/dpa-lower-bound-half.tikz.tex}
+    \caption{Plot showing the relationship between the competitive ratio
+    and the coefficient in the lower bound in theorem
+    \ref{theorem:dpa-lower-bound-half}.}
+\end{figure}
+
+We conjecture a better lower bound which approaches the lower bound of the
+optimal solution.
+
+\begin{conjecture}\label{conjecture:dpa-lower-bound-tight}
+    Any online algorithm for DPA which guarantees a competitive ratio
+    \todo{Fill me in.} needs to read at least
+    \todo{Fill me in.}
+    bits of advice.
+\end{conjecture}
