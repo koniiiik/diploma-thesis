@@ -45,12 +45,26 @@ the model from \cite{komm-thesis}, which gives $Adv$ full information
 about the advice string corresponding to an instance it creates.
 
 The rationale is that we usually show the existence of an adversary for
-online algorithms using at most $b$ bits of advice as a way of proving a
-lower bound of $b$ bits on the advice complexity. This means that a single
-algorithm can be actually treated as a collection of $2^b$ deterministic
-algorithms, where the advice string only serves to select the particular
-deterministic algorithm. The adversary can then simply simulate all $2^b$
-deterministic algorithms at once. Therefore if we want to show that $b$
-bits of advice are insufficient, we simply need to show that for each of
-those $2^b$ deterministic algorithms there is an instance where the
-algorithm \todo{wtf, sleep on this.}
+online algorithms using at most $b(n)$ bits of advice as a way of proving
+a lower bound of $b(n)$ bits on the advice complexity. This can be done by
+showing that for each pair $(A, O)$, where $A$ is an online algorithm and
+$O$ is an oracle which computes the advice string for $A$, there is an
+adversary $Adv$ which forces $A$ to fail some criterion, e.g. optimality,
+or competitiveness.
+
+We can thus assume when constructing $Adv$ that the advice does not exceed
+$b(n)$ bits. Since we do not impose any restrictions on the computational
+power of $A$, $Adv$, or $O$, $Adv$ can easily simulate the algorithm $A$
+it is working against with all of the $2^{b(n)}$ possible advice strings
+and find out which one leads to the best outcome. We can then simply
+assume that $Adv$ knows which advice string is the best one for a given
+instance.
+
+The previous idea suggests a slightly different approach. By choosing a
+fixed advice string $\phi$, an online algorithm becomes fully
+deterministic. Thus an algorithm with $b$ bits of advice can be viewed
+as a collection of $2^b$ deterministic algorithms. Showing that for any
+collection of $2^b$ deterministic algorithms, there is an adversary which
+forces each of them to compute a bad output is therefore equivalent to
+showing that for each algorithm with $b$ bits of advice, there is such an
+adversary.
