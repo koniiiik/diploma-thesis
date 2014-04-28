@@ -174,24 +174,22 @@ theorems \ref{theorem:sofsem6} and \ref{theorem:sofsem7} for $c \leq 4
 
 \subsection{Lower Bound for Small $c$}
 
-\cite{string-guessing} details a lower bound on the number of advice bits
-required for competitive solutions of the string guessing problem using
-covering codes on the universe of input instances. We reuse multiple ideas
-presented there to establish a lower bound on the advice for DPA.
+We obtain a lower bound by applying the generalized common prefix
+technique from section \ref{section:common-prefix}. First, we isolate a
+set of instances with these two properties: \begin{inparaenum}\item all
+instances share the same prefix, and \item for any two instances, the
+decisions of an online algorithm on the common prefix must be different in
+order to obtain an optimal solution.\end{inparaenum}\ We use the same set
+as described in section \ref{section:dpa-optimal} for the first lower
+bound on the advice required by an optimal solution.
 
-The general technique we use to show our lower bound consists of the
-following steps. First, we isolate a set of instances with these two
-properties: \begin{inparaenum}\item all instances share the same prefix,
-and \item for any two instances, the decisions of an online algorithm on
-the common prefix must be different in order to obtain an optimal
-solution.\end{inparaenum}\ Next, we observe that the decisions leading to
-an optimal solution for an instance $I$ are sufficient to obtain a good
-enough solution (i.e. one whose cost fits within the range allowed by a
-given competitive ratio) for a set of ``similar'' instances $C_I$ and
-compute an upper bound on the number of such instances. Finally, a lower
-bound on the length of the advice string is obtained as the binary
-logarithm of a fraction of the number of instances and the upper bound of
-$|C_I|$.
+Next, we observe that the decisions leading to an optimal solution for an
+instance $I$ are sufficient to obtain a good enough solution (i.e. one
+whose cost fits within the range allowed by a given competitive ratio) for
+a set of ``similar'' instances $C_I$ and compute an upper bound on the
+number of such instances. Finally, a lower bound on the length of the
+advice string is obtained as the binary logarithm of a fraction of the
+number of instances and the upper bound of $|C_I|$.
 
 In order to estimate the size of $C_I$, we will use the following lemma.
 Recall that $H_n$ is defined in theorem \ref{theorem:sguh-lower-ratio} as
@@ -224,7 +222,7 @@ This allows us to state the following lower bound.
 
 \begin{proof}
     Let $L = 2k$ for some positive integer k. Consider the following set
-    $U_L$ of instances consisting of two phases. The first phase of each
+    $\I$ of instances consisting of two phases. The first phase of each
     instance consists of requests $(2i, 2i+2)$ for all $0 \leq i < k$.
     The second phase is unique for each instance and consists of pairs of
     requests $(2i, 2i+1), (2i+1, 2i+2)$, where $i$ is chosen from some
@@ -288,7 +286,7 @@ This allows us to state the following lower bound.
     and if it rejects a phase 1 request corresponding to a zero bit, there
     will not be any further requests in phase 2 for this subpath.
 
-    Moreover, for each instance $I \in U_L$, the equality $C(Opt(I)) = pL$
+    Moreover, for each instance $I \in \I$, the equality $C(Opt(I)) = pL$
     holds for some $p \in [1/2, 1]$. That means, if we allow $A$ to make
     $e$ mistakes in phase $1$, its competitive ratio is described by the
     inequality
@@ -304,7 +302,7 @@ This allows us to state the following lower bound.
     Since the first $k$ queries are the same in all instances, all phase 1
     decisions an online algorithm makes only depend on the advice string.
     Each sequence of decisions in phase 1 is optimal for one instance $I
-    \in U_L$ with its corresponding bit vector $B$. In addition, if we
+    \in \I$ with its corresponding bit vector $B$. In addition, if we
     allow at most $e$ errors in phase 1, the same sequence of decisions is
     acceptable for an instance $I'$ with a bit string $B'$ if $Ham(B, B')
     \leq e$, where $Ham$ denotes the Hamming distance. The number of such
@@ -315,7 +313,7 @@ This allows us to state the following lower bound.
     We already have an upper bound on $e$ from \eqref{eq:upper-bound-e}.
     If we substitute this into the bound on $Vol_2(n, qn)$ from lemma
     \ref{lemma:hamming}, we obtain an upper bound on the number of
-    instances from $U_L$ that can be served with a single advice string in
+    instances from $\I$ that can be served with a single advice string in
     order to achieve $c$-competitiveness. For simplicity, we use $q$ to
     denote the expression $2(c-1)/c$.
     \begin{align*}
@@ -327,7 +325,7 @@ This allows us to state the following lower bound.
 
     If we denote the length of advice strings by $b$, we know that there
     are at most $2^b$ possible advice strings, whereas there are $2^k$
-    instances in $U_L$. \eqref{eq:single-string-instances} gives us an
+    instances in $\I$. \eqref{eq:single-string-instances} gives us an
     upper bound on the fraction of these two numbers, which we can solve
     for $b$ and thus obtain the lower bound on the amount of advice
     required for $c$-competitiveness.
