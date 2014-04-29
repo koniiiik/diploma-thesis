@@ -59,11 +59,14 @@ showstringspaces=false, escapechar=\%, language=C++}
     pdfkeywords = {online problem} {advice complexity} {approximation}
 }
 
-% TikZ setup for DPA figures
-\tikzstyle{vertex} = [circle, thick, draw, inner sep=2]
-\tikzstyle{query vertex} = [vertex, fill=white]
-\tikzstyle{path vertex} = [vertex, fill=black]
+% TikZ setup for DPA and other graph figures.
+\tikzstyle{vertex} = [circle, thick, draw, inner sep = 2]
+\tikzstyle{full vertex} = [vertex, fill = black]
+\tikzstyle{empty vertex} = [vertex, fill = white]
+\tikzstyle{path vertex} = [full vertex]
+\tikzstyle{query vertex} = [empty vertex]
 \tikzstyle{edge} = [thick]
+\tikzstyle{graph picture} = [scale = .6]
 
 \begin{document}
 

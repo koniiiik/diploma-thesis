@@ -1,25 +1,37 @@
-\todo{This section is just a result of massive cut\&pasting from various
-other sections, will probably need some housekeeping to make sense.}
+This section gives an overview of selected known results in advice
+complexity which we use to demonstrate the techniques described in the
+previous section.
 
-This section gives an overview of known results about the problem of
-online graph coloring. Obviously, the difficulty of this problem depends
-greatly on any assumptions we make on the input instance, e.g.
-restrictions on the class of graphs, such as trees, bipartite graphs,
-cycles or a relationship between the number of vertices and the number of
-edges, or the order in which their vertices are revealed to the online
-algorithm. All these assumptions provide the algorithm with additional
-information. This means that by comparing the advice required to solve
-these special cases to the advice complexity of the general case we can
-quantify the amount of information provided by a particular set of
-assumptions.
+\subsection{Graph Coloring}
+Graph coloring is a classic, well-known computational problem. Its offline
+version is one of the original 21 $NP$-complete problems published by Karp
+\cite{karp-np}. It comes as no surprise, then, that for the most genral
+version of this problem, online algorithms are unable to perform well
+\cite{online-graph-bound}.
 
-An online graph coloring algorithm works roughly as follows. In each turn
-a single vertex of the input graph is revealed to the algorithm and it has
-to assign a color to this vertex. More precisely, assuming the vertices of
-a graph are ordered in a sequence, in $t$-th turn the algorithm has the
-knowledge of the subgraph induced by the first $t$ vertices in this
-sequence. That means, all edges are revealed as soon as both of their
-ending vertices are known.
+An online graph coloring algorithm works roughly as follows. In each
+round, a single vertex of the input graph is revealed to the algorithm,
+which in turn has to assign a color to this vertex. More precisely,
+assuming the vertices of a graph are ordered in a sequence, in $t$-th turn
+the algorithm has the knowledge of the subgraph induced by the first $t$
+vertices in this sequence. That means, each edge is revealed as soon as
+both of its ending vertices are known.
+
+In the offline version of graph coloring, making certain assumptions about
+the input graph may dramatically reduce the difficulty of the problem. For
+instance, if we assume the graph is bipartite, the difficulty drops from
+$NP$-hard to a basic polynomial graph exploration algorithm.
+
+This property carries over to online graph coloring as well. The
+difficulty of this problem depends greatly on any assumptions we make
+about the input instance, e.g. restrictions on the class of graphs, such
+as trees, bipartite graphs, cycles or a relationship between the number of
+vertices and the number of edges, or the order in which their vertices are
+revealed to the online algorithm. All these assumptions provide the
+algorithm with additional information. This means that by comparing the
+advice required to solve these special cases to the advice complexity of
+the general case we can quantify the amount of information provided by a
+particular set of assumptions.
 
 The order in which vertices are revealed is referred to as the
 \emph{presentation order}. In the most general case, the vertices will
@@ -30,14 +42,6 @@ be restricted even further to the order in which a depth-first search
 (\problem{DFS}) or a breadth-first search (\problem{BFS}) will visit
 vertices. Another common presentation order is when the sequence of
 vertices is sorted by their degrees.
-
-In this thesis, each time we study a particular online graph coloring
-problem, we specify explicitly both the class of graphs and the
-presentation order. For instance, \graphcol{bipartite}{connected} denotes
-that the problem is restricted to bipartite graphs and their vertices are
-revealed in a connected order. As a special case, \graphcol{any}{any}
-denotes the most general version of the problem where no assumptions are
-made at all.
 
 \begin{definition}\label{def:graph-coloring}
     In \problem{OnlineColoring} the instance is an undirected graph $G =
@@ -51,34 +55,36 @@ made at all.
     vertices, and the largest integer used must be as small as possible.
 \end{definition}
 
-When anlyzing a variant of \problem{OnlineColoring}, we always need to
-specify the class of graphs it is restricted to and the presentation
+When talking about a variant of \problem{OnlineColoring}, we always need
+to specify the class of graphs it is restricted to and the presentation
 order. We denote this using \graphcol{X}{Y} where \problem{X} is the class
 of graphs $G$ will belong to and \problem{Y} is the presentation order.
 For the class of graphs we will use its common name (e.g.,
 ``\problem{bipartite}'', ``\problem{planar}'') with the special class
 called ``\problem{any}'' meaning that there is no restriction on $G$ at
 all. For the presentation order we will use ``\problem{connected}'',
-``\problem{bfs}'', ``\problem{dfs}'' and ``\problem{max-degree}'' with
+``\problem{BFS}'', ``\problem{DFS}'' and ``\problem{max-degree}'' with
 meanings as discussed earlier and, again, ``\problem{any}'' with the
 meaning that the vertices may be presented in a fully arbitrary order.
+For instance, \graphcol{bipartite}{connected} denotes that the problem is
+restricted to bipartite graphs and their vertices are revealed in a
+connected order. As a special case, \graphcol{any}{any} denotes the most
+general version of the problem where no assumptions are made at all.
 
 The value of $n$ is not known to the online algorithm beforehand. The
 reason for this is that it would provide the algorithm with additional
 information about the input instance which may (and in some cases does)
 affect the advice complexity of the problem.
 
-Most of the results provided in this section are discussed in more detail
-in \cite{misof-trivial-graphs}.
+This problem has been studied in \cite{misof-trivial-graphs, hermi}. We
+reproduce some of the results below.
 
-\todo{Add citations to each individual theorem.}
-
-\subsection{General Graphs}
+\subsubsection{General Graphs}
 
 The following asymptotically tight estimates on the advice complexity of
 the most general case of online graph coloring have been established.
 
-\begin{theorem}\label{theorem:general-graphs-upper}
+\begin{theorem}[\cite{misof-trivial-graphs}]\label{theorem:general-graphs-upper}
     There is an online algorithm with advice which solves
     \graphcol{any}{any} using $n \lg n - n \lg\lg n + O(n)$ bits of
     advice.
@@ -88,27 +94,26 @@ The general idea is to encode the position of an optimal coloring in a
 lexicographically sorted list of all partitions of the set of vertices on
 the advice tape.
 
-\begin{theorem}\label{theorem:general-graphs-lower}
-    The advice complexity of \graphcol{any}{bfs} is at least $n \lg n - n
+\begin{theorem}[\cite{misof-trivial-graphs}]\label{theorem:general-graphs-lower}
+    The advice complexity of \graphcol{any}{BFS} is at least $n \lg n - n
     \lg\lg n + O(n)$.
 \end{theorem}
 
-The proof of this theorem uses the idea outlined in section
-\ref{section:techniques}. It is possible to create a set of instances that
-an online algorithm cannot distinguish based on their prefixes up to a
-certain length but that require unique colorings in these prefixes
-already.
+\begin{proof}[Proof outline]
+    The proof of this theorem uses the common prefix technique described
+    in section \ref{section:common-prefix}. We will not reproduce the
+    details as they are relatively complicated. For a full proof, refer to
+    the original paper.
+\end{proof}
 
 These results are crucial in order to quantify how much a restriction on
 the class of graphs simplifies the coloring problem by means of advice
 complexity.
 
-\subsection{Bipartite Graphs}
+\subsubsection{Bipartite Graphs}
 
 As a reminder, bipartite graphs are those that can be colored using two
 colors.
-
-\todo{Mention the cases when advice is not needed.}
 
 \begin{theorem}\label{theorem:bipartite-connected}
     There is a deterministic online algorithm for
@@ -127,14 +132,77 @@ sense to analyze any of the connected presentation orders. However, for
 presentation orders without any restrictions this class of graphs is still
 interesting from the point of view of advice complexity.
 
-\subsection{Paths}
+\subsubsection{Paths}
 
 Paths are a subclass of bipartite graphs, therefore it is only interesting
 to analyze the most general presentation order.
 
 \begin{theorem}\label{theorem:paths-any}
     The advice complexity of \graphcol{path}{any} is
-    $\ceil*{\frac{n}{2}}$.
+    $\ceil*{\frac{n}{2}} - 1$.
 \end{theorem}
 
-\todo{Why?}
+\begin{proof}
+    For the upper bound, consider an algorithm $A$ which selects an
+    arbitrary color for the first vertex and then reads one bit of advice
+    for every isolated vertex in the input, which is interpreted as the
+    color. For each vertex $u$ connected to some already processed vertex
+    $v$, $A$ needs to output the color opposite to that of $v$.
+
+    It is easy to see that on a path, at most $\ceil*{\frac{n}{2}}$
+    vertices can be selected this way, since the selected vertices have to
+    form an independent set.
+
+    To show a lower bound of $\floor*{\frac{n}{2}} - 1$, we use the common
+    prefix technique. Assume $n$ is even and let us denote the vertices
+    $v_1, \dots, v_n$ according to their order on the path. Note that this
+    notation does not correlate with the presentation order.
+    
+    For any $1 \leq x \leq n/2$, consider two sets of vertices
+    $P_x = \{v_{2i - 1} \mid 1 \leq i \leq x\}$ and $Q_x = \{v_{2i} \mid
+    x + 1 \leq i \leq n/2\}$. The set $P_x \cup Q_x$ forms an independent
+    set such that vertices from $P_x$ have to share one color while all
+    vertices from $Q_x$ need to have the other color. An example is shown
+    in figure \ref{fig:path-mis}.
+
+    \begin{figure}\centering
+        \begin{tikzpicture}[graph picture]
+            \draw [edge] (0, 0) node [full vertex] {}
+            \foreach \x in {1, ..., 3}
+            {
+                -- ++(1, 0) node [empty vertex] {}
+                -- ++(1, 0) node [full vertex] {}
+            }
+            -- ++(1, 0) node [empty vertex] {}
+            \foreach \x in {1, ..., 4}
+            {
+                -- ++(1, 0) node [empty vertex] {}
+                -- ++(1, 0) node [full vertex] {}
+            };
+        \end{tikzpicture}
+        \caption{Example of an independent set on a path with $n = 16$
+            vertices for $x = 4$. Vertices from $P_x \cup Q_x$ are
+            filled.}
+        \label{fig:path-mis}
+    \end{figure}
+
+    Consider the set of all strings of the form
+    $\{\verb|p|\}\cdot\{\verb|p|,\verb|q|\}^{n/2-1}$. For each such string
+    we can now create an instance. Let $x$ be the number of $\verb|p|$
+    characters in a given string $w$. An instance can be created such that
+    for each $\verb|p|$ character, a vertex from $P_x$ is selected and for
+    each $\verb|q|$, a vertex from $Q_x$ is chosen. This sequence of
+    vertices forms the prefix of an instance, which is also an independent
+    set.
+
+    For every such instance, an optimal algorithm needs to assign one
+    color for every vertex from $P_x$ and the other color for all vertices
+    from $Q_x$, while the prefix of length $n/2$ looks the same for each
+    instance. The number of different strings is $2^{n/2-1}$, which gives
+    a lower bound of $n/2-1$ on the number of advice bits.
+
+    If we also consider odd $n$, the above proof implies a lower bound of
+    $\floor{n/2}-1$ bits. An additional bit can be forced, however, this
+    requires a more detailed analysis which can be found in
+    \cite{misof-trivial-graphs}.
+\end{proof}
