@@ -91,21 +91,21 @@ below.
             \foreach \j in {0, ..., 3}
             {
                 \draw let \n1 = {-7 - \j} in
-                    [edge] (\j, \n1) node [query vertex] {}
+                    [edge] (\j, \n1) node [query vertex] (phase 3_\j_0) {}
                 \foreach \i in {1, ..., 3}
                 {
-                    -- ++(1, 0) node [query vertex] {}
+                    -- ++(1, 0) node [query vertex] (phase 3_\j_\i) {}
                 };
             }
 
-            \draw [edge] (0, -11) node [query vertex] {}
+            \draw [edge] (0, -11) node [query vertex] (phase 2 0) {}
             \foreach \i in {1, ..., 2}
             {
-                -- ++(1, 0) node [query vertex]{}
+                -- ++(1, 0) node [query vertex] (phase 2 \i) {}
             };
 
-            \draw [edge] (5, -12) node [query vertex] {}
-                -- ++(1, 0) node [query vertex]{};
+            \draw [edge] (5, -12) node [query vertex] (phase 1 0) {}
+                -- ++(1, 0) node [query vertex] (phase 1 1) {};
 
             \draw [decorate, decoration={brace}, thick]
                   (-1, -1.3) -- (-1, -0.7)
@@ -125,9 +125,15 @@ below.
             \draw [decorate, decoration={brace}, thick]
                   (-1, -12.3) -- (-1, -11.7)
                   node [left, midway]{phase 1};
+
+            \begin{pgfonlayer}{background}
+                \node [background highlight, fit = (phase 1 0)(phase 1 1)] {};
+                \node [background highlight, fit = (phase 2 0)(phase 2 2)] {};
+                \node [background highlight, fit = (phase 3_2_0)(phase 3_2_3)] {};
+            \end{pgfonlayer}
         \end{tikzpicture}
         \caption{Example of an input instance for the string $1010011$.
-            \todo{Highlight the optimal solution.}}
+            The optimal solution is highlighted in gray.}
         \label{fig:dpa-lower-optimum}
     \end{figure}
 

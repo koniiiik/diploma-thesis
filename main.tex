@@ -32,7 +32,13 @@
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{gnuplot-lua-tikz}
-\usetikzlibrary{arrows,positioning,shapes,calc,decorations.pathreplacing}
+\usetikzlibrary{arrows}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{fit}
 \usepackage[style=alphabetic,maxbibnames=47,backend=biber]{biblatex}
 \input{utility/makra.tex}
 
@@ -67,6 +73,11 @@ showstringspaces=false, escapechar=\%, language=C++}
 \tikzstyle{query vertex} = [empty vertex]
 \tikzstyle{edge} = [thick]
 \tikzstyle{graph picture} = [scale = .6]
+\tikzstyle{background highlight} = [rounded corners = 1ex,
+                                    fill = black!30,
+                                    transform shape,
+                                    inner sep = .5em,
+                                   ]
 
 \begin{document}
 
