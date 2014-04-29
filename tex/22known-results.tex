@@ -97,8 +97,8 @@ lexicographically sorted list of all partitions of the set of vertices on
 the advice tape.
 
 \begin{theorem}[\cite{misof-trivial-graphs}]\label{theorem:general-graphs-lower}
-    The advice complexity of \graphcol{any}{BFS} is at least $n \lg n - n
-    \lg\lg n + O(n)$.
+    The \graphcol{any}{BFS} problem has an advice complexity of at least
+    $n \lg n - n \lg\lg n + O(n)$.
 \end{theorem}
 
 \begin{proof}[Proof outline]
@@ -117,7 +117,7 @@ complexity.
 As a reminder, bipartite graphs are those that can be colored using two
 colors.
 
-\begin{theorem}\label{theorem:bipartite-connected}
+\begin{theorem}[\cite{misof-trivial-graphs}]\label{theorem:bipartite-connected}
     There is a deterministic online algorithm for
     \graphcol{bipartite}{connected} without advice.
 \end{theorem}
@@ -139,8 +139,8 @@ interesting from the point of view of advice complexity.
 Paths are a subclass of bipartite graphs, therefore it is only interesting
 to analyze the most general presentation order.
 
-\begin{theorem}\label{theorem:paths-any}
-    The advice complexity of \graphcol{path}{any} is
+\begin{theorem}[\cite{misof-trivial-graphs}]\label{theorem:paths-any}
+    The \graphcol{path}{any} problem has an advice complexity of
     $\ceil*{\frac{n}{2}} - 1$.
 \end{theorem}
 
