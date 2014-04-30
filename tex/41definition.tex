@@ -1,0 +1,71 @@
+There is a wide collection of computational models from which we can
+choose one to extend with advice. We pick Turing machines due to their
+status of the de-facto standard computational model.
+
+\begin{definition}[Turing Machine with Advice]\label{definition:turing-advice}
+    A \emph{Turing machine with advice} is a deterministic Turing machine
+    $A$ with alphabet $\Sigma = \{0,1\}$, two read-only tapes and one
+    read-write tape such that one read-only tape contains the input word
+    and the other one contains an infinite binary advice string. $A$
+    accepts an input word $x$ if there exists an advice string $\phi$ such
+    that when the input tape contains $x$ and the advice tape contains
+    $\phi$, $A$ terminates in an accepting state.
+
+    A \emph{Turing machine with advice and output} has an additional
+    write-only output tape. Let $S$ be some subset of $\Sigma^*$ and let
+    $f: S \to \Sigma^*$ be some function. Turing machine $A$ computes the
+    function $f$ if for each $x \in S$ there is an advice string $\phi$
+    such that if the input tape contains $x$ and the advice tape contains
+    $\phi$, $A$ writes $f(x)$ to the output tape and terminates in an
+    accepting state.
+\end{definition}
+
+The same considerations as in the case of online algorithms apply here as
+well. We define the model to use an infinite advice tape in order to avoid
+giving away any additional information in the form of the length of
+advice.
+
+This definition resembles nondeterministic Turing machines and in a sense
+it is equivalent -- it is easy to see that one computational step of a
+nondeterministic Turing machine $A$ with $k$ possible outcomes can be
+simulated by $\ceil{\log{}k}$ computational steps of a Turing machine $B$
+with advice. In each step, $B$ reads one bit of advice and after reading
+all $\ceil{\log{}k}$ bits, decodes the number $k$ indicating which
+decision to take.
+
+The definition of a Turing machine with output is somewhat peculiar. Since
+the result of a computation of a given machine $A$ with a given input $x$
+can vary depending on the advice string, it is practically impossible to
+determine what function $A$ computes. Instead, we choose the opposite
+direction. In our work we concentrate on problems for which we know what
+the expected output looks like, i.e. we already have a function $f$ and we
+want to find a machine such that it can reach the correct output if it
+receives correct advice.
+
+It is easy to modify the definition of a machine with output to make it
+better suited for analysis of optimization algorithms. Instead of
+requiring that the machine computes the correct output, we can define a
+cost function whose value is $\infty$ for invalid outputs (or $-\infty$,
+depending on whether we talk about a minimization or maximization problem)
+and define the output as the outcome with the minimal (or maximal) cost.
+
+Let us now define the complexity measure which lead to the conception of
+this computational model in the first place.
+
+\begin{definition}[Offline Advice Complexity]\label{definition:offline-advice-complexity}
+    The \emph{advice complexity} of Turing machine $A$ with advice is a
+    function $b: \N \to \N$ such that for every input $x$ such that $|x| =
+    n$, $A$ accesses at most $b(n)$ positions on the advice tape.
+\end{definition}
+
+This complexity measure is analogous to the measure of space complexity in
+nondeterministic Turing machines \cite{nspace}, except we are only
+interested in the advice tape; on the work tape, $A$ can use as much space
+as it needs to. Also note that while the space complexity of a Turing
+machine is usually defined in a way that allows any multiplicative
+constant, this is not the case of advice complexity. The reason is that
+while in the case of traditional space complexity, the linear tape
+compression theorem holds \cite{tape-compression}, however, while it is
+possible to represent multiple advice symbols in one position by extending
+the advice alphabet, we are specifically interested in the amount of
+advice information in terms of the number of bits.

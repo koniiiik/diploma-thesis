@@ -1,0 +1,24 @@
+The model of algorithms with advice appears to be a useful tool to give a
+quantitative measure on the difficulty of online problems, which is more
+fine grained than what competitive analysis alone offers. A new question
+arises: Is it possible to use advice complexity to quantify the difficulty
+of hard offline problems?
+
+The concept of a Turing machine with advice is nothing new -- it has been
+introduced in \cite{karp-advice}. However, the motivation behind the
+Karp-Lipton model of advice differs significantly from ours -- their model
+is closely tied to Boolean circuits and it requires that given a Turing
+machine $A$, for every number $n \in \N$ there be some advice string
+$\alpha_n$ such that for every input $x$ of size $n$, $A(x, \alpha_n)$
+gives the correct answer.
+
+Our interest lies somewhere else: We want to find out what amount of
+additional information about a specific input instance can help an
+algorithm -- or a Turing machine -- to perform better in terms of time or
+space complexity. In other words, while Karp and Lipton allow only a
+single advice string for a given size of input, we allow an advice string
+specially tailored to each input instance.
+
+The purpose of this chapter is not to give any conclusive results.
+Instead, our intention is to lay out the groundwork for future research in
+this area.
