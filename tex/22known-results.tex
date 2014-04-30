@@ -219,3 +219,52 @@ are revealed to an algorithm one by one and the algorithm needs to decide
 whether to select a vertex into its solution or not.
 
 \todo{Finish this summary.}
+
+\begin{figure}\centering
+    \begin{tikzpicture}[graph picture,
+                        vertex 0/.style = empty vertex,
+                        vertex 1/.style = full vertex,
+                        edge 0/.style = {draw, black!50},
+                        edge 1/.style = {draw, thick},
+                       ]
+        \foreach \i/\v in {0/0, 1/0, 2/1, 3/0, 4/1}
+        {
+            \draw let \n1 = {\i < 4 ? !\v : 1},
+                      \n2 = {\i < 4 ?  \v : 1},
+                      \n3 = {\i < 4 ? 0.5 : -1.5}
+                in  (2 * \i,   0) node [vertex \n1] (vertex_\i_0) {}
+                    ++(   1,   0) node [vertex \n2] (vertex_\i_1) {}
+                    ++( \n3, -.2) -- ++(0, .4);
+        }
+
+        \begin{pgfonlayer}{background}
+            \foreach \i/\v in {0/0, 1/0, 2/1, 3/0}
+            {
+                \foreach \j in {\i, ..., 4}
+                {
+                    \foreach \b in {0, 1}
+                    {
+                        \ifnum \j>\i\relax
+                            \path let \n{edge type} = {(4 == \j) || ((2 == \j) ? \b : !\b)}, % 1 if (vertex_\j_\b) is full
+                                      \n{ran} = {2 * random(0, 1) - 1}, % random value {-1, 1}
+                                      \p3 = (vertex_\i_\v),
+                                      \p4 = (vertex_\j_\b),
+                                      \n{par height} = {\n{ran} * (\x4 - \x3) / 3}
+                                in  [edge \n{edge type}]
+                                    (vertex_\i_\v)
+                                    parabola [parabola height = \n{par height}]
+                                    (vertex_\j_\b);
+                        \fi
+                    }
+                }
+            }
+
+            \path [edge 1] (vertex_4_0)
+                parabola [parabola height = {(2 * random(0, 1) - 1) / 1}]
+                (vertex_4_1);
+        \end{pgfonlayer}
+    \end{tikzpicture}
+    \caption{Example of the graph $G_{0010}$. Maximum clique is
+        highlighted in black.}
+    \label{fig:clique-example}
+\end{figure}
