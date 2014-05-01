@@ -2,11 +2,14 @@
 
 from __future__ import division
 
+from collections import namedtuple
+import itertools
 import math
-import subprocess
 import random
+import subprocess
 import sys
 
+import click
 from liblll import (create_matrix_from_knapsack, lll_reduction,
     best_vect_knapsack)
 
@@ -26,6 +29,25 @@ try:
 except NameError:
     xrange = range
 
+
+class cached_property(object):
+    """
+    Decorator that converts a method with a single self argument into a
+    property cached on the instance. Borrowed from Django.
+    """
+    def __init__(self, func):
+        self.func = func
+
+    def __get__(self, instance, type=None):
+        if instance is None:
+            return self
+        res = instance.__dict__[self.func.__name__] = self.func(instance)
+        return res
+
+
+"""
+Definitions of solvers.
+"""
 
 class SolutionNotFound(Exception):
     pass
@@ -91,6 +113,75 @@ def transposed(m):
     return [[m[j][i] for j in xrange(len(m))] for i in xrange(len(m[0]))]
 
 
+"""
+Definitions of generators.
+"""
+
+Instance = namedtuple('Instance', 'mask, elems, sum')
+
+class RandomGeneratorStrategy(object):
+    """
+    Generator of sequences of elements and random subsets of those
+    sequences.
+    """
+
+    def __init__(self, n, density, **kwargs):
+        self.n = n
+        self.density = density
+        self.kwargs = kwargs
+
+    def get_max_element(self):
+        """
+        Returns the maximum element such that the resulting density is at
+        most self.density.
+        """
+        return int(2 ** (self.n / self.density) * (1 + random.expovariate(1 / (GEOMETRIC_MEAN - 1))))
+
+    def get_actual_density(self):
+        """
+        Returns the density of the generated sequence.
+        """
+        return self.n / math.log(max(self.elements), 2)
+
+    @cached_property
+    def elements(self):
+        """
+        Creates a random set of n elements with a density of at most d as
+        defined in [LO83].
+        """
+        max_elem = self.get_max_element()
+        result = random.sample(xrange(1, max_elem), self.n - 1)
+        result.append(max_elem)
+        return result
+
+    def mask_to_instance(self, mask=None, indicators=None):
+        """
+        Converts a mask (either a bit mask in an integer or a sequence of
+        indicator variables) to an Instance.
+        """
+        assert mask is not None or indicators is not None
+
+        if indicators is None:
+            indicators = [0] * self.n
+            for i in xrange(self.n):
+                if mask & 1 << i:
+                    indicators[i] = 1
+
+        subseq = [x for i, x in enumerate(self.elements) if indicators[i]]
+        return Instance(indicators, subseq, sum(subseq))
+
+    def instances(self):
+        """
+        Generator for individual instances, i.e. subsets of the sequence
+        of elements.
+        """
+        options = set(xrange(1, (1 << self.n) - 1))
+        while options:
+            mask = random.sample(options, 1).pop()
+            options.remove(mask)
+            yield self.mask_to_instance(mask=mask)
+
+
 def create_mh_keys(n):
     """
     Creates a MH instance of block size n. The superincreasing sequence is
@@ -106,62 +197,33 @@ def create_mh_keys(n):
     return (beta, r)
 
 
-def create_for_density(n, d):
-    """
-    Creates a random set of n elements with a density of at most d as
-    defined in [LO83].
-    """
-    max_elem = int(2 ** (n / d) * (1 + random.expovariate(1 / (GEOMETRIC_MEAN - 1))))
-    result = random.sample(xrange(1, max_elem), n - 1)
-    result.append(max_elem)
-    return result
+STRATEGIES = {
+    'random': RandomGeneratorStrategy,
+}
 
 
-def sample_from_mask(mask, population):
-    """
-    Returns a subset and indicator vector of population based on bits from
-    mask.
-    """
-    subset = []
-    indicators = [0] * len(population)
-    for i, elem in enumerate(population):
-        if mask & 1 << i:
-            subset.append(elem)
-            indicators[i] = 1
-    return subset, indicators
+"""
+The actual runner.
+"""
+
+@click.command()
+@click.option('--strategy', '-s', type=click.Choice(list(STRATEGIES.keys())),
+              required=True)
+@click.option('--density', '-d', type=click.FLOAT, required=True)
+@click.option('--elements', '-n', type=click.INT, required=True)
+@click.option('--instances', '-i', type=click.INT, required=True)
+def run(strategy, density, instances, elements, **kwargs):
+    generator = STRATEGIES[strategy](elements, density, **kwargs)
+    print("Density: %.5f" % generator.get_actual_density())
+    print("Elements: %s" % (" ".join("%s" % e for e in generator.elements)))
+    for i, instance in itertools.izip(xrange(instances),
+                                      generator.instances()):
+        try:
+            results = solve_knapsack(generator.elements, instance.sum)
+            print(results)
+        except SolutionNotFound:
+            print("Unsolved: %s" % (" ".join("%s" % e for e in subset)))
 
 
 if __name__ == "__main__":
-    assert len(sys.argv) == 4, "Usage: %s <density> <number of elements> <number of iterations>" % (sys.argv[0],)
-
-    d = float(sys.argv[1])
-    n = int(sys.argv[2])
-    its = int(sys.argv[3])
-    elems = create_for_density(n, d)
-    print("Density: %.5f" % (n / math.log(max(elems), 2)))
-    print("Elements: %s" % (" ".join("%s" % e for e in elems)))
-    options = set(xrange(1, (1 << n) - 1))
-    for i in xrange(its):
-        if not options:
-            break
-        mask = random.sample(options, 1).pop()
-        options.remove(mask)
-        subset, indicators = sample_from_mask(mask, elems)
-        try:
-            results = solve_knapsack(elems, sum(subset))
-            print(results)
-            continue
-            # TODO: Dead code follows, needs reworking
-            if result != indicators:
-                found_subset = [e for i, e in zip(result, elems) if i]
-                if sum(found_subset) != sum(subset):
-                    message = "Invalid solution found."
-                else:
-                    message = "Different solution found."
-                print("%s Original: %s; found: %s" % (
-                    message,
-                    " ".join(sorted("%s" % e for e in subset)),
-                    " ".join(sorted("%s" % e for e in found_subset)),
-                ))
-        except SolutionNotFound:
-            print("Unsolved: %s" % (" ".join("%s" % e for e in subset)))
+    run()
