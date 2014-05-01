@@ -16,14 +16,14 @@ the proof below.
 
 \begin{proof}
     We prove the theorem using an adversary $Adv$. Consider an algorithm
-    $A$. The adversary reveals $L$ and issues as the first query $(0, L+1)$.
+    $A$. The adversary reveals $L$ and issues as the first query $(0, L)$.
     If $A$ rejects this query, $Adv$ terminates the input instance, which
     leads to the second case in the theorem and it means $A$ is not
     competitive.
 
     If $A$ admits the first query, $Adv$ follows up with $L$ requests:
     $(0, 1), (1, 2), \dots, (L - 1, L)$. Since $A$ has already admitted a
-    request spanning the whole path $P$, it cannot admin any of these
+    request spanning the whole path $P$, it cannot admit any of these
     following requests, while the optimal solution is to reject the first
     request and admit all of the following $L$ requests. This leads
     to the first case and means that the competitive ratio of $A$ is at
@@ -38,7 +38,7 @@ $\alpha$ from definition \ref{def:competitive-ratio} to a value of only
 $1$ would eliminate this.
 
 Indeed, Komm described in \cite{komm-thesis} an algorithm that achieves a
-competitive ratio of $\left\lceil\frac{L-1}{\alpha+1}\right\rceil$, which
+competitive ratio of $\left\lceil\frac{L}{\alpha+1}\right\rceil$, which
 seems to indicate that relaxing the definition of competitiveness might
 lead to better results. However, he also proved that the competitive ratio
 of any deterministic algorithm is at least linear in the number of
