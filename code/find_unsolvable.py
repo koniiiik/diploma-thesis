@@ -167,7 +167,7 @@ class RandomGeneratorStrategy(object):
                 if mask & 1 << i:
                     indicators[i] = 1
 
-        subseq = [x for i, x in enumerate(self.elements) if indicators[i]]
+        subseq = indicators_to_elems(indicators, self.elements)
         return Instance(indicators, subseq, sum(subseq))
 
     def instances(self):
@@ -206,6 +206,10 @@ STRATEGIES = {
 The actual runner.
 """
 
+def indicators_to_elems(indicators, elems):
+    return [x for i, x in zip(indicators, elems) if i]
+
+
 @click.command()
 @click.option('--strategy', '-s', type=click.Choice(list(STRATEGIES.keys())),
               required=True)
@@ -219,10 +223,19 @@ def run(strategy, density, instances, elements, **kwargs):
     for i, instance in itertools.izip(xrange(instances),
                                       generator.instances()):
         try:
-            results = solve_knapsack(generator.elements, instance.sum)
-            print(results)
+            vector, first_round = solve_knapsack_ntl(generator.elements, instance.sum)
+            if not first_round:
+                vector = [1 - x for x in vector]
+            print("Round %d, sum %d: %s" % (
+                1 - first_round,
+                instance.sum,
+                " ".join("%d" % x for x in indicators_to_elems(vector, generator.elements)),
+            ))
         except SolutionNotFound:
-            print("Unsolved: %s" % (" ".join("%s" % e for e in subset)))
+            print("Failed sum %d: %s" % (
+                instance.sum,
+                " ".join("%d" % x for x in instance.elems),
+            ))
 
 
 if __name__ == "__main__":
