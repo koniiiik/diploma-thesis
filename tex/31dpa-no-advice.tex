@@ -7,27 +7,27 @@ number of vertices when restricted to strict competitiveness. We reproduce
 the proof below.
 
 \begin{theorem}[\cite{dpa-book}]\label{theorem:dpa-deterministic}
-    On a path on $L$ vertices, any deterministic online algorithm $A$ has
-    a competitive ratio of at least $L - 1$. Specifically, there exists
-    either an input instance $I_1$ where $C(Opt(I_1)) = L - 1$ and
+    On a path on $L+1$ vertices, any deterministic online algorithm $A$
+    has a competitive ratio of at least $L$. Specifically, there exists
+    either an input instance $I_1$ where $C(Opt(I_1)) = L$ and
     $C(A(I_1)) = 1$ or an instance $I_2$ for which $C(Opt(I_2)) = 1$ and
     $C(A(I_2)) = 0$.
 \end{theorem}
 
 \begin{proof}
     We prove the theorem using an adversary $Adv$. Consider an algorithm
-    $A$. The adversary reveals $L$ and issues as the first query $(0, L)$.
+    $A$. The adversary reveals $L$ and issues as the first query $(0, L+1)$.
     If $A$ rejects this query, $Adv$ terminates the input instance, which
     leads to the second case in the theorem and it means $A$ is not
     competitive.
 
-    If $A$ admits the first query, $Adv$ follows up with $L - 1$ requests:
+    If $A$ admits the first query, $Adv$ follows up with $L$ requests:
     $(0, 1), (1, 2), \dots, (L - 1, L)$. Since $A$ has already admitted a
     request spanning the whole path $P$, it cannot admin any of these
     following requests, while the optimal solution is to reject the first
-    request and admit all of the following $L - 1$ requests. This leads
+    request and admit all of the following $L$ requests. This leads
     to the first case and means that the competitive ratio of $A$ is at
-    least $L - 1$.
+    least $L$.
 \end{proof}
 
 The proof of theorem \ref{theorem:dpa-deterministic} might appear to rely
@@ -50,9 +50,9 @@ competitive ratio, which is one of our new results.
 
 \begin{theorem}\label{theorem:relaxed-dpa-deterministic}
     Consider an arbitrary value of $\alpha$ in the definition of
-    competitiveness. On a path on $L$ vertices, any deterministic online
+    competitiveness. On a path on $L+1$ vertices, any deterministic online
     algorithm has a competitive ratio of at least
-    $\frac{\lfloor\sqrt{L-1}\rfloor}{\alpha+1}$.
+    $\frac{\lfloor\sqrt{L}\rfloor}{\alpha+1}$.
 \end{theorem}
 
 \begin{proof}
@@ -61,7 +61,7 @@ competitive ratio, which is one of our new results.
     \frac{C(Opt(I))}{c} - \alpha$. We use an adversary $Adv$ to prove the
     bound.
 
-    Let $k := \lfloor\sqrt{L-1}\rfloor$. $Adv$ starts by issuing
+    Let $k := \lfloor\sqrt{L}\rfloor$. $Adv$ starts by issuing
     non-overlapping requests of length $k$: $(0, k), (k, 2k), \dots$,
     until either $A$ admits a request, or $Adv$ submits the request
     $(k(k-1), k^2)$.
@@ -80,7 +80,7 @@ competitive ratio, which is one of our new results.
     \begin{align*}
         1 &\geq \frac{k+i}{c} - \alpha \\
         c &\geq \frac{k+i}{\alpha + 1} \geq \frac{k}{\alpha + 1} =
-        \frac{\lfloor\sqrt{L-1}\rfloor}{\alpha + 1}
+        \frac{\lfloor\sqrt{L}\rfloor}{\alpha + 1}
     \end{align*}
 
     In the latter case, $Adv$ terminates the input after request $(k(k-1),
@@ -89,7 +89,7 @@ competitive ratio, which is one of our new results.
     inequalities:
     \begin{align*}
         0 &\geq \frac{k}{c} - \alpha \\
-        c &\geq \frac{k}{\alpha} \geq \frac{\lfloor\sqrt{L-1}\rfloor}{\alpha + 1}
+        c &\geq \frac{k}{\alpha} \geq \frac{\lfloor\sqrt{L}\rfloor}{\alpha + 1}
     \end{align*}
 \end{proof}
 
