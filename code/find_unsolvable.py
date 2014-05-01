@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from __future__ import division
+from __future__ import division, print_function
 
 from collections import namedtuple
 import itertools
@@ -77,7 +77,12 @@ def solve_knapsack_ntl(a, m):
         raise SolutionNotFound()
 
     result = [int(x) for x in stdout.split()]
-    return result[:-1], result[-1]
+    try:
+        return result[:-1], result[-1]
+    except Exception, e:
+        e.args += (stdout,)
+        print(_, file=sys.stderr)
+        raise
 
 
 def solve_knapsack_liblll(a, m):
@@ -236,6 +241,14 @@ def run(strategy, density, instances, elements, **kwargs):
                 instance.sum,
                 " ".join("%d" % x for x in instance.elems),
             ))
+        except Exception, e:
+            message = "Uncaught error %r on sum %d: %s" % (
+                e,
+                instance.sum,
+                " ".join("%d" % x for x in instance.elems),
+            )
+            print(message)
+            print(message, file=sys.stderr)
 
 
 if __name__ == "__main__":
