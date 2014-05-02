@@ -54,6 +54,28 @@ class cached_property(object):
         return res
 
 
+def sample(min, max, k):
+    """
+    Return a random sample of k integers from [min, max).
+
+    Workaround for broken CPython (x)ranges which freak out on __len__ if
+    the result cannot fit into C ssize_t.
+    """
+    # assume n is much larger than k
+    randrange = partial(random.randrange, min, max)
+    # from random.py
+    result = [None] * k
+    selected = set()
+    selected_add = selected.add
+    for i in range(k):
+        j = randrange()
+        while j in selected:
+            j = randrange()
+        selected_add(j)
+        result[i] = j
+    return result
+
+
 """
 Definitions of solvers.
 """
@@ -163,16 +185,23 @@ class RandomGeneratorStrategy(object):
         """
         return self.n / math.log(max(self.elements), 2)
 
+    def sample_n_elements(self, n):
+        """
+        Returns a sample of n elements with a density of at least
+        self.density.
+        """
+        max_elem = self.get_max_element()
+        result = sample(1, max_elem, n - 1)
+        result.append(max_elem)
+        return result
+
     @cached_property
     def elements(self):
         """
         Creates a random set of n elements with a density of at most d as
         defined in [LO83].
         """
-        max_elem = self.get_max_element()
-        result = random.sample(xrange(1, max_elem), self.n - 1)
-        result.append(max_elem)
-        return result
+        return self.sample_n_elements(self.n)
 
     def mask_to_instance(self, mask=None, indicators=None):
         """
@@ -203,7 +232,7 @@ class RandomGeneratorStrategy(object):
                 yield self.mask_to_instance(mask=mask)
         else:
             while True:
-                mask = random.choice(xrange(1, (1 << self.n) - 1))
+                mask = random.randrange(1, (1 << self.n) - 1)
                 yield self.mask_to_instance(mask=mask)
 
 
@@ -227,10 +256,7 @@ class LinearlyDependentStrategy(RandomGeneratorStrategy):
 
     @cached_property
     def elements(self):
-        max_elem = self.get_max_element()
-        result = set(random.sample(xrange(1, max_elem),
-                                   self.n - 1 - self.dependencies))
-        result.add(max_elem)
+        result = set(self.sample_n_elements(self.n - self.dependencies))
         lambd = 1/self.LAMBDA_MEAN
         choice, exp = random.choice, random.expovariate
         signs = [-1, 1]
