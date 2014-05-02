@@ -10,7 +10,7 @@ INSTANCES_PER_SEQUENCE=100
 # element.
 STRATEGY_COMBOS="--strategy random,random;\
                  --strategy linear-dep --linear-deps 1,linear-dep/1;\
-                 --strategy linear-dep --linear-deps 1,linear-dep/5;"
+                 --strategy linear-dep --linear-deps 5,linear-dep/5;"
 
 OUTDIR_TEMPLATE="results/density%.03f/n%02d/%s"
 
