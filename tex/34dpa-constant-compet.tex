@@ -2,14 +2,15 @@
 
 An upper bound on the amount of advice required for $c$-competitiveness
 for $c$ close to $1$ has been published in \cite{sofsem2014} as a
-modification of the optimal algorithm. We describe the modified algorithm
-in detail below.
+modification of the optimal algorithm. The original paper only contains a
+sketch of a proof; we describe the modified algorithm in detail below.
 
 \begin{theorem}[\cite{sofsem2014}]\label{theorem:dpa-log3}
-    For each $c = k/(k-1)$ where $k$ is an integer greater than $1$, there
-    is a $c$-competitive algorithm for DPA that uses
-    $\lceil\log(c/(c-1))\rceil + L-1 - \lfloor\lfloor(c-1)(L-2)/c\rfloor
-    \cdot (2 - \log 3)\rfloor$ bits of advice.
+    For each $c = k/(k-1)$, where $k$ is an integer greater than $1$,
+    there is a $c$-competitive algorithm for DPA that uses
+    $$\ceil*{\log\frac{c}{c-1}} + L-1 -
+    \floor*{\floor*{(L-2)\frac{c-1}{c}} \cdot (2 - \log 3)}$$
+    bits of advice.
 \end{theorem}
 
 \begin{proof}
@@ -19,7 +20,7 @@ in detail below.
     value of every $k$-th bit to the bit immediately preceding it and
     omitting the bit itself from the sequence. This way, we replace some
     pairs of successive bits with ternary numbers. For example, consider
-    the following sequence: $(1,0,1,1,0,1,0,0,1,0)$. For $k=4$ we obtain
+    the following sequence: $(1,0,1,1,0,1,0,0,1,0)$. For $k=4$, we obtain
     the following sequence: $(1,0,1+1,0,1,0+0,1,0) = (1,0,2,0,1,0,1,0)$.
     Assuming the positions of ternary numbers in the sequence are known
     beforehand, it is possible to encode the modified sequence using $L -
@@ -28,7 +29,7 @@ in detail below.
 
     Given a sequence thus shortened, it is possible to reconstruct most of
     the original sequence $\phi$. Each sum of two bits needs to be
-    replaced by a pair of bits. In cases where the sum is $0$ or $2$ the
+    replaced by a pair of bits. In cases where the sum is $0$ or $2$, the
     original pair of bits is unambiguous, however, if the sum is $1$,
     there are two possibilities. In this case, our algorithm will always
     assume that the original pair of bits was $0, 1$. With this
@@ -37,7 +38,7 @@ in detail below.
 
     Clearly, using $\phi'$ as the advice instead of $\phi$ can lead to the
     algorithm rejecting some requests which would be admitted in an
-    optimal solution. This can happen only in case when a pair of bits was
+    optimal solution. This can happen only in case a pair of bits was
     $1, 0$ before adding them; in this case, the algorithm would expect a
     request starting at the second position, which might not arrive. It
     will, however, not block any requests starting before the first of the
@@ -58,10 +59,10 @@ in detail below.
     bits to add of the following form: for each $1 \leq i \leq k$, the
     $i$-th strategy is to choose $b_{i+ak}, b_{i+ak+1}$ for all integers
     $a$ such that $0 \leq a \leq \left\lceil\frac{L-2}{k}-1\right\rceil$
-    as the pairs to add. In each strategy the number of pairs is $p \geq
-    \left\lfloor\frac{L-2}{p}\right\rfloor$. Of all such strategies, the
-    one with the smallest number of errors is chosen and its number $i$ is
-    encoded in the advice string.
+    as the pairs to add. In each strategy, the number of pairs is $p \geq
+    \left\lfloor\frac{L-2}{k}\right\rfloor$. Of all such strategies, the
+    one with the smallest number of errors is chosen, and its number $i$
+    is encoded in the advice string.
 
     This way of choosing strategies ensures that for each bit $b_j$,
     exactly two strategies are considered where $b_j$ is part of an added
@@ -72,7 +73,7 @@ in detail below.
     addition, only $1$ bits can contribute at all. From this and from the
     fact that the cost of the optimal solution is at least the number of
     $1$ bits (possibly $+1$ if the optimal solution accepts a request
-    starting in $v_0$) follows that $C(Opt(I)) \geq ke$ where $e$ is the
+    starting in $v_0$) follows that $C(Opt(I)) \geq ke$, where $e$ is the
     number of errors in the best strategy.
 
     The competitive ratio of this solution is then obtained as follows.
@@ -83,7 +84,7 @@ in detail below.
 
     The amount of advice required is therefore $\lceil\log{}k\rceil$ bits
     to encode the number of strategy used, and $L - 1 - 2p +
-    \lceil{}p\log{}3\rceil$ where the value of $p$ is described above,
+    \lceil{}p\log{}3\rceil$, where the value of $p$ is described above,
     which matches the theorem.
 \end{proof}
 
@@ -91,9 +92,10 @@ We present a new result which simplifies the above algorithm and requires
 less advice for the same competitive ratios.
 
 \begin{theorem}\label{theorem:dpa-fraction}
-    For each $c = (p+q)/q$ where $p, q$ are positive integers, there is a
-    $c$-competitive algorithm for DPA which uses $\lceil\log(p+q)\rceil +
-    L - 1 - \lfloor (L-1) p / (p + q)\rfloor$ bits of advice.
+    For each $c = (p+q)/q$, where $p, q$ are positive integers, there is a
+    $c$-competitive algorithm for DPA which uses
+    $$\ceil*{\log(p+q)} + L - 1 - \floor*{(L-1) \frac{p}{p + q}}$$
+    bits of advice.
 \end{theorem}
 
 \begin{proof}
@@ -114,7 +116,7 @@ less advice for the same competitive ratios.
     $\phi'$ with zeroes and then simulates the optimal algorithm with
     $\phi'$.
 
-    Some of the omitted bits will have been ones, for every such bit,
+    Some of the omitted bits will have been ones; for every such bit,
     $C(A(I))$ will decrease by $1$ compared to the optimal solution. In
     order to guarantee the expected competitive ratio, again, we need to
     consider $p+q$ possible strategies based on whether the first block is
@@ -128,8 +130,8 @@ less advice for the same competitive ratios.
     C(Opt(I)) - e_i$. Every $1$ bit contributes to the error count of $p$
     strategies, which, combined with the fact that $C(Opt(I))$ is at least
     the number of $1$ bits, gives $p \cdot C(Opt(I)) \geq \sum_{i=1}^{p+q}
-    \geq (p+q) \overline{e}$, where $\overline{e}$ is the error count of
-    the best strategy, i.e. the lowest of all $e_i$.
+    e_i \geq (p+q) \overline{e}$, where $\overline{e}$ is the error count
+    of the best strategy, i.e. the lowest of all $e_i$.
 
     The competitive ratio is therefore obtained from the following
     inequalities.
@@ -140,7 +142,7 @@ less advice for the same competitive ratios.
     $$
 
     The advice string consists of a binary encoding of the number of
-    chosen strategy taking $\lceil\log(p+q)\rceil$ bits followed by the
+    chosen strategy taking $\lceil\log(p+q)\rceil$, bits followed by the
     shortened string from an optimal solution taking $L - 1 - s$ bits.
 \end{proof}
 
@@ -318,7 +320,7 @@ result of our work.
     acceptable for an instance $I'$ with a bit string $B'$ if $Ham(B, B')
     \leq e$, where $Ham$ denotes the Hamming distance. The number of such
     acceptable instances is then $Vol_2(k, e) = \sum_{i=0}^e
-    \binom{k}{e}$, which is the volume of a binary Hamming ball of radius
+    \binom{k}{i}$, which is the volume of a binary Hamming ball of radius
     $e$ around a string of length $k$.
 
     We already have an upper bound on $e$ from \eqref{eq:upper-bound-e}.
@@ -361,7 +363,7 @@ result of our work.
 \end{proof}
 
 This lower bound is certainly not tight. The bound is a linear function
-where for $c=4/3$, the coefficient is $0$ and for $c \to 0$, the
+where for $c=4/3$, the coefficient is $0$ and for $c \to 1$, the
 coefficient approaches $1/2$. See figure \ref{fig:dpa-lower-half-plot} for
 a plot of the coefficient with respect to the competitive ratio. However,
 from theorem \ref{theorem:dpa-lower-optimal} we know that to achieve
