@@ -18,6 +18,10 @@ from liblll import (create_matrix_from_knapsack, lll_reduction,
 # generating a random instance.
 GEOMETRIC_MEAN = 1.2
 
+# The maximum value of n (the number of elements) for which to guarantee
+# uniqueness of generated instances.
+MAX_N_FOR_UNIQUENESS = 20
+
 # List of solvers defined in here.
 SOLVERS = ['liblll', 'ntl']
 SOLVERS = ['ntl']
@@ -185,11 +189,16 @@ class RandomGeneratorStrategy(object):
         Generator for individual instances, i.e. subsets of the sequence
         of elements.
         """
-        options = set(xrange(1, (1 << self.n) - 1))
-        while options:
-            mask = random.sample(options, 1).pop()
-            options.remove(mask)
-            yield self.mask_to_instance(mask=mask)
+        if self.n <= MAX_N_FOR_UNIQUENESS:
+            options = set(xrange(1, (1 << self.n) - 1))
+            while options:
+                mask = random.sample(options, 1).pop()
+                options.remove(mask)
+                yield self.mask_to_instance(mask=mask)
+        else:
+            while True:
+                mask = random.choice(xrange(1, (1 << self.n) - 1))
+                yield self.mask_to_instance(mask=mask)
 
 
 class LinearlyDependentStrategy(RandomGeneratorStrategy):
