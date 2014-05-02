@@ -192,6 +192,43 @@ class RandomGeneratorStrategy(object):
             yield self.mask_to_instance(mask=mask)
 
 
+class LinearlyDependentStrategy(RandomGeneratorStrategy):
+    """
+    This generator ensures there is always at least a specified number d
+    of small linear dependencies in each instance.
+
+    It does so by generating the first n - d elements of the large set and
+    then generating the remaining d elements in the following way: for
+    each already chosen element x_i, a random lambda_i is chosen with
+    exponential distribution and random sign; the new element is then
+    chosen as | \sum_{i=1}^{n-d+k} lambda_i x_i |.
+    """
+
+    LAMBDA_MEAN = 1.25
+
+    def __init__(self, *args, **kwargs):
+        self.dependencies = kwargs.pop('linear_deps')
+        super(LinearlyDependentStrategy, self).__init__(*args, **kwargs)
+
+    @cached_property
+    def elements(self):
+        max_elem = self.get_max_element()
+        result = set(random.sample(xrange(1, max_elem),
+                                   self.n - 1 - self.dependencies))
+        result.add(max_elem)
+        lambd = 1/self.LAMBDA_MEAN
+        choice, exp = random.choice, random.expovariate
+        signs = [-1, 1]
+        while len(result) < self.n:
+            new_elem = sum(choice(signs) * int(exp(lambd)) * x
+                           for x in result)
+            if new_elem and new_elem not in result:
+                result.add(abs(new_elem))
+        result = list(result)
+        random.shuffle(result)
+        return result
+
+
 def create_mh_keys(n):
     """
     Creates a MH instance of block size n. The superincreasing sequence is
@@ -209,6 +246,7 @@ def create_mh_keys(n):
 
 STRATEGIES = {
     'random': RandomGeneratorStrategy,
+    'linear-dep': LinearlyDependentStrategy,
 }
 
 
@@ -222,10 +260,17 @@ def indicators_to_elems(indicators, elems):
 
 @click.command()
 @click.option('--strategy', '-s', type=click.Choice(list(STRATEGIES.keys())),
-              required=True)
-@click.option('--density', '-d', type=click.FLOAT, required=True)
-@click.option('--elements', '-n', type=click.INT, required=True)
-@click.option('--instances', '-i', type=click.INT, required=True)
+              required=True,
+              help="Strategy for random instance generation.")
+@click.option('--density', '-d', type=click.FLOAT, required=True,
+              help="Maximum density for generated isntances.")
+@click.option('--elements', '-n', type=click.INT, required=True,
+              help="The number of elements of A.")
+@click.option('--instances', '-i', type=click.INT, required=True,
+              help="The number of instances to consider for each set.")
+@click.option('--linear-deps', '-l', type=click.INT,
+              help="The number of small linear dependencies. Only "
+              "applicable for the linear-dep strategy.")
 def run(strategy, density, instances, elements, **kwargs):
     generator = STRATEGIES[strategy](elements, density, **kwargs)
     print("Density: %.5f" % generator.get_actual_density())
