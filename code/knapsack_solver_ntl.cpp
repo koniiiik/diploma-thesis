@@ -119,11 +119,14 @@ int main()
                 }
                 if (selected_sum == curr_m)
                 {
+                    cerr << "Found a solution; n is " << n << endl;
                     for (int j = 0; j < n; ++j)
                     {
                         std::cout << mat[i][j] / lambda << ' ';
+                        cerr << mat[i][j] / lambda << ' ';
                     }
                     std::cout << (int)(curr_m == m) << std::endl;
+                    cerr << (int)(curr_m == m) << std::endl;
                     return 0;
                 }
                 else

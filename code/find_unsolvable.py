@@ -68,7 +68,7 @@ def solve_knapsack_ntl(a, m):
     solver = subprocess.Popen(NTL_SOLVER_BINARY, stdin=subprocess.PIPE,
                               stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE)
-    stdout, _ = solver.communicate(input='%s %s\n%s\n' % (
+    stdout, stderr = solver.communicate(input='%s %s\n%s\n' % (
         len(a), m,
         ' '.join(str(x) for x in a),
     ))
@@ -76,12 +76,17 @@ def solve_knapsack_ntl(a, m):
     if solver.returncode > 0:
         raise SolutionNotFound()
 
+    # This is a very ugly maybe-workaround for an even uglier heisenbug
+    # which appears to happen with a probability of about 1/500000 and is
+    # likely caused by some stdout buffering or some such.
+    if not stdout:
+        stdout = stderr.splitlines()[-1]
+
     result = [int(x) for x in stdout.split()]
     try:
         return result[:-1], result[-1]
     except Exception, e:
         e.args += (stdout,)
-        print(_, file=sys.stderr)
         raise
 
 
