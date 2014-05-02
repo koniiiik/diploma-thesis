@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from __future__ import division, print_function
+from __future__ import division, print_function, unicode_literals
 
 from collections import namedtuple
-import itertools
+from functools import partial
 import math
 import random
 import subprocess
@@ -32,6 +32,11 @@ try:
     xrange(47)
 except NameError:
     xrange = range
+
+try:
+    from itertools import izip
+except ImportError:
+    izip = zip
 
 
 class cached_property(object):
@@ -72,10 +77,11 @@ def solve_knapsack_ntl(a, m):
     solver = subprocess.Popen(NTL_SOLVER_BINARY, stdin=subprocess.PIPE,
                               stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE)
-    stdout, stderr = solver.communicate(input='%s %s\n%s\n' % (
+    stdin = '%s %s\n%s\n' % (
         len(a), m,
         ' '.join(str(x) for x in a),
-    ))
+    )
+    stdout, stderr = solver.communicate(input=stdin.encode())
 
     if solver.returncode > 0:
         raise SolutionNotFound()
@@ -86,10 +92,10 @@ def solve_knapsack_ntl(a, m):
     if not stdout:
         stdout = stderr.splitlines()[-1]
 
-    result = [int(x) for x in stdout.split()]
+    result = [int(x) for x in stdout.decode().split()]
     try:
         return result[:-1], result[-1]
-    except Exception, e:
+    except Exception as e:
         e.args += (stdout,)
         raise
 
@@ -284,8 +290,7 @@ def run(strategy, density, instances, elements, **kwargs):
     generator = STRATEGIES[strategy](elements, density, **kwargs)
     print("Density: %.5f" % generator.get_actual_density())
     print("Elements: %s" % (" ".join("%s" % e for e in generator.elements)))
-    for i, instance in itertools.izip(xrange(instances),
-                                      generator.instances()):
+    for i, instance in izip(xrange(instances), generator.instances()):
         try:
             vector, first_round = solve_knapsack_ntl(generator.elements, instance.sum)
             if not first_round:
@@ -300,7 +305,7 @@ def run(strategy, density, instances, elements, **kwargs):
                 instance.sum,
                 " ".join("%d" % x for x in instance.elems),
             ))
-        except Exception, e:
+        except Exception as e:
             message = "Uncaught error %r on sum %d: %s" % (
                 e,
                 instance.sum,
