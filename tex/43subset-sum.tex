@@ -1,0 +1,81 @@
+We devote the rest of this chapter to an analysis of the \emph{subset sum}
+problem, which is another example of an $NP$-hard problem
+\cite{subset-sum-np-hard}. This problem can be formulated as the
+following 0-1 integer programming problem.
+
+\begin{definition}[Subset Sum]\label{definition:subset-sum}
+    Given a set $A = \{a_i \mid 1 \leq i \leq n\}$ of positive integers
+    and a positive integer $M$, find a feasible solution to the 0-1
+    integer programming problem
+    \begin{equation}\label{eqn:subset-sum-def}
+        \sum_{i=1}^n a_ix_i = M; \quad x_i \in \{0,1\} \, \text{for all i}
+    \end{equation}
+\end{definition}
+
+This problem is of interest because of its applications in cryptography:
+multiple asymmetric cryptographic schemes have been proposed based on this
+problem \cite{merkle-hellman, chor-rivest}. These are usually referred to
+as knapsack-based cryptosystems, since subset sum is a special case of the
+0-1 knapsack problem. In these schemes, the public key generally consists
+of a set of weights $\{a_i \mid 1 \leq i \leq n\}$ and ciphertext is
+obtained from a plaintext binary message $(b_1, \dots, b_n)$ as
+$\sum_{i=1}^n a_ib_i$. The private key then consists of additional
+information which makes it possible to solve instances of the subset sum
+problem with the given sequence of $a_i$ in polynomial time.
+
+First we present some rudimentary properties of the advice required to
+solve subset sum and other $NP$-hard problems in polynomial time and then
+we look at a more sophisticated algorithm which applies to a specific
+class of subset sum instances.
+
+\subsection{General Results}
+\label{section:subset-sum-general}
+
+A nondeterministic algorithm for the subset sum problem might guess the
+values of variables $x_i$ in \eqref{eqn:subset-sum-def} and verify that
+the guess is correct. This suggests a trivial algorithm with advice: it
+simply reads the values of $x_i$ from the advice tape, writes them to the
+output and finishes. Obviously, there is nothing interesting about this
+algorithm, since it reads the whole output from the advice.
+
+A slightly better algorithm is obtained if we do not read the whole output
+from advice, but instead stop after reading the $k$-th bit, i.e. $A$ now
+knows the values of the first $k$ variables $x_i$. Then, our algorithm can
+find the correct values for the remaining $n-k$ varibles $x_i$ by
+exhaustive search, which takes $O(2^{n-k})$ time. This observation leads
+to the following claim.
+
+\begin{theorem}\label{theorem:subset-sum-advice-upper}
+    The subset sum problem can be solved in polynomial time with
+    $n-O(\log{}n)$ bits of advice.
+\end{theorem}
+
+\begin{proof}
+    Let $f(n) \leq c\log{}n$ for some $c$, let $k = n - c \log{}n$. $A$
+    reads $k$ bits of advice and interprets them as the values of $x_1,
+    \dots, x_k$ from \eqref{eqn:subset-sum-def}. $A$ then performs an
+    exhaustive search for the remaining $c \log{}n$ values $x_{k+1},
+    \dots, x_{n}$, which takes $O(P(n) \cdot 2^{c\log{}n}) = O(P(n) \cdot
+    n^c)$, where $P(n)$ is a polynomial bound on the time required to
+    verify the correctness of a single vector $(x_1, \dots, x_n)$.
+\end{proof}
+
+This result can be generalized to any problem from $NP$. This class of
+problems can be characterized as those where for each input instance, a
+polynomial-length certificate exists such that the correctness of the
+certificate can be verified in polynomial time \cite{introduction}.  If
+the upper bound on the length of the certificate for a given problem
+$\onlineproblem$ is $c(n)$, the sufficient advice to solve
+$\onlineproblem$ is $c(n) - O(\log{}n)$.
+
+We can establish a lower bound on the amount of advice for any $NP$-hard
+problem in a similar way: If we can solve some $NP$-hard problem using
+$O(\log{}n)$ bits of advice, it is easy to perform an exhaustive search in
+polynomial time for the right advice string using a deterministic Turing
+machine.
+
+\begin{theorem}\label{theorem:np-hard-advice-lower}
+    For any $NP$-hard problem $\onlineproblem$, the amount of advice
+    required to solve $\onlineproblem$ is $\omega(\log{}n)$, unless
+    $P=NP$.
+\end{theorem}
