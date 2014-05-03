@@ -4,9 +4,9 @@ problem, which is another example of an $NP$-hard problem
 following 0-1 integer programming problem.
 
 \begin{definition}[Subset Sum]\label{definition:subset-sum}
-    Given a set $A = \{a_i \mid 1 \leq i \leq n\}$ of positive integers
-    and a positive integer $M$, find a feasible solution to the 0-1
-    integer programming problem
+    Given a vector $\vec{a} = (a_1, \dots, a_n)$ of positive integers and
+    a positive integer $M$, find a feasible solution to the 0-1 integer
+    programming problem
     \begin{equation}\label{eqn:subset-sum-def}
         \sum_{i=1}^n a_ix_i = M; \quad x_i \in \{0,1\} \, \text{for all i}
     \end{equation}
@@ -79,3 +79,106 @@ machine.
     required to solve $\onlineproblem$ is $\omega(\log{}n)$, unless
     $P=NP$.
 \end{theorem}
+
+\subsection{Lattice-Based Algorithm for Low-Density Subset Sum}
+\label{section:lattice-based}
+
+Lagarias and Odlyzko proposed in \cite{lagarias-odlyzko} an algorithm
+called SV (Short Vector) which solves almost all instances of subset sum
+with a low density. The density of a vector $\vec{a}$ of $n$ elements is
+defined as
+$$
+    d(\vec{a}) = \frac{n}{\log\max\limits_ia_i}.
+$$
+Informally, instances with a low density are those consisting of elements
+significantly larger than $2^n$.
+
+In the rest of this section, we focus on an analysis of the
+Lagarias-Odlyzko algorithm. The ultimate goal of this analysis is to
+better understand the class of instances for which this algorithm fails to
+find a solution. We believe this should, in theory, make it possible to
+use less advice for low-density instances, since we can tailor the advice
+string specifically to the failing instances.
+
+Unfortunately, we have not managed to obtain a sufficient characterization
+of this class. We describe the results of our statistical analysis of this
+algorithm and draw some conclusions in hopes they will be useful for
+future research.
+
+The SV algorithm reduces the problem of finding a solution for
+\eqref{eqn:subset-sum-def} to the problem of finding the shortest vector
+in a $n+1$-dimensional lattice with Euclidean norm. This problem is known
+to be $NP$-hard for the supremum norm and this is conjectured to hold for
+the Euclidean norm as well \cite{van-emde-boas-shortest-vector}.
+Nevertheless, a polynomial algorithm for finding short (albeit not
+necessarily the sortest) vectors in a lattice is due to Lenstra, Lenstra
+and Lovász \cite{LLL}, commonly referred to as LLL.
+
+The output of the LLL algorithm is a $y$-reduced basis, where $1/4 \leq y
+< 1$ is a parameter whose value, unless noted otherwise, is usually $3/4$,
+containing at least one relatively short vector.
+
+\begin{theorem}[\cite{LLL}]\label{theorem:LLL-short-vector}
+    Let $[\vec{v_1}, \dots, \vec{v_n}]$ be a $y$-reduced basis of a
+    lattice $L$. Then
+    \begin{equation}\label{eqn:lll-y-reduced}
+        |\vec{v_1}|^2 \leq \paren*{\frac{4}{4y-1}}^{n-1}
+        \min\limits_{\vec{x} \in L, \vec{x} \not= \vec{0}} |\vec{x}|^2,
+    \end{equation}
+    where $|\vec{x}|$ denotes the Euclidean norm of $\vec{x}$.
+
+    Specifically, for $y = 3/4$,
+    \begin{equation}\label{eqn:lll-3/4-reduced}
+        |\vec{v_1}|^2 \leq 2^{n-1} \min\limits_{\vec{x} \in L, \vec{x}
+        \not= \vec{0}} |\vec{x}|^2.
+    \end{equation}
+\end{theorem}
+
+The SV algorithm works as follows.
+
+\begin{algorithm}[SV, \cite{lagarias-odlyzko}]\label{algorithm:sv}
+    Let $\vec{a} = (a_1, \dots, a_n), M$ be the input.
+    \begin{enumerate}
+        \item
+        Use the following vectors as a basis $[\vec{b_1}, \dots,
+        \vec{b_{n+1}}]$ of an $n+1$-dimensional integer lattice
+        $L(\vec{a}, M)$:
+        \begin{align*}
+            \vec{b_1} &= (1, 0, \dots, 0, -a_1) \\
+            \vec{b_2} &= (0, 1, \dots, 0, -a_2) \\
+            &\vdots \numberthis\label{eqn:sv-lll-basis} \\
+            \vec{b_n} &= (0, 0, \dots, 0, -a_n) \\
+            \vec{b_{n+1}} &= (0, 0, \dots, 0, M).
+        \end{align*}
+
+        \item
+        Find a reduced basis $[\vec{b_1}^*, \dots, \vec{b_{n+1}}^*]$ of
+        $L(\vec{a}, M)$ using the LLL algorithm.
+
+        \item
+        Check if any $\vec{b_i}^* = (b_{i,1}^*, \dots, b_{i,n+1}^*)$ has
+        all $b_{i,j}^* \in \{0, \lambda\}$ for some fixed $\lambda$ for $1
+        \leq j \leq n$. For any such $\vec{b_i}^*$, check if $x_j =
+        \frac{1}{\lambda}b_{i,j}^*$ gives a solution to
+        \eqref{eqn:subset-sum-def} and if so, halt, otherwise continue.
+
+        \item
+        Repeat steps 1 through 3 with $M$ replaced by $M' = \sum_{i=1}^n
+        a_i - M$, then halt.
+    \end{enumerate}
+\end{algorithm}
+
+The intuition behind this algorithm is that if a vector $\vec{e}$ is a
+solution to \eqref{eqn:subset-sum-def}, then the vector $\sum_{i=1}^n e_i
+\vec{b_i}$ has $-M$ on the last position and $\vec{e}$ on the first $n$
+positions; adding the last vector eliminates the last position. Since the
+solution vector is binary, it should presumably be one of the shortest
+vectors in $L(\vec{a}, M)$.
+
+The SV algorithm has been analysed thoroughly and it has been shown that
+the solution to \eqref{eqn:subset-sum-def} is indeed the shortest nonzero
+vector in the lattice spanned by vectors $b_i$ from
+\eqref{eqn:sv-lll-basis} for almost all instances such that $d(\vec{a}) <
+0.645\dots$ \cite{lagarias-odlyzko, sv-improved}. As stated earlier,
+though, the LLL algorithm does not guarantee finding the shortest vector,
+which decreases the chance of success of SV further.
