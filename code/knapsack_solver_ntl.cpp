@@ -102,12 +102,11 @@ int main()
                 NTL::ZZ lambda, selected_sum;
                 for (int j = 0; j < n; ++j)
                 {
-                    if (lambda == 0 && mat[i][j] > 0 && mat[i][j] <= n)
+                    if (lambda == 0 && mat[i][j] != 0)
                     {
                         lambda = mat[i][j];
                     }
-                    if ((lambda != 0 && mat[i][j] > 0 && mat[i][j] != lambda)
-                            || mat[i][j] < 0 || mat[i][j] > n)
+                    if (lambda != 0 && mat[i][j] != 0 && mat[i][j] != lambda)
                     {
                         cerr << lambda << ' ' << mat[i][j] << endl;
                         throw SolutionNotFound();
