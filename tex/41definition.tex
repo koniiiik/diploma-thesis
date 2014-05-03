@@ -31,7 +31,13 @@ nondeterministic Turing machine $A$ with $k$ possible outcomes can be
 simulated by $\ceil{\log{}k}$ computational steps of a Turing machine $B$
 with advice. In each step, $B$ reads one bit of advice and after reading
 all $\ceil{\log{}k}$ bits, decodes the number $k$ indicating which
-decision to take.
+decision to take. Conversely, we can easily simulate a Turing machine $B$ with
+advice using a nondeterministic Turing machine $A$: $A$ can simply
+nondeterministically fill one tape used to emulate the advice tape with a
+string of nondeterministically chosen length and then proceed to simulate
+$B$ without any further changes. The key difference is, as we will see in
+a little while, that the model with advice gives us fine-grained control
+over how much information the machine can obtain nondeterministically.
 
 The definition of a Turing machine with output is somewhat peculiar. Since
 the result of a computation of a given machine $A$ with a given input $x$
