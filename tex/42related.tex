@@ -1,0 +1,33 @@
+As we have indicated earlier, a different model of Turing machines with
+advice by Karp and Lipton has been around for more than 30 years. This
+model has been introduced as a means to provide complexity measures for
+languages accepted by Boolean circuits. Using this model, various
+complexity classes of languages have been analyzed and included in known
+complexity hierarchies, such as $\mathbf{P/poly}$ or $\mathbf{L/poly}$,
+with important implications on the polynomial hierarchy.
+
+This area of research is, however, very distant from ours. While the
+purpose of the Karp-Lipton model is to analyze complexity classes, the
+purpose of our model is to analyze individual problems.
+
+Our research has not revealed any paper focusing on a model equivalent to
+the one we introduced. This correlates with the fact that thus far,
+research in this area has been very limited.
+
+One particular area in which similar research has been done is
+cryptanalysis of the RSA cryptosystem, where Coppersmith has shown that it
+is possible to find the factors of $N = PQ$ given the high order $1/4 \log
+N$ bits of $P$ \cite{factoring}. His method works by reducing the
+factoring problem to the problem of finding a root of a bivariate integer
+polynomial. This problem can in turn be solved by constructing a basis of
+an appropriate lattice and running a basis reduction algorithm in order to
+obtain a basis consisting of short vectors. These short vectors are then
+used as candidates for a solution.
+
+In terms of our model of advice complexity, the $1/4 \log N$ bits can be
+interpreted as advice corresponding to the input $N$. This translates in
+an upper bound on the advice complexity of the factoring problem for
+inputs $N$ such that $N$ is a product of two primes: for any input of
+length $n$ (i.e. the binary representation of $N$ consists of $n$ bits),
+$n/4$ bits of advice are sufficient to obtain a solution in polynomial
+time.
