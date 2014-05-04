@@ -8,7 +8,7 @@ following 0-1 integer programming problem.
     a positive integer $M$, find a feasible solution to the 0-1 integer
     programming problem
     \begin{equation}\label{eqn:subset-sum-def}
-        \sum_{i=1}^n a_ix_i = M; \quad x_i \in \{0,1\} \, \text{for all i}
+        \sum_{i=1}^n a_ix_i = M; \quad x_i \in \{0,1\} \  \text{for all i}
     \end{equation}
 \end{definition}
 
@@ -190,7 +190,7 @@ The SV algorithm works as follows.
         \begin{align*}
             \vec{b_1} &= (1, 0, \dots, 0, -a_1) \\
             \vec{b_2} &= (0, 1, \dots, 0, -a_2) \\
-            &\vdots \numberthis\label{eqn:sv-lll-basis} \\
+            &\ \ \vdots \numberthis\label{eqn:sv-lll-basis} \\
             \vec{b_n} &= (0, 0, \dots, 0, -a_n) \\
             \vec{b_{n+1}} &= (0, 0, \dots, 0, M).
         \end{align*}
