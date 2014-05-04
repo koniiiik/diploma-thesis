@@ -93,18 +93,6 @@ $$
 Informally, instances with a low density are those consisting of elements
 significantly larger than $2^n$.
 
-In the rest of this section, we focus on an analysis of the
-Lagarias-Odlyzko algorithm. The ultimate goal of this analysis is to
-better understand the class of instances for which this algorithm fails to
-find a solution. We believe this should, in theory, make it possible to
-use less advice for low-density instances, since we can tailor the advice
-string specifically to the failing instances.
-
-Unfortunately, we have not managed to obtain a sufficient characterization
-of this class. We describe the results of our statistical analysis of this
-algorithm and draw some conclusions in hopes they will be useful for
-future research.
-
 We formulate the following observation which clarifies the importance of
 this restricted version of the subset sum problem.
 
@@ -148,6 +136,18 @@ This observation implies that restricting the density does not make the
 problem significantly easier to solve than it is in the general case.
 Nevertheless, it does not mean we cannot use any special properties of
 low-density instances to our advantage.
+
+In the rest of this section, we focus on an analysis of the
+Lagarias-Odlyzko algorithm. The ultimate goal of this analysis is to
+better understand the class of instances for which this algorithm fails to
+find a solution. We believe this should, in theory, make it possible to
+use less advice for low-density instances, since we can tailor the advice
+string specifically to the failing instances.
+
+Unfortunately, we have not managed to obtain a sufficient characterization
+of this class. We describe the results of our statistical analysis of this
+algorithm and draw some conclusions in hopes they will be useful for
+future research.
 
 The SV algorithm reduces the problem of finding a solution for
 \eqref{eqn:subset-sum-def} to the problem of finding the shortest vector
