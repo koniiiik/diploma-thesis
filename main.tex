@@ -15,7 +15,7 @@
 \usepackage{mathtools}
 %\usepackage{breqn} % messes up biblatex and \log_2
 %\usepackage{epsfig}
-\usepackage{color}
+\usepackage[table]{xcolor}
 \usepackage{mathrsfs}
 \usepackage{verbatim}
 \usepackage{fancyvrb}
@@ -24,12 +24,14 @@
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{changepage}
-\usepackage{caption}
+\usepackage[margin=1.3cm,font=small,labelfont=bf,textfont=it]{caption}
 \usepackage{subcaption}
 \usepackage{multirow}
 \usepackage{paralist}
 \usepackage{pdfpages}
 \usepackage{microtype}
+\usepackage{multirow}
+\usepackage{rotating}
 \usepackage{tikz}
 \usepackage{pgfplots}
 %\usepackage{gnuplot-lua-tikz}
@@ -93,6 +95,8 @@ showstringspaces=false, escapechar=\%, language=C++}
 
 % Bibliography tweaks.
 \renewcommand{\bibfont}{\normalfont\small}
+
+\definecolor{darkgray}{rgb}{0.6, 0.6, 0.6}
 
 \begin{document}
 

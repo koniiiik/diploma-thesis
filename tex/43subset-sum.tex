@@ -257,3 +257,59 @@ dependencies.
 For each combination of these parameters, we generated 100 random vectors
 $\vec{a}$ and for each such vector, we sampled 100 random nontrivial
 subsets (i.e., neither the whole $\vec{a}$, nor the empty set).
+
+Table \ref{table:subset-sum-cutoff-densities} shows the percentages of
+random instances solved by the SV algorithm for all combinations of
+density and dimension. This table clearly shows that the critical density
+above which the SV algorithm has a very low chance of success decreases
+rapidly with increasing dimension.
+
+\begin{table}
+    \renewcommand{\arraystretch}{1.2}
+    \centering
+    \caption{Percentages of successfully solved random instances for all
+             combinations of density and dimension.}
+    \label{table:subset-sum-cutoff-densities}
+    \begin{tabular}{ccrrrrr}
+        \arrayrulecolor{darkgray}
+        \hline
+        &            & \multicolumn{5}{c}{density} \\
+        &            & \thead{0.300} & \thead{0.400} & \thead{0.500} & \thead{0.600} & \thead{0.645} \\
+        \hline\hline
+        \multirow{7}[0]{*}{\begin{sideways}dimension\end{sideways}}
+        & \thead{10} & 100.00       & 100.00       & 100.00       & 100.00       & 100.00 \\
+        & \thead{20} & 100.00       & 100.00       & 99.59        & 92.68        & 87.61 \\
+        & \thead{30} & 100.00       & 97.31        & 68.19        & 30.78        & 18.69 \\
+        & \thead{40} & 99.51        & 60.82        & 9.79         & 1.14         & 0.89 \\
+        & \thead{50} & 81.54        & 6.03         & 0.28         & 0.05         & 0.02 \\
+        & \thead{60} & 17.46        & 0.14         & 0.00         & 0.00         & 0.00 \\
+        & \thead{70} & 0.77         & 0.00         & 0.00         & 0.00         & 0.00 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+The original article \cite{lagarias-odlyzko} contains a proof that if the
+density is below $0.645\dots$, the probability of $L(\vec{a}, M)$
+containing a vector shorter than the solution to the subset sum instance
+approaches zero for $n \to \infty$. This means that the inability of the
+SV algorithm to solve high-dimension instances can only be due to LLL not
+finding the shortest vector.
+
+Indeed, according to theorem \ref{theorem:LLL-short-vector}, the upper
+bound on the lengths of short vectors found by LLL, compared to the
+shortest vector in the lattice, grows exponentially in the dimension. In
+other words, the guarantee of the shortness of vectors found by LLL
+becomes exponentially worse for large $n$.
+
+A cursory look at some of the reduced bases computed by LLL for the
+unsolved high-dimension instances rules out the small linear dependency
+argument stated above. There appear to be very few vectors whose last
+component is equal to zero.
+
+This observation suggests a possible method to improve the success rate of
+high-dimension instances. If a good enough estimate of the function of
+density for which a solution can be found with high probability, depending
+on $n$, can be found, and if this function decreases only polynomially, it
+may be possible to obtain a solution with high probability at a polynomial
+increase in time complexity by using the reduction described in
+observation \ref{observation:subset-sum-low-density-reduction}.
