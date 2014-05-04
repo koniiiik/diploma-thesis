@@ -105,6 +105,15 @@ of this class. We describe the results of our statistical analysis of this
 algorithm and draw some conclusions in hopes they will be useful for
 future research.
 
+Note that if we manage to find an algorithm which solves all instances of
+low density, we can use it to solve even instances with higher density.
+Assume we can solve all instances with density lower than $c$. Consider an
+instance $(\vec{a}, M)$ such that $d(\vec{a}) > c$. That means
+$\log\max\limits_{i}a_i = n/c - e$ for some positive $e$. If we multiply
+both $\vec{a}$ and $M$ by $2^{\ceil{e}+1}$, we obtain an instance
+$(\vec{a}', M')$ with identical solutions to those of $(\vec{a}, M)$ and
+at the same time, $d(\vec{a}') < c$.
+
 The SV algorithm reduces the problem of finding a solution for
 \eqref{eqn:subset-sum-def} to the problem of finding the shortest vector
 in a $n+1$-dimensional lattice with Euclidean norm. This problem is known
