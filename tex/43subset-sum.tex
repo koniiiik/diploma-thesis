@@ -219,10 +219,40 @@ positions; adding the last vector eliminates the last position. Since the
 solution vector is binary, it should presumably be one of the shortest
 vectors in $L(\vec{a}, M)$.
 
-The SV algorithm has been analysed thoroughly and it has been shown that
+The SV algorithm has been analyzed thoroughly and it has been shown that
 the solution to \eqref{eqn:subset-sum-def} is indeed the shortest nonzero
 vector in the lattice spanned by vectors $b_i$ from
 \eqref{eqn:sv-lll-basis} for almost all instances such that $d(\vec{a}) <
 0.645\dots$ \cite{lagarias-odlyzko, sv-improved}. As stated earlier,
 though, the LLL algorithm does not guarantee finding the shortest vector,
-which decreases the chance of success of SV further.
+which further decreases the chance of success of SV.
+
+We have implemented the SV algorithm using an implementation of LLL from
+the NTL library \cite{ntl}. We then tested this implementation on randomly
+generated instances of subset sum with varying parameters. We have
+analyzed the results to find characteristics of those instances that the
+SV algorithm cannot solve.
+
+In fact, Lagarias and Odlyzko state one possible reason for failure of the
+SV algorithm in item (4) in the discussion at the end of 
+\cite{lagarias-odlyzko}. If the vector $\vec{a}$ contains many linear
+dependencies
+$$
+    \sum_{i=0}^n a_i \lambda_i = 0
+$$
+with $|\vec{\lambda}|$ small, the lattice $L(\vec{a}, M)$ will contain the
+short vector $(\lambda_1, \dots, \lambda_n, 0)$ for all $M$. If there are
+a lot of these small linear dependencies, the lattice reduction algorithm
+may find those instead of the sought solution vector.
+
+The two important parameters we varied are the dimension $n$ and the
+density of generated instances. For dimensions, we considered $10, 20,
+\dots, 70$, and for densities, we tried $0.3, 0.4, 0.5, 0.6$, and $0.645$.
+Furthermore, to verify the hypothesis about small linear dependencies, we
+generated vectors $\vec{a}$ using a fully random strategy, forcing at
+least one small linear dependency and forcing at least five linear
+dependencies.
+
+For each combination of these parameters, we generated 100 random vectors
+$\vec{a}$ and for each such vector, we sampled 100 random nontrivial
+subsets (i.e., neither the whole $\vec{a}$, nor the empty set).
