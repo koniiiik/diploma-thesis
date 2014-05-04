@@ -1,9 +1,9 @@
 Despite the fact that the computational model of online algorithms with
-advice has been only concieved a few years ago it is already possible to
+advice has been only conceived a few years ago it is already possible to
 notice the emergence of common techniques to analyze online problems and
 find lower and upper bounds for their advice complexity.
 
-To find an upper bound the most straightforward method is, same as with
+To find an upper bound, the most straightforward method is, same as with
 other complexity metrics, to find an algorithm which solves the problem
 and then determine its advice complexity. Any optimal algorithm cannot
 then have any worse advice complexity. While this method is obvious, it is
@@ -24,26 +24,26 @@ with the following properties:
 
 \begin{enumerate}[(i)]
     \item
-    for a given non-negative integer $k$ the prefixes $(x_1^{(i)}, \dots,
+    for a given non-negative integer $k$, the prefixes $(x_1^{(i)}, \dots,
     x_k^{(i)})$ of instances $I^{(i)}$ are equal, i.e., for two instances
     $I^{(i)} \not= I^{(j)}$, for each $l$ such that $1 \leq l \leq k$,
-    the members $x_l^{(i)}$ and $x_l^{(j)}$ are equal
+    the members $x_l^{(i)}$ and $x_l^{(j)}$ are equal;
 
     \item
     for each pair of instances $I^{(i)} \not= I^{(j)}$ there are no
     optimal solutions $Opt(I^{(i)}) = (y_1^{(i)}, \dots, y_{n_i}^{(i)})$,
     $Opt(I^{(j)}) = (y_1^{(j)}, \dots, y_{n_j}^{(j)})$ such that
     $$
-        (y_1^{(i)}, \dots, y_{k}^{(i)}) = (y_1^{(j)}, \dots, y_{k}^{(j)})
+        (y_1^{(i)}, \dots, y_{k}^{(i)}) = (y_1^{(j)}, \dots, y_{k}^{(j)}).
     $$
 \end{enumerate}
 
 In other words, we find a set of instances such that the algorithm cannot
-possibly distinguish the prefixes of these instances, however, for each
+possibly distinguish the prefixes of these instances; however, for each
 instance a unique solution needs to be yielded in the prefix already. To
 achieve this, the advice string must necessarily be used. If the size of
 this set of instances is $m$, at least $\lg m$ advice bits need to be
-accessed which gives a lower bound on the advice complexity of the
+accessed, which gives a lower bound on the advice complexity of the
 problem.
 
 This technique is used in various proofs in \cite{misof-trivial-graphs}
@@ -79,10 +79,10 @@ they picked the string guessing problem in two variants.
     integer $n$ specifying the length of the instance and a sequence of
     $n$ characters, where $d_i \in \Sigma, 1 \leq i \leq n$. Let $A$ be an
     online algorithm that solves \sgkh{q}, then $A(I) = (y_1, \dots, y_n,
-    \_)$, where $y_i \in \Sigma$. We define the cost of a solution as the
-    Hamming distance between the sequence $(y_1, \dots, y_n)$ and the
-    sequence $(d_1, \dots, d_n)$, i.e. the number of wrongly guessed
-    characters.
+    \longunderscore)$, where $y_i \in \Sigma$. We define the cost of a
+    solution as the Hamming distance between the sequence $(y_1, \dots,
+    y_n)$ and the sequence $(d_1, \dots, d_n)$, i.e. the number of
+    wrongly guessed characters.
 \end{definition}
 
 \begin{definition}[String Guessing with Unknown History]
@@ -92,10 +92,10 @@ they picked the string guessing problem in two variants.
     an integer $n$ specifying the length of the instance, $n-1$ queries
     without additional information and a string $d = d_1d_2\dots{}d_n$,
     where $d_i \in \Sigma, 1 \leq i \leq n$. Let $A$ be an online
-    algorithm that solves \sguh{q}, then $A(I) = (y_1, \dots, y_n, \_)$,
-    where $y_i \in \Sigma$. We define the cost of a solution as the
-    Hamming distance between the sequence $(y_1, \dots, y_n)$ and the
-    sequence $(d_1, \dots, d_n)$.
+    algorithm that solves \sguh{q}, then $A(I) = (y_1, \dots, y_n,
+    \longunderscore)$, where $y_i \in \Sigma$. We define the cost of a
+    solution as the Hamming distance between the sequence $(y_1, \dots,
+    y_n)$ and the sequence $(d_1, \dots, d_n)$.
 \end{definition}
 
 Both \sgkh{q} and \sguh{q} consist of $n + 1$ queries where for the first
@@ -124,7 +124,7 @@ two variants of the string guessing problem.
 \end{observation}
 
 With this in mind, bounds on the advice necessary to achieve optimality
-for both veriants have been shown.
+for both variants have been shown.
 
 \begin{theorem}[\cite{string-guessing}]\label{theorem:sgkh-upper}\label{theorem:sguh-upper}
     The advice complexity of \sguh{q} is at most $\ceil{n \lg q}$.
@@ -253,7 +253,7 @@ their common prefixes.
     tree with the following properties:
     \begin{enumerate}[(i)]
         \item Each vertex $v$ of $T(\I)$ is labeled by a non-empty set of
-            instances $\I_v \subseteq \I$ and by a natural number $k_v$,
+            instances $\I_v \subseteq \I$ and by a natural number $k_v$
             such that any two instances $I_1, I_2 \in \I_v$ have a common
             prefix of length at least $k_v$.
 

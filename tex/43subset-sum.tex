@@ -8,7 +8,7 @@ following 0-1 integer programming problem.
     a positive integer $M$, find a feasible solution to the 0-1 integer
     programming problem
     \begin{equation}\label{eqn:subset-sum-def}
-        \sum_{i=1}^n a_ix_i = M; \quad x_i \in \{0,1\} \  \text{for all i}
+        \sum_{i=1}^n a_ix_i = M; \quad x_i \in \{0,1\} \  \text{for all i.}
     \end{equation}
 \end{definition}
 
@@ -39,9 +39,9 @@ output and finishes. Obviously, there is nothing interesting about this
 algorithm, since it reads the whole output from the advice.
 
 A slightly better algorithm is obtained if we do not read the whole output
-from advice, but instead stop after reading the $k$-th bit, i.e. $A$ now
+from advice, but instead stop after reading the $k$-th bit, i.e., $A$ now
 knows the values of the first $k$ variables $x_i$. Then, our algorithm can
-find the correct values for the remaining $n-k$ varibles $x_i$ by
+find the correct values for the remaining $n-k$ variables $x_i$ by
 exhaustive search, which takes $O(2^{n-k})$ time. This observation leads
 to the following claim.
 

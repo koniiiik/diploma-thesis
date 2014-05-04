@@ -7,7 +7,7 @@ application of the string guessing problem for the maximum clique problem.
 \subsection{Graph Coloring}
 Graph coloring is a classic, well-known computational problem. Its offline
 version is one of the original 21 $NP$-complete problems published by Karp
-\cite{karp-np}. It comes as no surprise, then, that for the most genral
+\cite{karp-np}. It comes as no surprise, then, that for the most general
 version of this problem, online algorithms are unable to perform well
 \cite{online-graph-bound}.
 
@@ -59,7 +59,7 @@ vertices is sorted by their degrees.
 
 When talking about a variant of \problem{OnlineColoring}, we always need
 to specify the class of graphs it is restricted to and the presentation
-order. We denote this by \graphcol{X}{Y} where \problem{X} is the class
+order. We denote this by \graphcol{X}{Y}, where \problem{X} is the class
 of graphs $G$ will belong to and \problem{Y} is the presentation order.
 For the class of graphs we will use its common name (e.g.,
 ``\problem{bipartite}'', ``\problem{planar}'') with the special class
@@ -75,7 +75,7 @@ general version of the problem where no assumptions are made at all.
 
 The value of $n$ is not known to the online algorithm beforehand. The
 reason for this is that it would provide the algorithm with additional
-information about the input instance which may (and in some cases does)
+information about the input instance, which may (and in some cases does)
 affect the advice complexity of the problem.
 
 This problem has been studied in \cite{misof-trivial-graphs, hermi}. We
@@ -204,7 +204,7 @@ to analyze the most general presentation order.
     a lower bound of $n/2-1$ on the number of advice bits.
 
     If we also consider odd $n$, the above proof implies a lower bound of
-    $\floor{n/2}-1$ bits. An additional bit can be forced, however, this
+    $\floor{n/2}-1$ bits. An additional bit can be forced; however, this
     requires a more detailed analysis which can be found in
     \cite{misof-trivial-graphs}.
 \end{proof}

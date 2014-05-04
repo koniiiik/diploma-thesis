@@ -30,7 +30,7 @@ sketch of a proof; we describe the modified algorithm in detail below.
     Given a sequence thus shortened, it is possible to reconstruct most of
     the original sequence $\phi$. Each sum of two bits needs to be
     replaced by a pair of bits. In cases where the sum is $0$ or $2$, the
-    original pair of bits is unambiguous, however, if the sum is $1$,
+    original pair of bits is unambiguous; however, if the sum is $1$,
     there are two possibilities. In this case, our algorithm will always
     assume that the original pair of bits was $0, 1$. With this
     reconstructed sequence $\phi'$ it is now possible to simulate the
@@ -49,7 +49,7 @@ sketch of a proof; we describe the modified algorithm in detail below.
     However, simply selecting bits $b_{k+1}, b_{2k+1}, \dots$ does not lead to
     the required competitive ratio. For example, let $k = 3$ and assume
     the original advice string $\phi$ is $010010010$. By selecting every
-    $3$-rd bit, the compressed string becomes $010101$ and the
+    third bit, the compressed string becomes $010101$ and the
     reconstructed $\phi'$ becomes $001001001$. Now, if the only requests
     the instance contains are those starting on positions $2$, $5$, and
     $8$, our algorithm would admit no request and thus fail to be
@@ -105,14 +105,14 @@ less advice for the same competitive ratios.
     the advice string.
 
     More precisely, given an advice string $\phi$ leading to an optimal
-    solution, we split $\phi$ into alternating blocks of lengths $p$ and
-    $q$ bits (with a possible exception of the first and last blocks,
-    which may be shorter). We retain blocks of length $q$ and we leave out
-    blocks of length $p$, thus removing $s$ bits, where $s \geq
-    \lfloor(L-1) p / (p+q)\rfloor$.
+    solution, we split $\phi$ into alternating blocks of $p$ and $q$ bits
+    (with a possible exception of the first and last blocks, which may be
+    shorter). We retain blocks of length $q$ and we leave out blocks of
+    length $p$, thus removing $s$ bits, where $s \geq \lfloor(L-1) p /
+    (p+q)\rfloor$.
 
     Again, our algorithm $A$ first reconstructs an approximation
-    $\phi'$ of the original string $\phi$, by filling all the gaps in
+    $\phi'$ of the original string $\phi$ by filling all the gaps in
     $\phi'$ with zeroes and then simulates the optimal algorithm with
     $\phi'$.
 
@@ -134,7 +134,7 @@ less advice for the same competitive ratios.
     of the best strategy, i.e. the lowest of all $e_i$.
 
     The competitive ratio is therefore obtained from the following
-    inequalities.
+    inequality.
     $$
         \frac{C(Opt(I))}{C(Opt(I))-\overline{e}} \leq
         \frac{C(Opt(I))}{C(Opt(I)) - \frac{p\cdot{}C(Opt(I))}{p+q}} =
@@ -142,7 +142,7 @@ less advice for the same competitive ratios.
     $$
 
     The advice string consists of a binary encoding of the number of
-    chosen strategy taking $\lceil\log(p+q)\rceil$, bits followed by the
+    chosen strategy taking $\lceil\log(p+q)\rceil$ bits, followed by the
     shortened string from an optimal solution taking $L - 1 - s$ bits.
 \end{proof}
 

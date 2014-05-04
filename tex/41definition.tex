@@ -14,7 +14,7 @@ status of the de-facto standard computational model.
     A \emph{Turing machine with advice and output} has an additional
     write-only output tape. Let $S$ be some subset of $\Sigma^*$ and let
     $f: S \to \Sigma^*$ be some function. Turing machine $A$ computes the
-    function $f$ if for each $x \in S$ there is an advice string $\phi$
+    function $f$ if for each $x \in S$, there is an advice string $\phi$
     such that if the input tape contains $x$ and the advice tape contains
     $\phi$, $A$ writes $f(x)$ to the output tape and terminates in an
     accepting state.
@@ -25,9 +25,9 @@ well. We define the model to use an infinite advice tape in order to avoid
 giving away any additional information in the form of the length of
 advice.
 
-This definition resembles nondeterministic Turing machines and in a sense
-it is equivalent -- it is easy to see that one computational step of a
-nondeterministic Turing machine $A$ with $k$ possible outcomes can be
+This definition resembles nondeterministic Turing machines and, in a
+sense, it is equivalent -- it is easy to see that one computational step
+of a nondeterministic Turing machine $A$ with $k$ possible outcomes can be
 simulated by $\ceil{\log{}k}$ computational steps of a Turing machine $B$
 with advice. In each step, $B$ reads one bit of advice and after reading
 all $\ceil{\log{}k}$ bits, decodes the number $k$ indicating which
@@ -44,8 +44,8 @@ the result of a computation of a given machine $A$ with a given input $x$
 can vary depending on the advice string, it is practically impossible to
 determine what function $A$ computes. Instead, we choose the opposite
 direction. In our work we concentrate on problems for which we know what
-the expected output looks like, i.e. we already have a function $f$ and we
-want to find a machine such that it can reach the correct output if it
+the expected output looks like, i.e., we already have a function $f$ and
+we want to find a machine such that it can reach the correct output if it
 receives correct advice.
 
 It is easy to modify the definition of a machine with output to make it
@@ -55,7 +55,7 @@ cost function whose value is $\infty$ for invalid outputs (or $-\infty$,
 depending on whether we talk about a minimization or maximization problem)
 and define the output as the outcome with the minimal (or maximal) cost.
 
-Let us now define the complexity measure which lead to the conception of
+Let us now define the complexity measure which led to the conception of
 this computational model in the first place.
 
 \begin{definition}[Offline Advice Complexity]\label{definition:offline-advice-complexity}
