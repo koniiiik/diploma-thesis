@@ -105,14 +105,49 @@ of this class. We describe the results of our statistical analysis of this
 algorithm and draw some conclusions in hopes they will be useful for
 future research.
 
-Note that if we manage to find an algorithm which solves all instances of
-low density, we can use it to solve even instances with higher density.
-Assume we can solve all instances with density lower than $c$. Consider an
-instance $(\vec{a}, M)$ such that $d(\vec{a}) > c$. That means
-$\log\max\limits_{i}a_i = n/c - e$ for some positive $e$. If we multiply
-both $\vec{a}$ and $M$ by $2^{\ceil{e}+1}$, we obtain an instance
-$(\vec{a}', M')$ with identical solutions to those of $(\vec{a}, M)$ and
-at the same time, $d(\vec{a}') < c$.
+We formulate the following observation which clarifies the importance of
+this restricted version of the subset sum problem.
+
+\begin{observation}\label{observation:subset-sum-low-density-reduction}
+    If there is an algorithm $A$ for solving all instances $(\vec{a}, M)$
+    of subset sum such that $d(a) < c$ for some $c \in \R^+$ in polynomial
+    time, we can solve any instance of subset sum in polynomial time,
+    regardless of density.
+\end{observation}
+
+\begin{proof}
+    Assume we can solve all instances with density lower than $c$ for some
+    $c > 0$. Consider an instance $(\vec{a}, M)$ such that $d(\vec{a}) >
+    c$. Let $e = n/c - \log\max_ia_i$. From $d(\vec{a}) > c$ follows that
+    $e > 0$.
+    
+    If we multiply both $\vec{a}$ and $M$ by $2^{\ceil{e}+1}$, we obtain
+    an instance $(\vec{a}', M')$ with identical solutions to those of
+    $(\vec{a}, M)$.
+
+    For the density of $\vec{a}'$, the bound
+    \begin{multline*}
+        d(\vec{a}')
+        = \frac{n}{\log\paren*{2^{\ceil{e}+1} \max\limits_ia_i}}
+        \leq \frac{n}{e + 1 + \log\max\limits_ia_i}
+        \\
+        = \frac{n}{1 + \frac{n}{c} - \log\max\limits_ia_i + \log\max\limits_ia_i}
+        = \frac{cn}{c + n}
+        = c \cdot \paren*{1 - \frac{c}{n+c}} < c
+    \end{multline*}
+    holds, which means $(\vec{a}', M')$ can be solved in polynomial time
+    in the size of the new instance.
+
+    To be entirely correct, we note that the number $e$ is polynomial in
+    $n$ and the size of a binary representation of $(\vec{a}', M')$ is $e$
+    times larger than the binary representation of $(\vec{a}, M)$,
+    thus this transformation keeps the size of the input polynomial.
+\end{proof}
+
+This observation implies that restricting the density does not make the
+problem significantly easier to solve than it is in the general case.
+Nevertheless, it does not mean we cannot use any special properties of
+low-density instances to our advantage.
 
 The SV algorithm reduces the problem of finding a solution for
 \eqref{eqn:subset-sum-def} to the problem of finding the shortest vector
