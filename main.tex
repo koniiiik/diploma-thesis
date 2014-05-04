@@ -32,7 +32,7 @@
 \usepackage{microtype}
 \usepackage{tikz}
 \usepackage{pgfplots}
-\usepackage{gnuplot-lua-tikz}
+%\usepackage{gnuplot-lua-tikz}
 \usetikzlibrary{arrows}
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes}
@@ -40,7 +40,16 @@
 \usetikzlibrary{decorations.pathreplacing}
 \usetikzlibrary{backgrounds}
 \usetikzlibrary{fit}
-\usepackage[style=alphabetic,maxbibnames=47,backend=biber]{biblatex}
+\usepackage[backend=biber,style=alphabetic]{biblatex}
+
+\ExecuteBibliographyOptions{
+    firstinits,
+    url=false,
+    doi=false,
+    eprint=false,
+    maxbibnames=47
+}
+
 \input{utility/makra.tex}
 
 \input{configurables.tex}
@@ -79,6 +88,9 @@ showstringspaces=false, escapechar=\%, language=C++}
                                     transform shape,
                                     inner sep = .5em,
                                    ]
+
+% Bibliography tweaks.
+\renewcommand{\bibfont}{\normalfont\small}
 
 \begin{document}
 
@@ -278,7 +290,6 @@ Supervisor: & \supervisor \\
 
 %\backmatter fixme: preco to tu nefunguje? asi chyba nejaky package
 
-\todo{Make the bibliography consistent.}
 \printbibliography
 
 \appendix
