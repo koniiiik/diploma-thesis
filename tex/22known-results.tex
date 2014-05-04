@@ -218,53 +218,166 @@ in the online version of maximum clique, the vertices of an input graph
 are revealed to an algorithm one by one and the algorithm needs to decide
 whether to select a vertex into its solution or not.
 
-\todo{Finish this summary.}
+We use this problem to show an example of a proof by reduction to string
+guessing, as discussed in section \ref{section:string-guessing}, offered in
+\cite{string-guessing}. The authors of this paper use a cost function
+which allows the algorithm to produce a graph that is not a clique with a
+penalty for every selected vertex that is not part of the maximal clique
+in a graph induced by the vertices selected by $A$. This is to avoid
+pathologic edge cases where $A$ cannot select any vertex after accepting
+an isolated vertex at the beginning.
 
-\begin{figure}\centering
-    \begin{tikzpicture}[graph picture,
-                        vertex 0/.style = empty vertex,
-                        vertex 1/.style = full vertex,
-                        edge 0/.style = {draw, black!50},
-                        edge 1/.style = {draw, thick},
-                       ]
-        \foreach \i/\v in {0/0, 1/0, 2/1, 3/0, 4/1}
-        {
-            \draw let \n1 = {\i < 4 ? !\v : 1},
-                      \n2 = {\i < 4 ?  \v : 1},
-                      \n3 = {\i < 4 ? 0.5 : -1.5}
-                in  (2 * \i,   0) node [vertex \n1] (vertex_\i_0) {}
-                    ++(   1,   0) node [vertex \n2] (vertex_\i_1) {}
-                    ++( \n3, -.2) -- ++(0, .4);
-        }
+The problem is formally defined as follows.
 
-        \begin{pgfonlayer}{background}
-            \foreach \i/\v in {0/0, 1/0, 2/1, 3/0}
+\begin{definition}[\problem{MaxClique}]\label{definition:max-clique}
+    In \problem{MaxClique}, the input is an undirected graph $G = (V, E)$
+    with $V = \{1, \dots, n\}$ and the goal is to select a clique $C
+    \subseteq V$ in $G$. The graph is presented to an online algorithm $A$
+    in turns: in the $k$-th turn, the online algorithm receives the graph
+    $G_k = [\{1, \dots, k\}]$, i.e., a subgraph og $G$ induced by the
+    vertex set $\{1, \dots, k\}$. In each turn, $A$ has to decide whether
+    $i \in C$ or not.
+
+    Let $A(I)$ be the set of vertices selected by $A$ and let $C_{A(I)}$
+    be a maximum clique in the graph $G_{A(I)}$. The cost function is
+    defined by $C(A(I)) = |C_{A(I)}|^2 / |A(I)|$.
+\end{definition}
+
+If an algorithm selects a clique, the value of the cost function thus
+defined is as we would expect -- the number of vertices selected. This
+holds for the optimal solution as well, which means the competitive ratio
+of an algorithm $A$ can be expressed as
+$$
+    c = \frac{C(Opt(I))}{C(A(I))} = \frac{|A(I)|}{|C_{A(I)}|} \cdot
+    \frac{|C_{opt}|}{|C_{A(I)}|},
+$$
+where $C_{opt}$ denotes the maximum clique in $G$. The first ratio can be
+interpreted as a measure of how many wrong vertices $A$ has selected and
+the second one measures how many correct vertices $A$ has rejected.
+
+The following lower bound for \problem{MaxClique} has been proved.
+Recall that $H_n$ is defined in theorem \ref{theorem:sguh-lower-ratio} as
+the $n$-ary entropy function; as a special case, $H_2(x)$ is commonly
+denoted by $H(x)$.
+
+\begin{theorem}[\cite{string-guessing}]\label{theorem:maximum-clique}
+    Any $(c - \eps)$-competitive algorithm $A$ for \problem{MaxClique}
+    needs at least
+    $$
+        (1 + (c - 1) \log (c - 1) + (2 - c) \log (2 - c)) \frac{n-2}{2} =
+        (1 - H(c - 1))\frac{n-2}{2}
+    $$
+    bits of advice for any $1 < c \leq 3/2$ and $\eps > 0$.
+\end{theorem}
+
+\begin{proof}[Proof outline]
+    The full proof of theorem \ref{theorem:maximum-clique} consists of many
+    nontrivial steps, most of which are not interesting for our purpose of
+    deminstrating the string guessing reduction. Thus we only focus on the
+    first part, where we show how \problem{MaxClique} can be used to solve
+    \sgkh{2}; the rest of the proof can be found in
+    \cite{string-guessing}.
+
+    We consider the following set of instances such that every instance
+    corresponds to a binary string. Let $b = b_1b_2\dots{}b_{n'}$ be a
+    binary string of length $n'$. We construct a graph $G_b = (V_b, E_b)$
+    corresponding to $b$, with $n = 2n' + 2$ vertices. Let
+    $$
+        V_b = \{v_{i,j} \mid 1 \leq i \leq n', 0 \leq j \leq 1 \},
+    $$
+    and let $V_b' = \{v_{i,b_i} \mid 1 \leq i \leq n'\}$ be a subset of
+    $V_b$ selected by the string $b$. The set of edges is chosen as
+    \begin{multline*}
+        E_b = \{\{v_{i,b_i}, v_{j,k}\} \mid 1 \leq i < j \leq n', 0 \leq k
+                \leq 1\} \\
+        \cup \{\{v, v_{n'+1,0}\}, \{v, v_{n'+1,1}\} \mid v \in V_b'\}
+        \cup \{\{v_{n'+1,0}, v_{n'+1,1}\}\}.
+    \end{multline*}
+    The vertices are presented according to the lexicographic order of
+    their indices. An example of such a graph is presented in figure
+    \ref{fig:clique-example}.
+
+    \begin{figure}\centering
+        \begin{tikzpicture}[graph picture,
+                            vertex 0/.style = empty vertex,
+                            vertex 1/.style = full vertex,
+                            edge 0/.style = {draw, black!60},
+                            edge 1/.style = {draw, thick},
+                           ]
+            \foreach \i/\v in {0/0, 1/0, 2/1, 3/0, 4/1}
             {
-                \foreach \j in {\i, ..., 4}
-                {
-                    \foreach \b in {0, 1}
-                    {
-                        \ifnum \j>\i\relax
-                            \path let \n{edge type} = {(4 == \j) || ((2 == \j) ? \b : !\b)}, % 1 if (vertex_\j_\b) is full
-                                      \n{ran} = {2 * random(0, 1) - 1}, % random value {-1, 1}
-                                      \p3 = (vertex_\i_\v),
-                                      \p4 = (vertex_\j_\b),
-                                      \n{par height} = {\n{ran} * (\x4 - \x3) / 3}
-                                in  [edge \n{edge type}]
-                                    (vertex_\i_\v)
-                                    parabola [parabola height = \n{par height}]
-                                    (vertex_\j_\b);
-                        \fi
-                    }
-                }
+                \draw let \n1 = {\i < 4 ? !\v : 1},
+                          \n2 = {\i < 4 ?  \v : 1},
+                          \n3 = {\i < 4 ? 0.5 : -1.5}
+                    in  (2 * \i,   0) node [vertex \n1] (vertex_\i_0) {}
+                        ++(   1,   0) node [vertex \n2] (vertex_\i_1) {}
+                        ++( \n3, -.2) -- ++(0, .4);
             }
 
-            \path [edge 1] (vertex_4_0)
-                parabola [parabola height = {(2 * random(0, 1) - 1) / 1}]
-                (vertex_4_1);
-        \end{pgfonlayer}
-    \end{tikzpicture}
-    \caption{Example of the graph $G_{0010}$. Maximum clique is
-        highlighted in black.}
-    \label{fig:clique-example}
-\end{figure}
+            \begin{pgfonlayer}{background}
+                \foreach \i/\v in {0/0, 1/0, 2/1, 3/0}
+                {
+                    \foreach \j in {\i, ..., 4}
+                    {
+                        \foreach \b in {0, 1}
+                        {
+                            \ifnum \j>\i\relax
+                                \path let \n{edge type} = {(4 == \j) || ((2 == \j) ? \b : !\b)}, % 1 if (vertex_\j_\b) is full
+                                          \n{ran} = {2 * random(0, 1) - 1}, % random value {-1, 1}
+                                          \p3 = (vertex_\i_\v),
+                                          \p4 = (vertex_\j_\b),
+                                          \n{par height} = {\n{ran} * (\x4 - \x3) / 3}
+                                    in  [edge \n{edge type}]
+                                        (vertex_\i_\v)
+                                        parabola [parabola height = \n{par height}]
+                                        (vertex_\j_\b);
+                            \fi
+                        }
+                    }
+                }
+
+                \path [edge 1] (vertex_4_0)
+                    parabola [parabola height = {(2 * random(0, 1) - 1) / 1}]
+                    (vertex_4_1);
+            \end{pgfonlayer}
+        \end{tikzpicture}
+        \caption{Example of the graph $G_{0010}$. Maximum clique is
+            highlighted in black.}
+        \label{fig:clique-example}
+    \end{figure}
+
+    The graph $G_b$ is constructed in such a way that $V_b'$, together
+    with vertices $v_{n'+1, 0}$ and $v_{n'+1,1}$, forms the only maximum
+    clique. In addition, for every $1 \leq i \leq n'$, the two vertices
+    $v_{i,0}$ and $v_{i,1}$ are indistinguishable at the time of their
+    presentation to an algorithm, since both of them are connected to the
+    same set of preceding vertices.
+
+    An algorithm $A'$ for solving \problem{MaxClique} can be used as an
+    oracle for the \sgkh{2} problem in the following way. For every time
+    step of the \sgkh{2} computation, $A$ simulates two time steps of a
+    computation of $A'$. For the $i$-th character of the string guessing
+    problem, $A$ submits the vertices $v_{i,0}$ and $v_{i,1}$ to $A'$ and
+    guesses $0$ if $A'$ selects $v_{i,0}$, otherwise it guesses $1$.
+
+    $A$ constructs the graph $G_b$ in an online fashion based on the
+    information about the string $b$ it is guessing. After reading the
+    $i+1$-th query, $A$ knows the value of $b_i$, which means it can
+    decide which one of the vertices $v_{i,0}, v_{i,1}$ belongs to $V_b'$.
+    This way, $A$ is able to build the set $V_b'$ online and reveal edges
+    from $G_b$ to $A'$ in a consistent manner.
+
+    A careful analysis of this algorithm shows that assuming there is no
+    algorithm for \sgkh{2} which guesses more than $\alpha{}n'$ characters
+    correctly using $b$ advice bits, for every algorithm $A$ for
+    \problem{MaxClique} using at most $b$ bits of advice,
+    $$
+        C(A(G_b)) \leq \frac{(\alpha{}n + 2 + (1 -
+        \alpha)n')^2}{\alpha{}n' + 2 + 2(1 - \alpha)n'}.
+    $$
+
+    The next step of the proof is to show that for each pair of wrongly
+    guessed vertices $v_{i,0}, v_{i,1}$, the cost function is maximized if
+    an algorithm selects both vertices. The theorem then follows from
+    these facts and from theorem \ref{theorem:sgkh-lower-ratio}.
+\end{proof}
